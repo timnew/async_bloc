@@ -33,9 +33,10 @@ abstract class ActionResult implements MultiStateResult {
   const factory ActionResult.failed(dynamic error, [StackTrace? stackTrace]) =
       _Failed;
 
-  /// A method to do pattern match on result
+  /// Pattern match the result
   ///
-  /// The standard way to consume the result
+  /// [completed] is called if result is completed
+  /// [failed] is called with error and stackTrace if result is failed
   TR map<TR>({
     required ResultMapper<TR> completed,
     required FailedResultMapper<TR> failed,
@@ -45,7 +46,7 @@ abstract class ActionResult implements MultiStateResult {
         failedResult: failed,
       );
 
-  /// Convert the [ActionResult] into [AsyncActionResult]
+  /// Convert the [ActionResult] into [AsyncActionResult] with corresponding state
   AsyncActionResult asAsyncResult() => map(
         completed: () => AsyncActionResult.completed(),
         failed: (error, callStack) =>
@@ -62,7 +63,7 @@ class _Failed extends FailedResult with ActionResult {
       : super(error, stackTrace);
 }
 
-extension FutureExtension on Future {
+extension ActionResultFutureExtension on Future {
   /// Materialize [Future] into [Future<ActionResult>]
   ///
   /// Materialised future always succeed
@@ -109,7 +110,7 @@ extension FutureExtension on Future {
       this.asActionResult().asAsyncResult();
 }
 
-extension ActionResultFutureExtension on Future<ActionResult> {
+extension FutureActionResultExtension on Future<ActionResult> {
   /// Same as [ActionResult.asAsyncResult] but applies on Future
   /// Convert Future of [ActionResult] to Future of [AsyncActionResult]
   Future<AsyncActionResult> asAsyncResult() async =>

@@ -7,11 +7,35 @@ import 'states/value_result.dart';
 import 'states/failed_result.dart';
 import 'util.dart';
 
+/// A 2-state result represents synchronised query with single return value
+/// It could be either succeeded or failed
+///
+/// Typically wrapped in a future as the return value of an action execution.
+/// ```dart
+/// Future<ActionResult> deleteObject(String id);
+/// ```
+///
+/// [ActionResult]'s default constructor creates the [ValueResult]
+/// [ActionResult.failed] creates the [FailedResult]
+///
+/// See also
+/// * [ActionResult]
+/// * [AsyncActionResult]
+/// * [AsyncQueryResult]
 abstract class QueryResult<T> implements MultiStateResult {
-  factory QueryResult(T result) => _Succeeded(result);
-  factory QueryResult.failed(dynamic error, [StackTrace? stackTrace]) =>
-      _Failed(error, stackTrace);
+  /// Creates the [ValueResult] with [value]
+  const factory QueryResult(T value) = _Succeeded;
 
+  /// creates the [FailedResult]
+  /// [error] is the [Error]/[Exception] fails the action
+  /// [stackTrace] indicates where the [error] was thrown, it is optional
+  const factory QueryResult.failed(dynamic error, [StackTrace? stackTrace]) =
+      _Failed;
+
+  /// Pattern match the result
+  ///
+  /// [succeeded] is called with value if result is succeeded
+  /// [failed] is called with error and stackTrace if result is failed
   TR map<TR>({
     required ValueResultMapper<T, TR> succeeded,
     required FailedResultMapper<TR> failed,
@@ -21,6 +45,7 @@ abstract class QueryResult<T> implements MultiStateResult {
         failedResult: failed,
       );
 
+  /// Convert the [QueryResult] into [AsyncQueryResult] with corresponding state
   AsyncQueryResult<T> asAsyncResult() => map(
         succeeded: (value) => AsyncQueryResult.succeeded(value),
         failed: (error, callStack) => AsyncQueryResult.failed(error, callStack),
@@ -32,15 +57,38 @@ class _Succeeded<T> extends ValueResult<T> with QueryResult<T> {
 }
 
 class _Failed<T> extends FailedResult with QueryResult<T> {
-  _Failed(dynamic error, StackTrace? stackTrace) : super(error, stackTrace);
+  const _Failed(dynamic error, [StackTrace? stackTrace])
+      : super(error, stackTrace);
 }
 
-extension QueryResultFutureOrExtension<T> on FutureOr<QueryResult<T>> {
-  Future<AsyncQueryResult<T>> asAsyncResult() async =>
-      (await this).asAsyncResult();
+extension QueryResultFutureExtension<T> on Future<T> {
+  /// Materialize [Future<T>] into [Future<QueryResult<T>>]
+  ///
+  /// Materialised future always succeed
+  /// Returns [ValueResult] if future resovled succesfully
+  /// Returns [FailedResult] if future throws
+  Future<QueryResult<T>> asQueryResult() async {
+    try {
+      final result = await this;
+
+      return QueryResult(result);
+    } catch (error, stackTrace) {
+      return QueryResult<T>.failed(error, stackTrace);
+    }
+  }
+
+  /// Materialize [Future<T>] into [Future<AsyncQueryResult<T>>]
+  ///
+  /// Materialised future always succeed
+  /// Returns [ValueResult] if future resovled succesfully
+  /// Returns [FailedResult] if future throws
+  Future<AsyncQueryResult<T>> asAsyncQueryResult() =>
+      this.asQueryResult().asAsyncResult();
 }
 
-extension QueryResultFutureExtension<T> on Future<QueryResult<T>> {
+extension FutureQueryResultExtension<T> on Future<QueryResult<T>> {
+  /// Same as [QueryResult.asAsyncResult] but applies on Future
+  /// Convert Future of [QueryResult] to Future of [AsyncQueryResult]
   Future<AsyncQueryResult<T>> asAsyncResult() async =>
       (await this).asAsyncResult();
 }
