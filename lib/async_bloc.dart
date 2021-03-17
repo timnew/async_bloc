@@ -1,4 +1,6 @@
 library async_bloc;
 
 export 'bloc.dart';
-export 'multi_state_result.dart';
+export 'result.dart';
+export 'bloc_flutter.dart';
+export 'result_flutter.dart';

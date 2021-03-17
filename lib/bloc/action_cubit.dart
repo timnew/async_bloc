@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../multi_state_result.dart';
+import '../result.dart';
 
 abstract class ActionCubit extends Cubit<AsyncActionResult> {
   ActionCubit() : super(const AsyncActionResult());
