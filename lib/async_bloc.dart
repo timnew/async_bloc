@@ -1,7 +1,5 @@
 library async_bloc;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'package:async_bloc/src/function_types.dart';
+export 'package:async_bloc/src/action_result.dart';
+export 'package:async_bloc/src/query_result.dart';
