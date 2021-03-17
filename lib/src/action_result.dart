@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:async_bloc/src/async_action_result.dart';
 
 import 'function_types.dart';
@@ -34,4 +36,14 @@ class _Completed extends CompletedResult with ActionResult {
 class _Failed extends FailedResult with ActionResult {
   const _Failed(dynamic error, [StackTrace? stackTrace])
       : super(error, stackTrace);
+}
+
+extension ActionResultFutureOrExtension on FutureOr<ActionResult> {
+  Future<AsyncActionResult> asAsyncResult() async =>
+      (await this).asyncActionResult();
+}
+
+extension ActionResultFutureExtension on Future<ActionResult> {
+  Future<AsyncActionResult> asAsyncResult() async =>
+      (await this).asyncActionResult();
 }

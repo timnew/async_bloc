@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'async_query_result.dart';
 import 'function_types.dart';
 import 'state_values/multi_state_result.dart';
@@ -31,4 +33,14 @@ class _Succeeded<T> extends ValueResult<T> with QueryResult<T> {
 
 class _Failed<T> extends FailedResult with QueryResult<T> {
   _Failed(dynamic error, StackTrace? stackTrace) : super(error, stackTrace);
+}
+
+extension QueryResultFutureOrExtension<T> on FutureOr<QueryResult<T>> {
+  Future<AsyncQueryResult<T>> asAsyncResult() async =>
+      (await this).asyncQueryResult();
+}
+
+extension QueryResultFutureExtension<T> on Future<QueryResult<T>> {
+  Future<AsyncQueryResult<T>> asAsyncResult() async =>
+      (await this).asyncQueryResult();
 }
