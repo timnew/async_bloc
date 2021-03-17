@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:async_bloc/src/async_action_result.dart';
-
+import 'async_action_result.dart';
 import 'function_types.dart';
 import 'state_values/completed_result.dart';
 import 'state_values/failed_result.dart';
