@@ -1,5 +1,5 @@
 import 'function_types.dart';
-import 'state_values/multi_state_result.dart';
+import 'multi_state_result.dart';
 import 'state_values/busy_result.dart';
 import 'state_values/completed_result.dart';
 import 'state_values/default_result.dart';

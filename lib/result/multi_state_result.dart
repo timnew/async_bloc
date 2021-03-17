@@ -1,9 +1,9 @@
-import 'busy_result.dart';
-import 'completed_result.dart';
-import 'default_result.dart';
-import 'failed_result.dart';
-import 'pending_result.dart';
-import 'value_result.dart';
+import 'state_values/busy_result.dart';
+import 'state_values/completed_result.dart';
+import 'state_values/default_result.dart';
+import 'state_values/failed_result.dart';
+import 'state_values/pending_result.dart';
+import 'state_values/value_result.dart';
 
 mixin MultiStateResult {
   bool get isPending => this is PendingResult || this is DefaultResult;

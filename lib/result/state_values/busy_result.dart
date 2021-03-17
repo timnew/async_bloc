@@ -1,4 +1,4 @@
-import 'multi_state_result.dart';
+import '../multi_state_result.dart';
 
 abstract class BusyResult with MultiStateResult {
   const BusyResult();

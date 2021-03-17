@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 
-import 'multi_state_result.dart';
+import '../multi_state_result.dart';
 
 abstract class FailedResult with MultiStateResult {
   final dynamic error;
