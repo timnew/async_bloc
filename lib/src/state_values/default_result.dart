@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 
-import 'result.dart';
+import 'multi_state_result.dart';
 
-abstract class DefaultResult<T> with Result implements HasValue<T> {
+abstract class DefaultResult<T> with MultiStateResult implements HasValue<T> {
   final T value;
 
   const DefaultResult(this.value);

@@ -5,7 +5,7 @@ import 'failed_result.dart';
 import 'pending_result.dart';
 import 'value_result.dart';
 
-mixin Result {
+mixin MultiStateResult {
   bool get isPending => this is PendingResult || this is DefaultResult;
   bool get isBusy => this is BusyResult;
   bool get isFinished => isSucceeded || isFailed;

@@ -1,6 +1,6 @@
-import 'result.dart';
+import 'multi_state_result.dart';
 
-abstract class PendingResult with Result {
+abstract class PendingResult with MultiStateResult {
   const PendingResult();
 
   @override

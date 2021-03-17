@@ -1,11 +1,11 @@
 import 'async_query_result.dart';
 import 'function_types.dart';
-import 'state_values/result.dart';
+import 'state_values/multi_state_result.dart';
 import 'state_values/value_result.dart';
 import 'state_values/failed_result.dart';
 import 'util.dart';
 
-abstract class QueryResult<T> implements Result {
+abstract class QueryResult<T> implements MultiStateResult {
   factory QueryResult(T result) => _Succeeded(result);
   factory QueryResult.failed(dynamic error, [StackTrace? stackTrace]) =>
       _Failed(error, stackTrace);

@@ -1,5 +1,5 @@
 import 'function_types.dart';
-import 'state_values/result.dart';
+import 'state_values/multi_state_result.dart';
 import 'state_values/pending_result.dart';
 import 'state_values/default_result.dart';
 import 'state_values/busy_result.dart';
@@ -7,7 +7,7 @@ import 'state_values/value_result.dart';
 import 'state_values/failed_result.dart';
 import 'util.dart';
 
-abstract class AsyncQueryResult<T> implements Result {
+abstract class AsyncQueryResult<T> implements MultiStateResult {
   const factory AsyncQueryResult() = _Pending;
   const factory AsyncQueryResult.withDefaultValue(T defaultValue) = _Default;
   const factory AsyncQueryResult.busy() = _Busy;

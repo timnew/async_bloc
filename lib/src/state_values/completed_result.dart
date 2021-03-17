@@ -1,6 +1,6 @@
-import 'result.dart';
+import 'multi_state_result.dart';
 
-abstract class CompletedResult with Result {
+abstract class CompletedResult with MultiStateResult {
   const CompletedResult();
 
   @override

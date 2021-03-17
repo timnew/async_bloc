@@ -1,5 +1,5 @@
 import 'function_types.dart';
-import 'state_values/result.dart';
+import 'state_values/multi_state_result.dart';
 import 'state_values/busy_result.dart';
 import 'state_values/completed_result.dart';
 import 'state_values/default_result.dart';
@@ -7,7 +7,7 @@ import 'state_values/failed_result.dart';
 import 'state_values/pending_result.dart';
 import 'state_values/value_result.dart';
 
-extension ResultExtension on Result {
+extension MultiStateResultExtension on MultiStateResult {
   TR completeMapOr<T, TR>({
     ResultMapper<TR>? pendingResult,
     ResultMapper<TR>? busyResult,

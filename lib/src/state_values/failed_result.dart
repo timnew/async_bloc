@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 
-import 'result.dart';
+import 'multi_state_result.dart';
 
-abstract class FailedResult with Result {
+abstract class FailedResult with MultiStateResult {
   final dynamic error;
   final StackTrace? stackTrace;
 

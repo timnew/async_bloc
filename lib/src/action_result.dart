@@ -3,10 +3,10 @@ import 'package:async_bloc/src/async_action_result.dart';
 import 'function_types.dart';
 import 'state_values/completed_result.dart';
 import 'state_values/failed_result.dart';
-import 'state_values/result.dart';
+import 'state_values/multi_state_result.dart';
 import 'util.dart';
 
-abstract class ActionResult implements Result {
+abstract class ActionResult implements MultiStateResult {
   const factory ActionResult.completed() = _Completed;
   const factory ActionResult.failed(dynamic error, [StackTrace? stackTrace]) =
       _Failed;
