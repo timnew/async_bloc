@@ -7,9 +7,9 @@ import 'multi_state_result.dart';
 import 'util.dart';
 
 abstract class AsyncActionResult implements MultiStateResult {
-  const factory AsyncActionResult() = _Pending;
-  const factory AsyncActionResult.busy() = _Busy;
-  const factory AsyncActionResult.completed() = _Completed;
+  factory AsyncActionResult() => const _Pending();
+  factory AsyncActionResult.busy() => const _Busy();
+  factory AsyncActionResult.completed() => const _Completed();
   const factory AsyncActionResult.failed(dynamic error,
       [StackTrace? stackTrace]) = _Failed;
 

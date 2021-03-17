@@ -8,7 +8,7 @@ import 'multi_state_result.dart';
 import 'util.dart';
 
 abstract class ActionResult implements MultiStateResult {
-  const factory ActionResult.completed() = _Completed;
+  factory ActionResult.completed() => const _Completed();
   const factory ActionResult.failed(dynamic error, [StackTrace? stackTrace]) =
       _Failed;
 

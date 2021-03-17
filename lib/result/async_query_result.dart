@@ -8,9 +8,9 @@ import 'state_values/failed_result.dart';
 import 'util.dart';
 
 abstract class AsyncQueryResult<T> implements MultiStateResult {
-  const factory AsyncQueryResult() = _Pending;
+  factory AsyncQueryResult() => const _Pending();
   const factory AsyncQueryResult.withDefaultValue(T defaultValue) = _Default;
-  const factory AsyncQueryResult.busy() = _Busy;
+  factory AsyncQueryResult.busy() => const _Busy();
   const factory AsyncQueryResult.succeeded(T result) = _Succeeded;
   const factory AsyncQueryResult.failed(dynamic error,
       [StackTrace? stackTrace]) = _Failed;
