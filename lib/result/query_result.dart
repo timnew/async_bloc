@@ -21,7 +21,7 @@ abstract class QueryResult<T> implements MultiStateResult {
         failedResult: failed,
       );
 
-  AsyncQueryResult<T> asyncQueryResult() => map(
+  AsyncQueryResult<T> asAsyncResult() => map(
         succeeded: (value) => AsyncQueryResult.succeeded(value),
         failed: (error, callStack) => AsyncQueryResult.failed(error, callStack),
       );
@@ -37,10 +37,10 @@ class _Failed<T> extends FailedResult with QueryResult<T> {
 
 extension QueryResultFutureOrExtension<T> on FutureOr<QueryResult<T>> {
   Future<AsyncQueryResult<T>> asAsyncResult() async =>
-      (await this).asyncQueryResult();
+      (await this).asAsyncResult();
 }
 
 extension QueryResultFutureExtension<T> on Future<QueryResult<T>> {
   Future<AsyncQueryResult<T>> asAsyncResult() async =>
-      (await this).asyncQueryResult();
+      (await this).asAsyncResult();
 }

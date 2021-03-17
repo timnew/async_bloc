@@ -9,18 +9,22 @@ abstract class ActionCubit extends Cubit<AsyncActionResult> {
   ActionCubit() : super(AsyncActionResult());
 
   @protected
-  Future<AsyncActionResult> flatMap(FutureOr<ActionResult> futureOr) =>
-      flatMapAsync(futureOr.asAsyncResult());
+  Future<AsyncActionResult> flatMap(Future<ActionResult> future) =>
+      flatMapAsync(future.asAsyncResult());
+
+  @protected
+  Future<AsyncActionResult> flatMapPlain(Future future) =>
+      flatMapAsync(future.asAsyncActionResult());
 
   @protected
   Future<AsyncActionResult> flatMapAsync(
-    FutureOr<AsyncActionResult> futureOr,
+    Future<AsyncActionResult> future,
   ) async {
     this.state.ensureNotBusy();
 
     this.emit(AsyncActionResult.busy());
 
-    this.emit(await futureOr);
+    this.emit(await future);
 
     return this.state;
   }

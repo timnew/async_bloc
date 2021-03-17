@@ -11,18 +11,18 @@ abstract class QueryCubit<T> extends Cubit<AsyncQueryResult<T>> {
       : super(AsyncQueryResult.withDefaultValue(intialValue));
 
   @protected
-  Future<AsyncQueryResult<T>> flatMap(FutureOr<QueryResult<T>> futureOr) =>
-      flatMapAsync(futureOr.asAsyncResult());
+  Future<AsyncQueryResult<T>> flatMap(Future<QueryResult<T>> future) =>
+      flatMapAsync(future.asAsyncResult());
 
   @protected
   Future<AsyncQueryResult<T>> flatMapAsync(
-    FutureOr<AsyncQueryResult<T>> futureOr,
+    Future<AsyncQueryResult<T>> future,
   ) async {
     this.state.ensureNotBusy();
 
     this.emit(AsyncQueryResult.busy());
 
-    this.emit(await futureOr);
+    this.emit(await future);
 
     return this.state;
   }
