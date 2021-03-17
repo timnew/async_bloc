@@ -2,6 +2,23 @@ import 'package:collection/collection.dart';
 
 import '../multi_state_result.dart';
 
+/// State indicates the query is finished successfully
+///
+/// [value] is the result returned by the query
+///
+/// All states:
+/// * [PendingResult]
+/// * [BusyResult]
+/// * [DefaultResult]
+/// * [ValueResult]
+/// * [CompletedResult]
+/// * [FailedResult]
+///
+/// Used by
+/// * [ActionResult]
+/// * [QueryResult]
+/// * [AsyncActionResult]
+/// * [AsyncQueryResult]
 abstract class ValueResult<T> with MultiStateResult implements HasValue<T> {
   final T value;
 

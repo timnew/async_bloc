@@ -3,8 +3,8 @@ import 'dart:async';
 import 'async_query_result.dart';
 import 'function_types.dart';
 import 'multi_state_result.dart';
-import 'state_values/value_result.dart';
-import 'state_values/failed_result.dart';
+import 'states/value_result.dart';
+import 'states/failed_result.dart';
 import 'util.dart';
 
 abstract class QueryResult<T> implements MultiStateResult {

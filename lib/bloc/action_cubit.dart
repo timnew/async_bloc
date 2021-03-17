@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../result.dart';
 
 abstract class ActionCubit extends Cubit<AsyncActionResult> {
-  ActionCubit() : super(const AsyncActionResult());
+  ActionCubit() : super(AsyncActionResult());
 
   @protected
   Future<AsyncActionResult> flatMap(FutureOr<ActionResult> futureOr) =>

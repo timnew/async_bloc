@@ -1,10 +1,10 @@
 import 'function_types.dart';
 import 'multi_state_result.dart';
-import 'state_values/pending_result.dart';
-import 'state_values/default_result.dart';
-import 'state_values/busy_result.dart';
-import 'state_values/value_result.dart';
-import 'state_values/failed_result.dart';
+import 'states/pending_result.dart';
+import 'states/default_result.dart';
+import 'states/busy_result.dart';
+import 'states/value_result.dart';
+import 'states/failed_result.dart';
 import 'util.dart';
 
 abstract class AsyncQueryResult<T> implements MultiStateResult {

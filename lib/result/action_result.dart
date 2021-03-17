@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'async_action_result.dart';
 import 'function_types.dart';
-import 'state_values/completed_result.dart';
-import 'state_values/failed_result.dart';
+import 'states/completed_result.dart';
+import 'states/failed_result.dart';
 import 'multi_state_result.dart';
 import 'util.dart';
 

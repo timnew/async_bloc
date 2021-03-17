@@ -1,5 +1,20 @@
 import '../multi_state_result.dart';
 
+/// State indicates the action/query has been started but not yet finished
+///
+/// All states:
+/// * [PendingResult]
+/// * [BusyResult]
+/// * [DefaultResult]
+/// * [ValueResult]
+/// * [CompletedResult]
+/// * [FailedResult]
+///
+/// Used by
+/// * [ActionResult]
+/// * [QueryResult]
+/// * [AsyncActionResult]
+/// * [AsyncQueryResult]
 abstract class BusyResult with MultiStateResult {
   const BusyResult();
 

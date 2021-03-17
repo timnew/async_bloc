@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../result.dart';
 
 abstract class QueryCubit<T> extends Cubit<AsyncQueryResult<T>> {
-  QueryCubit() : super(const AsyncQueryResult());
+  QueryCubit() : super(AsyncQueryResult());
   QueryCubit.initialValue(T intialValue)
       : super(AsyncQueryResult.withDefaultValue(intialValue));
 

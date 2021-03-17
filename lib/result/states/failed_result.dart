@@ -2,6 +2,24 @@ import 'package:collection/collection.dart';
 
 import '../multi_state_result.dart';
 
+/// State indicates the query/action is failed
+///
+/// [error] is the captured exception/error
+/// [stackTrace] might be available indicates where the error was thrown
+///
+/// All states:
+/// * [PendingResult]
+/// * [BusyResult]
+/// * [DefaultResult]
+/// * [ValueResult]
+/// * [CompletedResult]
+/// * [FailedResult]
+///
+/// Used by
+/// * [ActionResult]
+/// * [QueryResult]
+/// * [AsyncActionResult]
+/// * [AsyncQueryResult]
 abstract class FailedResult with MultiStateResult {
   final dynamic error;
   final StackTrace? stackTrace;
