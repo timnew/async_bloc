@@ -14,7 +14,7 @@ abstract class ActionCubit extends Cubit<AsyncActionResult> {
 
   @protected
   Future<AsyncActionResult> flatMapPlain(Future future) =>
-      flatMapAsync(future.asAsyncActionResult());
+      flatMapAsync(future.asActionResult().asAsyncResult());
 
   @protected
   Future<AsyncActionResult> flatMapAsync(
