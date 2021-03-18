@@ -15,8 +15,8 @@ import 'util.dart';
 /// Future<ActionResult> deleteObject(String id);
 /// ```
 ///
-/// [ActionResult.completed] creates the [CompletedResult]
-/// [ActionResult.failed] creates the [FailedResult]
+/// [ActionResult.completed] creates the [CompletedResult], indicates the action is completed
+/// [ActionResult.failed] creates the [FailedResult], indicates the action is failed
 ///
 /// See also
 /// * [AsyncActionResult]

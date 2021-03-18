@@ -7,7 +7,9 @@ import 'states/failed_result.dart';
 import 'states/pending_result.dart';
 import 'states/value_result.dart';
 
+/// Internal use utils
 extension MultiStateResultExtension on MultiStateResult {
+  /// Internal used unsafe mapping function
   TR completeMapOr<T, TR>({
     ResultMapper<TR>? pendingResult,
     ResultMapper<TR>? busyResult,

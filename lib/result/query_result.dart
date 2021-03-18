@@ -15,8 +15,8 @@ import 'util.dart';
 /// Future<ActionResult> deleteObject(String id);
 /// ```
 ///
-/// [ActionResult]'s default constructor creates the [ValueResult]
-/// [ActionResult.failed] creates the [FailedResult]
+/// [ActionResult] creates the [ValueResult], indicates the query is succeded with a value
+/// [ActionResult.failed] creates the [FailedResult], indicates the query is failed
 ///
 /// See also
 /// * [ActionResult]
