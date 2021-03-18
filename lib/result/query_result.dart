@@ -76,14 +76,6 @@ extension QueryResultFutureExtension<T> on Future<T> {
       return QueryResult<T>.failed(error, stackTrace);
     }
   }
-
-  /// Materialize [Future<T>] into [Future<AsyncQueryResult<T>>]
-  ///
-  /// Materialised future always succeed
-  /// Returns [ValueResult] if future resovled succesfully
-  /// Returns [FailedResult] if future throws
-  Future<AsyncQueryResult<T>> asAsyncQueryResult() =>
-      this.asQueryResult().asAsyncResult();
 }
 
 extension FutureQueryResultExtension<T> on Future<QueryResult<T>> {

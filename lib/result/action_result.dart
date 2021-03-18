@@ -93,21 +93,6 @@ extension ActionResultFutureExtension on Future {
       return ActionResult.failed(error, stackTrace);
     }
   }
-
-  /// Materialize [Future] into [Future<AsyncActionResult>]
-  ///
-  /// Materialised future always succeed
-  /// Returns [CompletedResult] if future resovled succesfully
-  /// Returns [FailedResult] if future throws
-  ///
-  /// If input future contains [ActionResult] or [QueryResult],
-  /// the result is flattened automatically.
-  ///
-  /// If input future contains [AsyncActionResult] or [AsyncQueryResult],
-  /// only [ValueResult], [CompletedResult], [FailedResult] are flattened automatically.
-  /// Other values would cause exception.
-  Future<AsyncActionResult> asAsyncActionResult() =>
-      this.asActionResult().asAsyncResult();
 }
 
 extension FutureActionResultExtension on Future<ActionResult> {

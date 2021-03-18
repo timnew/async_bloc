@@ -17,9 +17,9 @@ class DefaultFailedResultBuilder extends InheritedWidget {
       oldWidget is! DefaultFailedResultBuilder ||
       oldWidget.builder != this.builder;
 
-  static FailedResultBuilder defaultBuilder = _defaultBuilder;
+  static FailedResultBuilder globalBuilder = _globalBuilderImp;
 
-  static Widget _defaultBuilder(
+  static Widget _globalBuilderImp(
           BuildContext context, dynamic error, StackTrace? stackTrace) =>
       Center(
         child: Column(
@@ -41,7 +41,7 @@ class DefaultFailedResultBuilder extends InheritedWidget {
       context
           .dependOnInheritedWidgetOfExactType<DefaultFailedResultBuilder>()
           ?.builder ??
-      defaultBuilder;
+      globalBuilder;
 
   static Widget ensureBuild(
     BuildContext context,

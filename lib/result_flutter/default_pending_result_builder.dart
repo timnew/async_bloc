@@ -14,15 +14,15 @@ class DefaultPendingResultBuilder extends InheritedWidget {
       oldWidget is! DefaultPendingResultBuilder ||
       oldWidget.builder != this.builder;
 
-  static WidgetBuilder defaultBuilder = _defaultBuilder;
+  static WidgetBuilder globalBuilder = _globalBuilderImp;
 
-  static Widget _defaultBuilder(BuildContext context) => Container();
+  static Widget _globalBuilderImp(BuildContext context) => Container();
 
   static WidgetBuilder findBuilder(BuildContext context) =>
       context
           .dependOnInheritedWidgetOfExactType<DefaultPendingResultBuilder>()
           ?.builder ??
-      defaultBuilder;
+      globalBuilder;
 
   static Widget ensureBuild(
     BuildContext context,

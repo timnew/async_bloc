@@ -15,9 +15,9 @@ class DefaultBusyResultBuilder extends InheritedWidget {
       oldWidget is! DefaultBusyResultBuilder ||
       oldWidget.builder != this.builder;
 
-  static WidgetBuilder defaultBuilder = _defaultBuilder;
+  static WidgetBuilder globalBuilder = _globalBuilderImp;
 
-  static Widget _defaultBuilder(BuildContext context) => Center(
+  static Widget _globalBuilderImp(BuildContext context) => Center(
         child: Text("Loading..."),
       );
 
@@ -25,7 +25,7 @@ class DefaultBusyResultBuilder extends InheritedWidget {
       context
           .dependOnInheritedWidgetOfExactType<DefaultBusyResultBuilder>()
           ?.builder ??
-      defaultBuilder;
+      globalBuilder;
 
   static Widget ensureBuild(
     BuildContext context,

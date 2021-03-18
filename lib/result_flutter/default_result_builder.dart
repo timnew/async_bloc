@@ -44,4 +44,22 @@ class DefaultResultBuilder extends StatelessWidget {
 
     return result;
   }
+
+  static void setGlobalBuilder({
+    WidgetBuilder? pendingBuilder,
+    WidgetBuilder? busyBuilder,
+    FailedResultBuilder? failedBuilder,
+  }) {
+    if (pendingBuilder != null) {
+      DefaultPendingResultBuilder.globalBuilder = pendingBuilder;
+    }
+
+    if (busyBuilder != null) {
+      DefaultBusyResultBuilder.globalBuilder = busyBuilder;
+    }
+
+    if (failedBuilder != null) {
+      DefaultFailedResultBuilder.globalBuilder = failedBuilder;
+    }
+  }
 }
