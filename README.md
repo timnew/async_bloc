@@ -1,4 +1,7 @@
 # async_bloc
+[![Star this Repo](https://img.shields.io/github/stars/timnew/async_bloc.svg?style=flat-square)](https://github.com/timnew/async_bloc)
+[![Pub Package](https://img.shields.io/pub/v/async_bloc.svg?style=flat-square)](https://pub.dev/packages/async_bloc)
+[![Build Status](https://img.shields.io/github/workflow/status/timnew/async_bloc/Run-Test)](https://github.com/timnew/async_bloc/actions?query=workflow%3ARun-Test)
 
 A library built upon [Bloc_Flutter] and [Provider] to make it easy to support async operation
 
