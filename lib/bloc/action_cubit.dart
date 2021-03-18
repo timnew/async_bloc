@@ -9,10 +9,10 @@ import '../result.dart';
 abstract class ActionCubit extends Cubit<AsyncActionResult> {
   /// Create new Cubit
   ///
-  /// Optional [initialValue] can be used to set the initial value of the Cubit.
+  /// Optional [initialState] can be used to set the initial state of the Cubit.
   /// [PendingResult] is used if not specified
-  ActionCubit([AsyncActionResult? initialValue])
-      : super(initialValue ?? AsyncActionResult());
+  ActionCubit([AsyncActionResult? initialState])
+      : super(initialState ?? AsyncActionResult());
 
   /// Update Cubit with a [Future] of any type
   /// [future] will be materialized first

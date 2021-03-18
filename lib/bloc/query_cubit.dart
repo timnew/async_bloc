@@ -5,8 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../result.dart';
 
+/// [Cubit] holds [AsyncQueryResult]
 abstract class QueryCubit<T> extends Cubit<AsyncQueryResult<T>> {
-  QueryCubit() : super(AsyncQueryResult());
+  /// Create new Cubit
+  ///
+  /// Optional [initialState] can be used to set the initial state of the Cubit.
+  /// [PendingResult] is used if not specified
+  QueryCubit([AsyncQueryResult<T>? initialState])
+      : super(initialState ?? AsyncQueryResult());
+
+  /// Create new Cubit with given intial value of the query
+  /// [DefaultResult] will be set
   QueryCubit.initialValue(T intialValue)
       : super(AsyncQueryResult.initialValue(intialValue));
 
