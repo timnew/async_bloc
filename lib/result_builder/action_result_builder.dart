@@ -1,8 +1,8 @@
 import 'package:async_bloc/result/async_action_result.dart';
-import 'package:async_bloc/result_flutter/default_busy_result_builder.dart';
-import 'package:async_bloc/result_flutter/default_failed_result_builder.dart';
-import 'package:async_bloc/result_flutter/default_pending_result_builder.dart';
-import 'package:async_bloc/result_flutter/function_types.dart';
+import 'package:async_bloc/result_builder/default_busy_result_builder.dart';
+import 'package:async_bloc/result_builder/default_failed_result_builder.dart';
+import 'package:async_bloc/result_builder/default_pending_result_builder.dart';
+import 'package:async_bloc/result_builder/function_types.dart';
 import 'package:flutter/widgets.dart';
 
 class ActionResultBuilder extends StatelessWidget {

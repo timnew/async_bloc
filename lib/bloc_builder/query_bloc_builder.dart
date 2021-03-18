@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../result.dart';
-import '../result_flutter.dart';
+import '../result_builder.dart';
 
 class QueryBlocBuilder<T, B extends Bloc<Object?, AsyncQueryResult<T>>>
     extends BlocBuilder<B, AsyncQueryResult<T>> {

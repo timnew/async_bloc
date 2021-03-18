@@ -2,29 +2,29 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../result.dart';
-import '../result_flutter.dart';
+import '../result_builder.dart';
 
-class QueryBlocConsumer<T, B extends Bloc<Object?, AsyncQueryResult<T>>>
-    extends BlocConsumer<B, AsyncQueryResult<T>> {
-  QueryBlocConsumer({
+class ActionBlocConsumer<B extends Bloc<Object?, AsyncActionResult>>
+    extends BlocConsumer<B, AsyncActionResult> {
+  ActionBlocConsumer({
     Key? key,
     WidgetBuilder? pendingBuilder,
     WidgetBuilder? busyBuilder,
     FailedResultBuilder? failedBuilder,
-    required final ValueResultBuilder<T> successfulBuilder,
-    required BlocWidgetListener<AsyncQueryResult<T>> listener,
+    required WidgetBuilder completedBuilder,
+    required BlocWidgetListener<AsyncActionResult> listener,
     B? bloc,
-    BlocBuilderCondition<AsyncQueryResult<T>>? buildWhen,
-    BlocBuilderCondition<AsyncQueryResult<T>>? listenWhen,
+    BlocBuilderCondition<AsyncActionResult>? buildWhen,
+    BlocBuilderCondition<AsyncActionResult>? listenWhen,
   }) : super(
           key: key,
           bloc: bloc,
-          builder: (context, result) => QueryResultBuilder(
+          builder: (context, result) => ActionResultBuilder(
             result: result,
             pendingBuilder: pendingBuilder,
             busyBuilder: busyBuilder,
             failedBuilder: failedBuilder,
-            successfulBuilder: successfulBuilder,
+            completedBuilder: completedBuilder,
           ),
           buildWhen: buildWhen,
           listener: listener,
