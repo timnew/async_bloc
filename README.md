@@ -39,16 +39,6 @@ AsyncQueryResult asyncQueryResult = queryResult.asAsyncResult();
 `Future<ActionResult>.asActionResult`  would flatten the hierarchy and respect the failed value from original future.
 
 `Future<T>.asQueryResult` would matertialse the future of `T` into `Future<QueryResult<T>>`. The new future would always fulfills, when original future failed, it captures the error into a `FailedResult` accordingly.
-
-## Bloc Integration
-
-This library uses `Cubit` instead of `Bloc`, which is a simplified and easier-to-use `Bloc`.
-
-* `ActionCubit`: A `Cubit` holds `AsyncActionResult`, it also provides protected methods to update its value from different kinds of `Future`
-* `QueryCubit<T>`: A `Cubit` holds `AsyncQueryResult<T>`, it also provides protected methods to update its value from different kinds of `Future`
-
-Both `ActionCubit` and `QueryCubit` can be provided into widget tree via `BlocProvider`
-
 ## Multi-State Result Builder
 
 `MultiStateResult` types provide `map` and/or `mapOr` method to pattern match and map the value, which can be used to build UI manually.
@@ -99,7 +89,18 @@ Which can be setup via
 
 It also can be configured in batch via `DefaultResultBuilder.setGlobalBuilder`
 
-## Bloc Builder
+## Bloc Integration
+
+Library provided the classes to integrate the [MultiStateResult] to Bloc
+
+This library uses `Cubit` instead of `Bloc`, which is a simplified and easier-to-use `Bloc`.
+
+* `ActionCubit`: A `Cubit` holds `AsyncActionResult`, it also provides protected methods to update its value from different kinds of `Future`
+* `QueryCubit<T>`: A `Cubit` holds `AsyncQueryResult<T>`, it also provides protected methods to update its value from different kinds of `Future`
+
+Both `ActionCubit` and `QueryCubit` can be provided into widget tree via `BlocProvider`
+
+### Bloc Builder and Bloc Consumer
 
 Like `BlocBuilder` and `BlocConsumer` provided by [Bloc_Flutter] library, the following types are provided:
 
@@ -108,6 +109,19 @@ Like `BlocBuilder` and `BlocConsumer` provided by [Bloc_Flutter] library, the fo
 * `QueryBlocBuilder`: `BlocBuilder` that consumes `QueryCubit` via `QueryResultBuilder`
 * `QueryBlocConsumer`: `BlocConsumer` that consumes `QueryCubit` via `QueryResultBuilder`
 
+## ValueNotifier Integration
+
+Besides of Bloc, this library also provides the integration to [ValueNotifier] and [ListenableBuilder].
+
+* `ActionNotifier`: A `ValueNotifier` holds `AsyncActionResult`, it also provides protected methods to update its value from different kinds of `Future`
+* `QueryNotifier<T>`: A `ValueNotifier` holds `AsyncQueryResult<T>`, it also provides protected methods to update its value from different kinds of `Future`
+
+### Listenable Builder
+
+Like `ListenableBuilder, the following classes are provided:
+
+* `ActionListenableBuilder`: `ListenableBuilder` that consumes `ActionNotifier` via `ActionResultBuilder`
+* `QueryListenableBuilder`: `ListenableBuilder` that consumes `QueryNotifier` via `QueryResultBuilder`
 
 [Bloc_Flutter]:https://pub.dev/packages/flutter_bloc
 [Provider]:https://pub.dev/packages/provider

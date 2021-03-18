@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../result.dart';
 
+/// A [ValueNotifier] holds [AsyncQueryResult]
 class QueryResultNotifier<T> extends ValueNotifier<AsyncQueryResult<T>> {
   /// Create new ValueNotifier
   ///
