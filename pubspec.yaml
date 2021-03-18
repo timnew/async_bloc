@@ -1,7 +1,6 @@
 name: async_bloc
 description: A bloc that accepts async source as input
-version: 0.0.1
-author: timnew
+version: 0.1.0
 homepage: https://github.com/timnew/async_bloc
 
 environment:
@@ -11,7 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: 7.0.0-nullsafety.5
+  flutter_bloc: ^7.0.0
+  collection: ^1.15.0
+  meta: ^1.3.0
 
 dev_dependencies:
   pedantic: ^1.0.0

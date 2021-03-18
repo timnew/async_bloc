@@ -35,7 +35,7 @@ packages:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.0.0-nullsafety.3"
+    version: "7.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -142,7 +142,7 @@ packages:
     source: hosted
     version: "3.7.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -201,7 +201,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.0.0-nullsafety.5"
+    version: "7.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -271,7 +271,7 @@ packages:
     source: hosted
     version: "0.12.10"
   meta:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: meta
       url: "https://pub.dartlang.org"
