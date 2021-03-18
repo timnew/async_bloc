@@ -1,8 +1,8 @@
-import 'package:async_bloc/result_builder/default_busy_result_builder.dart';
-import 'package:async_bloc/result_builder/default_failed_result_builder.dart';
-import 'package:async_bloc/result_builder/default_pending_result_builder.dart';
 import 'package:flutter/widgets.dart';
 
+import 'default_busy_result_builder.dart';
+import 'default_failed_result_builder.dart';
+import 'default_pending_result_builder.dart';
 import 'function_types.dart';
 
 class DefaultResultBuilder extends StatelessWidget {

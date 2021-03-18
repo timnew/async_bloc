@@ -1,5 +1,6 @@
-import 'package:async_bloc/result/async_query_result.dart';
 import 'package:flutter/widgets.dart';
+
+import '../result.dart';
 
 import 'default_busy_result_builder.dart';
 import 'default_failed_result_builder.dart';

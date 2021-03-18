@@ -1,9 +1,10 @@
-import 'package:async_bloc/result/async_action_result.dart';
-import 'package:async_bloc/result_builder/default_busy_result_builder.dart';
-import 'package:async_bloc/result_builder/default_failed_result_builder.dart';
-import 'package:async_bloc/result_builder/default_pending_result_builder.dart';
-import 'package:async_bloc/result_builder/function_types.dart';
 import 'package:flutter/widgets.dart';
+
+import '../result.dart';
+import 'default_busy_result_builder.dart';
+import 'default_failed_result_builder.dart';
+import 'default_pending_result_builder.dart';
+import 'function_types.dart';
 
 class ActionResultBuilder extends StatelessWidget {
   final WidgetBuilder? pendingBuilder;
