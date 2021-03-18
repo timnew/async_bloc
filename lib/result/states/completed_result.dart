@@ -12,9 +12,7 @@ import '../multi_state_result.dart';
 ///
 /// Used by
 /// * [ActionResult]
-/// * [QueryResult]
 /// * [AsyncActionResult]
-/// * [AsyncQueryResult]
 abstract class CompletedResult with MultiStateResult {
   const CompletedResult();
 

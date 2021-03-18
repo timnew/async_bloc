@@ -21,7 +21,10 @@ import '../multi_state_result.dart';
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
 abstract class FailedResult with MultiStateResult {
+  /// Error or exception caught
   final dynamic error;
+
+  /// Stack trace of the error
   final StackTrace? stackTrace;
 
   const FailedResult(this.error, this.stackTrace);

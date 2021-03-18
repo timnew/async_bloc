@@ -15,11 +15,9 @@ import '../multi_state_result.dart';
 /// * [FailedResult]
 ///
 /// Used by
-/// * [ActionResult]
-/// * [QueryResult]
-/// * [AsyncActionResult]
 /// * [AsyncQueryResult]
 abstract class DefaultResult<T> with MultiStateResult implements HasValue<T> {
+  /// Initial value given
   final T value;
 
   const DefaultResult(this.value);

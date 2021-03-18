@@ -15,11 +15,10 @@ import '../multi_state_result.dart';
 /// * [FailedResult]
 ///
 /// Used by
-/// * [ActionResult]
 /// * [QueryResult]
-/// * [AsyncActionResult]
 /// * [AsyncQueryResult]
 abstract class ValueResult<T> with MultiStateResult implements HasValue<T> {
+  /// Return value of the query
   final T value;
 
   const ValueResult(this.value);

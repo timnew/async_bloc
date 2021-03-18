@@ -11,8 +11,6 @@ import '../multi_state_result.dart';
 /// * [FailedResult]
 ///
 /// Used by
-/// * [ActionResult]
-/// * [QueryResult]
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
 abstract class BusyResult with MultiStateResult {
