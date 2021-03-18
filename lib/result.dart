@@ -1,4 +1,4 @@
-library async_bloc;
+library multi_state_result;
 
 export 'result/function_types.dart';
 export 'result/action_result.dart';

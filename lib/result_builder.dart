@@ -1,4 +1,4 @@
-library async_bloc;
+library multi_state_result_builder;
 
 export 'result_builder/function_types.dart';
 
