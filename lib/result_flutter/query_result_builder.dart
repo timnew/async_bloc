@@ -29,7 +29,7 @@ class QueryResultBuilder<T> extends StatelessWidget {
         busy: () => DefaultBusyResultBuilder.ensureBuild(context, busyBuilder),
         failed: (error, stackTrace) => DefaultFailedResultBuilder.ensureBuild(
             context, failedBuilder, error, stackTrace),
-        defaultValue: (value) => successfulBuilder(context, value),
+        initialValue: (value) => successfulBuilder(context, value),
         succeeded: (value) => successfulBuilder(context, value),
       );
 }

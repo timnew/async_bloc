@@ -8,7 +8,7 @@ import '../result.dart';
 abstract class QueryCubit<T> extends Cubit<AsyncQueryResult<T>> {
   QueryCubit() : super(AsyncQueryResult());
   QueryCubit.initialValue(T intialValue)
-      : super(AsyncQueryResult.withDefaultValue(intialValue));
+      : super(AsyncQueryResult.initialValue(intialValue));
 
   @protected
   Future<AsyncQueryResult<T>> flatMap(Future<QueryResult<T>> future) =>
