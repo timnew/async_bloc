@@ -1,9 +1,8 @@
 import '../../stated_result.dart';
 
 /// Base class for state result without fields
-abstract class StatelessResultBase<SELF extends StatedResult>
-    with StatedResult {
-  const StatelessResultBase();
+abstract class UnitResultBase<SELF extends StatedResult> with StatedResult {
+  const UnitResultBase();
 
   @override
   bool operator ==(dynamic other) => other is SELF;

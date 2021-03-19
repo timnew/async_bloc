@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'async_query_result.dart';
-import 'function_types.dart';
+import 'contracts.dart';
 import 'stated_result.dart';
 import 'states/succeeded_result.dart';
 import 'states/failed_result.dart';
@@ -47,8 +47,9 @@ abstract class QueryResult<T> implements StatedResult {
 
   /// Convert the [QueryResult] into [AsyncQueryResult] with corresponding state
   AsyncQueryResult<T> asAsyncResult() => map(
-        succeeded: (value) => AsyncQueryResult.succeeded(value),
-        failed: (error, callStack) => AsyncQueryResult.failed(error, callStack),
+        succeeded: (result) => AsyncQueryResult.succeeded(result.value),
+        failed: (result) =>
+            AsyncQueryResult.failed(result.error, result.stackTrace),
       );
 }
 

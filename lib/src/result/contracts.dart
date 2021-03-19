@@ -1,6 +1,15 @@
-import 'package:stated_result/stated_result.dart';
+import 'stated_result.dart';
+import 'states/failed_result.dart';
 
-import 'value_result.dart';
+/// Contract for any state result with a value
+///
+/// Used by
+/// * [SucceededResult]
+/// * [InitialValueResult]
+abstract class ValueResult<T> implements StatedResult {
+  /// The given value of the result
+  T get value;
+}
 
 /// Mapper function for general result state
 typedef TR ResultMapper<TR>();

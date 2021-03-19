@@ -1,4 +1,4 @@
-import 'function_types.dart';
+import 'contracts.dart';
 import 'stated_result.dart';
 import 'states/pending_result.dart';
 import 'states/initial_value_result.dart';

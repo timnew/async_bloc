@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/src/result/stated_result.dart';
-import 'package:stated_result/src/result/states/abstract/singleton_result_base.dart';
+import 'package:stated_result/src/result/states/abstract/unit_result_base.dart';
 
-class TestState extends StatelessResultBase<TestState> {
+class TestState extends UnitResultBase<TestState> {
   const TestState();
 }
 
@@ -15,7 +15,7 @@ class AnotherTestResult extends TestState {
 }
 
 void main() {
-  group('StateLessResultBase', () {
+  group('UnitResultBase', () {
     final result1 = TestResult();
     final result2 = TestResult();
     final anotherResult = const AnotherTestResult();

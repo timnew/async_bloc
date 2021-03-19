@@ -1,4 +1,4 @@
-import 'abstract/singleton_result_base.dart';
+import 'abstract/unit_result_base.dart';
 
 /// State indicates the query/action hasn't started yet
 ///
@@ -15,6 +15,6 @@ import 'abstract/singleton_result_base.dart';
 /// Used by
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
-abstract class PendingResult extends StatelessResultBase<PendingResult> {
+abstract class PendingResult extends UnitResultBase<PendingResult> {
   const PendingResult();
 }

@@ -1,4 +1,4 @@
-import 'abstract/singleton_result_base.dart';
+import 'abstract/unit_result_base.dart';
 
 /// State indicates the action/query has been started but not yet finished
 ///
@@ -13,6 +13,6 @@ import 'abstract/singleton_result_base.dart';
 /// Used by
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
-abstract class BusyResult extends StatelessResultBase<BusyResult> {
+abstract class BusyResult extends UnitResultBase<BusyResult> {
   const BusyResult();
 }

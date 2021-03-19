@@ -1,5 +1,4 @@
-import 'package:stated_result/src/result/value_result.dart';
-
+import 'contracts.dart';
 import 'states/busy_result.dart';
 import 'states/completed_result.dart';
 import 'states/initial_value_result.dart';

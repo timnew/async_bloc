@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'async_action_result.dart';
-import 'function_types.dart';
+import 'contracts.dart';
 import 'states/completed_result.dart';
 import 'states/failed_result.dart';
 import 'stated_result.dart';
@@ -49,8 +49,8 @@ abstract class ActionResult implements StatedResult {
   /// Convert the [ActionResult] into [AsyncActionResult] with corresponding state
   AsyncActionResult asAsyncResult() => map(
         completed: () => AsyncActionResult.completed(),
-        failed: (error, callStack) =>
-            AsyncActionResult.failed(error, callStack),
+        failed: (result) =>
+            AsyncActionResult.failed(result.error, result.stackTrace),
       );
 }
 
@@ -84,8 +84,8 @@ extension ActionResultFutureExtension on Future {
       if (result is StatedResult) {
         return result.completeMapOr(
           isSucceeded: () => ActionResult.completed(),
-          failedResult: (error, stackTrace) =>
-              ActionResult.failed(error, stackTrace),
+          failedResult: (result) =>
+              ActionResult.failed(result.error, result.stackTrace),
         );
       }
 

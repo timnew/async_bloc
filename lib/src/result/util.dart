@@ -1,4 +1,4 @@
-import 'function_types.dart';
+import 'contracts.dart';
 import 'stated_result.dart';
 import 'states/busy_result.dart';
 import 'states/completed_result.dart';
@@ -6,7 +6,6 @@ import 'states/initial_value_result.dart';
 import 'states/failed_result.dart';
 import 'states/pending_result.dart';
 import 'states/succeeded_result.dart';
-import 'value_result.dart';
 
 /// Internal use utils
 extension MultiStateResultExtension on StatedResult {
