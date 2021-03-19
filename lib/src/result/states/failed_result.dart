@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 
+import '../contracts.dart';
 import '../stated_result.dart';
 
 /// State indicates the query/action is failed
@@ -20,7 +21,7 @@ import '../stated_result.dart';
 /// * [QueryResult]
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
-abstract class FailedResult with StatedResult {
+abstract class FailedResult with StatedResult implements ErrorWithStack {
   /// Error or exception caught
   final dynamic error;
 

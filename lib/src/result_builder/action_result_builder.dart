@@ -1,35 +1,39 @@
 import 'package:flutter/widgets.dart';
-
 import 'package:stated_result/stated_result.dart';
+import 'package:stated_result/stated_result_builder.dart';
 
-import 'default_busy_result_builder.dart';
-import 'default_failed_result_builder.dart';
-import 'default_pending_result_builder.dart';
-import 'widget_builders.dart';
+import 'stated_result_builder_base.dart';
 
-class ActionResultBuilder extends StatelessWidget {
-  final WidgetBuilder? pendingBuilder;
-  final WidgetBuilder? busyBuilder;
-  final FailedResultBuilder? failedBuilder;
+/// Widget that builds UI according to the state of [AsyncActionResult] or [ActionResult]
+class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
   final WidgetBuilder completedBuilder;
-  final AsyncActionResult result;
 
-  const ActionResultBuilder({
+  ActionResultBuilder({
     Key? key,
-    this.pendingBuilder,
-    this.busyBuilder,
-    this.failedBuilder,
+    WidgetBuilder? pendingBuilder,
+    WidgetBuilder? busyBuilder,
+    FailedResultBuilder? failedBuilder,
     required this.completedBuilder,
-    required this.result,
-  }) : super(key: key);
+    required AsyncActionResult result,
+  }) : super(
+          key: key,
+          pendingBuilder: pendingBuilder,
+          busyBuilder: busyBuilder,
+          failedBuilder: failedBuilder,
+          result: result,
+        );
+
+  ActionResultBuilder.sync({
+    Key? key,
+    FailedResultBuilder? failedBuilder,
+    required WidgetBuilder completedBuilder,
+    required ActionResult result,
+  }) : this(
+          key: key,
+          completedBuilder: completedBuilder,
+          result: result.asAsyncResult(),
+        );
 
   @override
-  Widget build(BuildContext context) => result.map(
-        pending: () =>
-            DefaultPendingResultBuilder.ensureBuild(context, pendingBuilder),
-        busy: () => DefaultBusyResultBuilder.ensureBuild(context, busyBuilder),
-        failed: (error, stackTrace) => DefaultFailedResultBuilder.ensureBuild(
-            context, failedBuilder, error, stackTrace),
-        completed: () => completedBuilder(context),
-      );
+  Widget buildData(BuildContext context) => completedBuilder(context);
 }

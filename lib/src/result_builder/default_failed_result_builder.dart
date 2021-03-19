@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:stated_result/stated_result.dart';
 
 import 'widget_builders.dart';
 
@@ -20,7 +21,7 @@ class DefaultFailedResultBuilder extends InheritedWidget {
   static FailedResultBuilder globalBuilder = _globalBuilderImp;
 
   static Widget _globalBuilderImp(
-          BuildContext context, dynamic error, StackTrace? stackTrace) =>
+          BuildContext context, ErrorWithStack result) =>
       Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -32,7 +33,7 @@ class DefaultFailedResultBuilder extends InheritedWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            Text(error.toString()),
+            Text(result.error.toString()),
           ],
         ),
       );
@@ -46,10 +47,9 @@ class DefaultFailedResultBuilder extends InheritedWidget {
   static Widget ensureBuild(
     BuildContext context,
     FailedResultBuilder? customBuilder,
-    dynamic error,
-    StackTrace? stackTrace,
+    FailedResult result,
   ) =>
       (customBuilder != null)
-          ? customBuilder(context, error, stackTrace)
-          : findBuilder(context)(context, error, stackTrace);
+          ? customBuilder(context, result)
+          : findBuilder(context)(context, result);
 }

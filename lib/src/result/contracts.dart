@@ -11,6 +11,11 @@ abstract class ValueResult<T> implements StatedResult {
   T get value;
 }
 
+abstract class ErrorWithStack {
+  dynamic get error;
+  StackTrace? get stackTrace;
+}
+
 /// Mapper function for general result state
 typedef TR ResultMapper<TR>();
 
