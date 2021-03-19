@@ -8,7 +8,7 @@ import 'states/succeeded_result.dart';
 /// Common behaviors for [ActionResult], [QueryResult], [AsyncActionResult], [AsyncQueryResult]
 mixin MultiStateResult {
   /// Return true when query/action hasn't been started
-  bool get isPending => this is PendingResult || this is InitialValueResult;
+  bool get isNotStarted => this is PendingResult || this is InitialValueResult;
 
   /// Return true when query/action is being processed
   bool get isBusy => this is BusyResult;

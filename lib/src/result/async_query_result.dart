@@ -93,7 +93,7 @@ abstract class AsyncQueryResult<T> implements MultiStateResult {
         defaultResult: initialValue,
         valueResult: succeeded,
         failedResult: failed,
-        isPending: notStarted,
+        isNotStarted: notStarted,
         isFinished: finished,
         hasValue: hasValue,
         orElse: orElse,

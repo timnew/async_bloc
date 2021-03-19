@@ -14,7 +14,7 @@ void main() {
       });
 
       test("should have correct states", () {
-        expect(result.isPending, isFalse);
+        expect(result.isNotStarted, isFalse);
         expect(result.isBusy, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isTrue);
@@ -49,7 +49,7 @@ void main() {
       });
 
       test("should have correct states", () {
-        expect(result.isPending, isFalse);
+        expect(result.isNotStarted, isFalse);
         expect(result.isBusy, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isFalse);

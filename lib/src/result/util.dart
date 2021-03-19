@@ -17,7 +17,7 @@ extension MultiStateResultExtension on MultiStateResult {
     ResultMapper<TR>? completedResult,
     ValueResultMapper<T, TR>? valueResult,
     FailedResultMapper<TR>? failedResult,
-    ResultMapper<TR>? isPending,
+    ResultMapper<TR>? isNotStarted,
     ResultMapper<TR>? isFinished,
     ResultMapper<TR>? isSucceeded,
     ValueResultMapper<T, TR>? hasValue,
@@ -44,8 +44,8 @@ extension MultiStateResultExtension on MultiStateResult {
       }
     }
 
-    if (this.isPending) {
-      if (isPending != null) return isPending();
+    if (this.isNotStarted) {
+      if (isNotStarted != null) return isNotStarted();
     } else if (this.isFinished) {
       if (isFinished != null) return isFinished();
     } else if (this.isSucceeded) {
