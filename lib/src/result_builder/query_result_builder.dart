@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../stated_result.dart';
+import '../../stated_result.dart';
 
 import 'default_busy_result_builder.dart';
 import 'default_failed_result_builder.dart';

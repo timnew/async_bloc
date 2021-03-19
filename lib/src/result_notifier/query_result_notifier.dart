@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../stated_result.dart';
+import '../../stated_result.dart';
 
 /// A [ValueNotifier] holds [AsyncQueryResult]
 class QueryResultNotifier<T> extends ValueNotifier<AsyncQueryResult<T>> {

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../stated_result.dart';
+import '../../stated_result.dart';
 
 /// [Cubit] holds [AsyncQueryResult]
 abstract class QueryCubit<T> extends Cubit<AsyncQueryResult<T>> {
