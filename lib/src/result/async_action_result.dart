@@ -9,7 +9,7 @@ import 'util.dart';
 /// A 4-state result represents asychronised action with no return value
 /// It could be either pending, busy, succeeded, or failed
 ///
-/// Typically used with [Bloc] or [ValueNotifier]
+/// Typically used with `Bloc` or `ValueNotifier`
 ///
 /// [AsyncActionResult] creates the [PendingResult], indicates the action hasn't started
 /// [AsyncActionResult.busy] creates the [BusyResult], indicates the action is in progress

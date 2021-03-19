@@ -10,7 +10,7 @@ import 'util.dart';
 /// A 4-state result represents asychronised query with single query value
 /// It could be either pending, busy, succeeded, or failed
 ///
-/// Typically used with [Bloc] or [ValueNotifier]
+/// Typically used with `Bloc` or `ValueNotifier`
 ///
 /// [AsyncQueryResult] creates the [PendingResult], indicates the query hasn't started
 /// [AsyncQueryResult.busy] creates the [BusyResult], indicates the query is in progress

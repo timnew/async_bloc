@@ -114,7 +114,7 @@ Like `BlocBuilder` and `BlocConsumer` provided by [Bloc_Flutter] library, the fo
 
 ## ValueNotifier Integration
 
-Besides of Bloc, this library also provides the integration to [ValueNotifier] and [ListenableBuilder].
+Besides of Bloc, this library also provides the integration to `ValueNotifier` and `ListenableBuilder`.
 
 * `ActionNotifier`: A `ValueNotifier` holds `AsyncActionResult`, it also provides protected methods to update its value from different kinds of `Future`
 * `QueryNotifier<T>`: A `ValueNotifier` holds `AsyncQueryResult<T>`, it also provides protected methods to update its value from different kinds of `Future`

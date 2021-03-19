@@ -64,7 +64,7 @@ class _Failed extends FailedResult with ActionResult {
 }
 
 extension ActionResultFutureExtension on Future {
-  /// Materialize [Future] into [Future<ActionResult>]
+  /// Materialize `Future` into `Future<ActionResult>`]
   ///
   /// Materialised future always succeed
   /// Returns [CompletedResult] if future resovled succesfully
@@ -96,7 +96,7 @@ extension ActionResultFutureExtension on Future {
 }
 
 extension FutureActionResultExtension on Future<ActionResult> {
-  /// Same as [ActionResult.asAsyncResult] but applies on Future
+  /// Same as `ActionResult.asAsyncResult` provided by [ActionResultFutureExtension] but applies on Future
   /// Convert Future of [ActionResult] to Future of [AsyncActionResult]
   Future<AsyncActionResult> asAsyncResult() async =>
       (await this).asAsyncResult();

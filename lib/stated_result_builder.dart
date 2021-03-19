@@ -1,4 +1,4 @@
-library stated_result_flutter;
+library stated_result_builder;
 
 export 'src/result_builder/function_types.dart';
 

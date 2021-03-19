@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../stated_result.dart';
 
-/// A [ValueNotifier] holds [AsyncActionResult]
+/// A `ValueNotifier` holds [AsyncActionResult]
 class ActionResultNotifier extends ValueNotifier<AsyncActionResult> {
   /// Create new ValueNotifier
   ///
@@ -14,11 +14,11 @@ class ActionResultNotifier extends ValueNotifier<AsyncActionResult> {
   Future<AsyncActionResult> updateWithGeneralFuture(Future future) =>
       updateWithAsyncResult(future.asActionResult().asAsyncResult());
 
-  /// Update [ValueNotifier] with a [Future] of [ActionResult]
+  /// Update `ValueNotifier` with a `Future` of [ActionResult]
   Future<AsyncActionResult> updateWithResult(Future<ActionResult> future) =>
       updateWithAsyncResult(future.asAsyncResult());
 
-  /// Update [ValueNotifier] with a [Future] of [AsyncActionResult]
+  /// Update `ValueNotifier` with a `Future` of [AsyncActionResult]
   Future<AsyncActionResult> updateWithAsyncResult(
     Future<AsyncActionResult> future,
   ) async {

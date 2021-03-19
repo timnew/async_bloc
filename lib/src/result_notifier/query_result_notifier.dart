@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../stated_result.dart';
 
-/// A [ValueNotifier] holds [AsyncQueryResult]
+/// A `ValueNotifier` holds [AsyncQueryResult]
 class QueryResultNotifier<T> extends ValueNotifier<AsyncQueryResult<T>> {
   /// Create new ValueNotifier
   ///
@@ -16,16 +16,16 @@ class QueryResultNotifier<T> extends ValueNotifier<AsyncQueryResult<T>> {
   QueryResultNotifier.initialValue(T initialValue)
       : super(AsyncQueryResult<T>.initialValue(initialValue));
 
-  /// Update Cubit with a [Future]
-  /// [future] will be materialized first
+  /// Update Cubit with a `Future`
+  /// `Future` will be materialized first
   Future<AsyncQueryResult<T>> updateWithGeneralFuture(Future<T> future) =>
       updateWithAsyncResult(future.asQueryResult().asAsyncResult());
 
-  /// Update [ValueNotifier] with a [Future] of [ActionResult]
+  /// Update `ValueNotifier` with a `Future` of [ActionResult]
   Future<AsyncQueryResult<T>> updateWithResult(Future<QueryResult<T>> future) =>
       updateWithAsyncResult(future.asAsyncResult());
 
-  /// Update [ValueNotifier] with a [Future] of [AsyncQueryResult<T>]
+  /// Update `ValueNotifier` with a `Future` of [AsyncQueryResult<T>]
   Future<AsyncQueryResult<T>> updateWithAsyncResult(
     Future<AsyncQueryResult<T>> future,
   ) async {

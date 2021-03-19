@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../stated_result.dart';
-import '../../stated_result_flutter.dart';
+import '../../stated_result_builder.dart';
 
 class ActionBlocConsumer<B extends Bloc<Object?, AsyncActionResult>>
     extends BlocConsumer<B, AsyncActionResult> {

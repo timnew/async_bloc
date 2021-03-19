@@ -14,18 +14,18 @@ abstract class ActionCubit extends Cubit<AsyncActionResult> {
   ActionCubit([AsyncActionResult? initialState])
       : super(initialState ?? AsyncActionResult());
 
-  /// Update Cubit with a [Future] of any type
-  /// [future] will be materialized first
+  /// Update Cubit with a `Future` of any type
+  /// `Future` will be materialized first
   @protected
   Future<AsyncActionResult> updateWithGeneralFuture(Future future) =>
       updateWithAsyncResult(future.asActionResult().asAsyncResult());
 
-  /// Update Cubit with a [Future] of [ActionResult]
+  /// Update Cubit with a `Future` of [ActionResult]
   @protected
   Future<AsyncActionResult> updateWithResult(Future<ActionResult> future) =>
       updateWithAsyncResult(future.asAsyncResult());
 
-  /// Update Cubit with a [Future] of [AsyncActionResult]
+  /// Update Cubit with a `Future` of [AsyncActionResult]
   @protected
   Future<AsyncActionResult> updateWithAsyncResult(
     Future<AsyncActionResult> future,

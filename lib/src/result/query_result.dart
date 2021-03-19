@@ -62,7 +62,7 @@ class _Failed<T> extends FailedResult with QueryResult<T> {
 }
 
 extension QueryResultFutureExtension<T> on Future<T> {
-  /// Materialize [Future<T>] into [Future<QueryResult<T>>]
+  /// Materialize `Future<T>` into `Future<QueryResult<T>>`
   ///
   /// Materialised future always succeed
   /// Returns [ValueResult] if future resovled succesfully
