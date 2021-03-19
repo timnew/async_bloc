@@ -1,7 +1,7 @@
-name: async_bloc
+name: stated_result
 description: A bloc that accepts async source as input
-version: 0.1.1
-homepage: https://github.com/timnew/async_bloc
+version: 0.2.0-preview.1
+homepage: https://github.com/timnew/stated_result
 
 environment:
   sdk: '>=2.12.0 <3.0.0'

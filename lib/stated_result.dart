@@ -1,4 +1,4 @@
-library async_bloc;
+library stated_result;
 
 export 'src/result.dart';
 export 'src/result_builder.dart';

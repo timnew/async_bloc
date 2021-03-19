@@ -1,5 +1,3 @@
-library multi_state_result_builder;
-
 export 'result_builder/function_types.dart';
 
 export 'result_builder/default_busy_result_builder.dart';
