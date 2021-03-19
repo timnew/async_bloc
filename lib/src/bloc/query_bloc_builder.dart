@@ -12,7 +12,7 @@ class QueryBlocBuilder<T, B extends Bloc<Object?, AsyncQueryResult<T>>>
     WidgetBuilder? pendingBuilder,
     WidgetBuilder? busyBuilder,
     FailedResultBuilder? failedBuilder,
-    required final ValueResultBuilder<T> successfulBuilder,
+    required final ValueResultBuilder<T> valueBuilder,
     BlocBuilderCondition<AsyncQueryResult<T>>? buildWhen,
   }) : super(
           key: key,
@@ -22,7 +22,7 @@ class QueryBlocBuilder<T, B extends Bloc<Object?, AsyncQueryResult<T>>>
             pendingBuilder: pendingBuilder,
             busyBuilder: busyBuilder,
             failedBuilder: failedBuilder,
-            successfulBuilder: successfulBuilder,
+            valueBuilder: valueBuilder,
           ),
           buildWhen: buildWhen,
         );

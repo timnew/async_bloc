@@ -11,7 +11,7 @@ class QueryResultBuilder<T> extends StatelessWidget {
   final WidgetBuilder? pendingBuilder;
   final WidgetBuilder? busyBuilder;
   final FailedResultBuilder? failedBuilder;
-  final ValueResultBuilder<T> successfulBuilder;
+  final ValueResultBuilder<T> valueBuilder;
   final AsyncQueryResult<T> result;
 
   const QueryResultBuilder({
@@ -19,7 +19,7 @@ class QueryResultBuilder<T> extends StatelessWidget {
     this.pendingBuilder,
     this.busyBuilder,
     this.failedBuilder,
-    required this.successfulBuilder,
+    required this.valueBuilder,
     required this.result,
   }) : super(key: key);
 
@@ -30,7 +30,7 @@ class QueryResultBuilder<T> extends StatelessWidget {
         busy: () => DefaultBusyResultBuilder.ensureBuild(context, busyBuilder),
         failed: (error, stackTrace) => DefaultFailedResultBuilder.ensureBuild(
             context, failedBuilder, error, stackTrace),
-        initialValue: (value) => successfulBuilder(context, value),
-        succeeded: (value) => successfulBuilder(context, value),
+        initialValue: (value) => valueBuilder(context, value),
+        succeeded: (value) => valueBuilder(context, value),
       );
 }

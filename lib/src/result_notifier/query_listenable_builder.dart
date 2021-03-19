@@ -9,14 +9,14 @@ class QueryListenableBuilder<T> extends StatelessWidget {
   final WidgetBuilder? pendingBuilder;
   final WidgetBuilder? busyBuilder;
   final FailedResultBuilder? failedBuilder;
-  final ValueResultBuilder<T> successfulBuilder;
+  final ValueResultBuilder<T> valueBuilder;
 
   const QueryListenableBuilder({
     Key? key,
     this.pendingBuilder,
     this.busyBuilder,
     this.failedBuilder,
-    required this.successfulBuilder,
+    required this.valueBuilder,
     required this.valueListenable,
   }) : super(key: key);
 
@@ -29,7 +29,7 @@ class QueryListenableBuilder<T> extends StatelessWidget {
           pendingBuilder: pendingBuilder,
           busyBuilder: busyBuilder,
           failedBuilder: failedBuilder,
-          successfulBuilder: successfulBuilder,
+          valueBuilder: valueBuilder,
         ),
       );
 }
