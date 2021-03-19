@@ -1,6 +1,6 @@
 library async_bloc;
 
-export 'result.dart';
-export 'result_builder.dart';
-export 'bloc.dart';
-export 'result_notifier.dart';
+export 'src/result.dart';
+export 'src/result_builder.dart';
+export 'src/bloc.dart';
+export 'src/result_notifier.dart';
