@@ -10,3 +10,5 @@ export 'src/result_builder/default_result_builder.dart';
 
 export 'src/result_builder/action_result_builder.dart';
 export 'src/result_builder/query_result_builder.dart';
+
+export 'src/result_builder/blankable_builder.dart';
