@@ -1,9 +1,13 @@
 import 'package:flutter/widgets.dart';
-
 import 'package:stated_result/src/result/stated_result.dart';
+
 import 'package:stated_result/src/result/util.dart';
 import 'package:stated_result/stated_result.dart';
-import 'package:stated_result/stated_result_builder.dart';
+
+import 'default_busy_result_builder.dart';
+import 'default_failed_result_builder.dart';
+import 'default_pending_result_builder.dart';
+import 'widget_builders.dart';
 
 /// @nodoc
 abstract class StatedResultBuilderBase<TS extends StatedResult>
