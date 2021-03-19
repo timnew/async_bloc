@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'default_failed_result_builder.dart';
+import 'default_pending_result_builder.dart';
+import 'default_result_builder.dart';
+
 /// Provide defauilt busy builder to child
+///
+/// See also
+/// * [DefaultPendingResultBuilder]
+/// * [DefaultBusyResultBuilder]
+/// * [DefaultFailedResultBuilder]
+/// * [DefaultResultBuilder]
 class DefaultBusyResultBuilder extends InheritedWidget {
   /// The default builder
   final WidgetBuilder builder;

@@ -5,12 +5,28 @@ import 'default_failed_result_builder.dart';
 import 'default_pending_result_builder.dart';
 import 'widget_builders.dart';
 
+/// Provide multiple defauilt builders to child
+///
+/// See also
+/// * [DefaultPendingResultBuilder]
+/// * [DefaultBusyResultBuilder]
+/// * [DefaultFailedResultBuilder]
 class DefaultResultBuilder extends StatelessWidget {
+  /// Default pending builder
   final WidgetBuilder? pendingBuilder;
+
+  /// Default busy builder
   final WidgetBuilder? busyBuilder;
+
+  /// Default failed builder
   final FailedResultBuilder? failedBuilder;
+
+  /// child widget
   final Widget child;
 
+  /// Provider default busy builders to [child].
+  ///
+  /// [pendingBuilder], [busyBuilder], [failedBuilder] should at least 1 have value.
   const DefaultResultBuilder({
     Key? key,
     this.pendingBuilder,
@@ -45,6 +61,7 @@ class DefaultResultBuilder extends StatelessWidget {
     return result;
   }
 
+  /// Configue global builders in batch
   static void setGlobalBuilder({
     WidgetBuilder? pendingBuilder,
     WidgetBuilder? busyBuilder,
