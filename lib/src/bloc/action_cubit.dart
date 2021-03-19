@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../result.dart';
+import '../stated_result.dart';
 
 /// [Cubit] holds [AsyncActionResult]
 abstract class ActionCubit extends Cubit<AsyncActionResult> {

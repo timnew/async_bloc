@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
-import '../result.dart';
-import '../result_builder.dart';
+import '../stated_result.dart';
+import '../stated_result_flutter.dart';
 
 class ActionListenableBuilder extends StatelessWidget {
   final ValueListenable<AsyncActionResult> valueListenable;
