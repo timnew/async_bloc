@@ -1,4 +1,4 @@
-import '../multi_state_result.dart';
+import 'base/singleton_result_base.dart';
 
 /// State indicates the query/action hasn't started yet
 ///
@@ -15,16 +15,6 @@ import '../multi_state_result.dart';
 /// Used by
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
-abstract class PendingResult with MultiStateResult {
+abstract class PendingResult extends SingletonResultBase<PendingResult> {
   const PendingResult();
-
-  @override
-  bool operator ==(dynamic other) =>
-      other is PendingResult && other.runtimeType == runtimeType;
-
-  @override
-  int get hashCode => (PendingResult).hashCode;
-
-  @override
-  String toString() => "PendingResult";
 }

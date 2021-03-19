@@ -31,16 +31,16 @@ abstract class FailedResult with MultiStateResult {
 
   @override
   bool operator ==(dynamic other) =>
-      const DeepCollectionEquality().equals(this, other) ||
+      const IdentityEquality().equals(this, other) ||
       (other is FailedResult &&
-          const DeepCollectionEquality().equals(other.error, error) &&
-          const DeepCollectionEquality().equals(other.stackTrace, stackTrace));
+          const IdentityEquality().equals(other.error, error) &&
+          const IdentityEquality().equals(other.stackTrace, stackTrace));
 
   @override
   int get hashCode =>
       (FailedResult).hashCode ^
-      const DeepCollectionEquality().hash(error) ^
-      const DeepCollectionEquality().hash(stackTrace);
+      const IdentityEquality().hash(error) ^
+      const IdentityEquality().hash(stackTrace);
 
   @override
   String toString() => "FailedResult: $error\n$stackTrace";

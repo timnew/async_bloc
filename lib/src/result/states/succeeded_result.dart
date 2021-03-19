@@ -1,6 +1,4 @@
-import 'package:collection/collection.dart';
-
-import '../multi_state_result.dart';
+import 'base/value_result_base.dart';
 
 /// State indicates the query is finished successfully
 ///
@@ -17,24 +15,7 @@ import '../multi_state_result.dart';
 /// Used by
 /// * [QueryResult]
 /// * [AsyncQueryResult]
-abstract class SucceededResult<T> with MultiStateResult implements HasValue<T> {
-  /// Return value of the query
-  final T value;
-
-  const SucceededResult(this.value);
-
-  @override
-  bool operator ==(dynamic other) =>
-      const DeepCollectionEquality().equals(this, other) ||
-      (other is SucceededResult &&
-          const DeepCollectionEquality().equals(other.value, value));
-
-  @override
-  int get hashCode =>
-      (SucceededResult).hashCode ^
-      (T).hashCode ^
-      const DeepCollectionEquality().hash(value);
-
-  @override
-  String toString() => "ValueResult<$T>: $value";
+abstract class SucceededResult<T>
+    extends ValueResultBase<T, SucceededResult<T>> {
+  const SucceededResult(T value) : super(value);
 }

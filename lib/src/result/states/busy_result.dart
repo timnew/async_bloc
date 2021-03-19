@@ -1,4 +1,4 @@
-import '../multi_state_result.dart';
+import 'base/singleton_result_base.dart';
 
 /// State indicates the action/query has been started but not yet finished
 ///
@@ -13,16 +13,6 @@ import '../multi_state_result.dart';
 /// Used by
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
-abstract class BusyResult with MultiStateResult {
+abstract class BusyResult extends SingletonResultBase<BusyResult> {
   const BusyResult();
-
-  @override
-  bool operator ==(dynamic other) =>
-      other is BusyResult && other.runtimeType == runtimeType;
-
-  @override
-  int get hashCode => (BusyResult).hashCode;
-
-  @override
-  String toString() => "BusyResult";
 }
