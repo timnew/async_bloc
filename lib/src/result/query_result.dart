@@ -61,6 +61,7 @@ class _Failed<T> extends FailedResult with QueryResult<T> {
       : super(error, stackTrace);
 }
 
+/// Provides extension methods on `Future<T>` for [QueryResult]
 extension QueryResultFutureExtension<T> on Future<T> {
   /// Materialize `Future<T>` into `Future<QueryResult<T>>`
   ///
@@ -78,6 +79,7 @@ extension QueryResultFutureExtension<T> on Future<T> {
   }
 }
 
+/// Provides extension methods on `Future<QueryResult<T>>` for [QueryResult]
 extension FutureQueryResultExtension<T> on Future<QueryResult<T>> {
   /// Same as [QueryResult.asAsyncResult] but applies on Future
   /// Convert Future of [QueryResult] to Future of [AsyncQueryResult]

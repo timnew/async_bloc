@@ -63,6 +63,7 @@ class _Failed extends FailedResult with ActionResult {
       : super(error, stackTrace);
 }
 
+/// Provides extension methods on `Future` for [ActionResult]
 extension ActionResultFutureExtension on Future {
   /// Materialize `Future` into `Future<ActionResult>`]
   ///
@@ -95,6 +96,7 @@ extension ActionResultFutureExtension on Future {
   }
 }
 
+/// Provides extension methods on `Future<ActionResult>` for [ActionResult]
 extension FutureActionResultExtension on Future<ActionResult> {
   /// Same as `ActionResult.asAsyncResult` provided by [ActionResultFutureExtension] but applies on Future
   /// Convert Future of [ActionResult] to Future of [AsyncActionResult]
