@@ -1,4 +1,4 @@
-import 'base/singleton_result_base.dart';
+import 'abstract/singleton_result_base.dart';
 
 /// State indicates the action is completed successfully
 ///
@@ -13,6 +13,6 @@ import 'base/singleton_result_base.dart';
 /// Used by
 /// * [ActionResult]
 /// * [AsyncActionResult]
-abstract class CompletedResult extends SingletonResultBase<CompletedResult> {
+abstract class CompletedResult extends StatelessResultBase<CompletedResult> {
   const CompletedResult();
 }

@@ -1,3 +1,5 @@
+import 'package:stated_result/src/result/value_result.dart';
+
 import 'states/busy_result.dart';
 import 'states/completed_result.dart';
 import 'states/initial_value_result.dart';
@@ -23,8 +25,8 @@ mixin StatedResult {
   bool get isFailed => this is FailedResult;
 
   /// Return true when query resut has a value, either it is intial value or the result after running query
-  /// It also indicates whether state implemented the [HasValue] contract, regardless the type of the value
-  bool get hasValue => this is HasValue;
+  /// It also indicates whether state implemented the [ValueResult] contract, regardless the type of the value
+  bool get hasValue => this is ValueResult;
 
   /// Ensure no trigger parallel running
   /// Throw [StateError] if [isBusy] returns true
@@ -33,14 +35,8 @@ mixin StatedResult {
   void ensureNoParallelRun() {
     if (this.isBusy) throw StateError("Parallel run");
   }
-}
 
-/// Contract for any state result with a value
-///
-/// Used by
-/// * [SucceededResult]
-/// * [InitialValueResult]
-abstract class HasValue<T> {
-  /// The given value of the result
-  T get value;
+  FailedResult? asFailed() => isFailed ? this as FailedResult : null;
+  ValueResult<T>? asValueResult<T>() =>
+      this is ValueResult<T> ? this as ValueResult<T> : null;
 }

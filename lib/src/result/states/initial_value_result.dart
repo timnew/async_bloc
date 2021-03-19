@@ -1,4 +1,4 @@
-import 'base/value_result_base.dart';
+import 'abstract/value_result_base.dart';
 
 /// State indicates the query has not been started yet, but provided with a default initial value
 ///

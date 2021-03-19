@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/src/result/stated_result.dart';
-import 'package:stated_result/src/result/states/base/value_result_base.dart';
+import 'package:stated_result/src/result/states/abstract/value_result_base.dart';
 
 class TestValueResult extends ValueResultBase<String, TestValueResult> {
   const TestValueResult(String value) : super(value);
@@ -74,9 +74,9 @@ void main() {
       expect(AnotherTestResult(value2), isInstanceOf<StatedResult>());
     });
 
-    test("instances should be instance of HasValue", () {
-      expect(TestResult(value1), isInstanceOf<HasValue<String>>());
-      expect(AnotherTestResult(value2), isInstanceOf<HasValue<String>>());
+    test("instances should be instance of ValueResult", () {
+      expect(TestResult(value1), isInstanceOf<ValueResult<String>>());
+      expect(AnotherTestResult(value2), isInstanceOf<ValueResult<String>>());
     });
 
     test("toString() should contains State name and value", () {

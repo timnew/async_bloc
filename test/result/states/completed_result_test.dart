@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stated_result/src/result/states/base/singleton_result_base.dart';
+import 'package:stated_result/src/result/states/abstract/singleton_result_base.dart';
 import 'package:stated_result/stated_result.dart';
 
 class TestResult extends CompletedResult {
@@ -8,9 +8,9 @@ class TestResult extends CompletedResult {
 
 void main() {
   group('CompletedResult', () {
-    test("instance should be instance of SingletonResultBase", () {
+    test("instance should be instance of StateLessResultBase", () {
       expect(
-          TestResult(), isInstanceOf<SingletonResultBase<CompletedResult>>());
+          TestResult(), isInstanceOf<StatelessResultBase<CompletedResult>>());
     });
   });
 }

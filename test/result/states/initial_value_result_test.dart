@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stated_result/src/result/states/base/value_result_base.dart';
+import 'package:stated_result/src/result/states/abstract/value_result_base.dart';
 import 'package:stated_result/stated_result.dart';
 
 class TestResult extends InitialValueResult<String> {

@@ -1,10 +1,11 @@
 import 'package:collection/collection.dart';
 
 import '../../stated_result.dart';
+import '../../value_result.dart';
 
-abstract class ValueResultBase<T, SELF extends HasValue<T>>
+abstract class ValueResultBase<T, SELF extends ValueResult<T>>
     with StatedResult
-    implements HasValue<T> {
+    implements ValueResult<T> {
   /// The value of the result
   final T value;
 
