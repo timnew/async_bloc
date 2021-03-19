@@ -5,7 +5,7 @@ import '../../stated_result.dart';
 import 'default_busy_result_builder.dart';
 import 'default_failed_result_builder.dart';
 import 'default_pending_result_builder.dart';
-import 'function_types.dart';
+import 'widget_builders.dart';
 
 class QueryResultBuilder<T> extends StatelessWidget {
   final WidgetBuilder? pendingBuilder;

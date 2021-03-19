@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'function_types.dart';
+import 'widget_builders.dart';
 
 class DefaultFailedResultBuilder extends InheritedWidget {
   final FailedResultBuilder builder;

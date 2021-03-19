@@ -3,7 +3,7 @@ import 'dart:async';
 import 'async_query_result.dart';
 import 'function_types.dart';
 import 'multi_state_result.dart';
-import 'states/value_result.dart';
+import 'states/succeeded_result.dart';
 import 'states/failed_result.dart';
 import 'util.dart';
 
@@ -15,7 +15,7 @@ import 'util.dart';
 /// Future<ActionResult> deleteObject(String id);
 /// ```
 ///
-/// [ActionResult] creates the [ValueResult], indicates the query is succeded with a value
+/// [ActionResult] creates the [SucceededResult], indicates the query is succeded with a value
 /// [ActionResult.failed] creates the [FailedResult], indicates the query is failed
 ///
 /// See also
@@ -23,7 +23,7 @@ import 'util.dart';
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
 abstract class QueryResult<T> implements MultiStateResult {
-  /// Creates the [ValueResult] with [value]
+  /// Creates the [SucceededResult] with [value]
   const factory QueryResult(T value) = _Succeeded;
 
   /// creates the [FailedResult]
@@ -52,7 +52,7 @@ abstract class QueryResult<T> implements MultiStateResult {
       );
 }
 
-class _Succeeded<T> extends ValueResult<T> with QueryResult<T> {
+class _Succeeded<T> extends SucceededResult<T> with QueryResult<T> {
   const _Succeeded(T value) : super(value);
 }
 
@@ -65,7 +65,7 @@ extension QueryResultFutureExtension<T> on Future<T> {
   /// Materialize `Future<T>` into `Future<QueryResult<T>>`
   ///
   /// Materialised future always succeed
-  /// Returns [ValueResult] if future resovled succesfully
+  /// Returns [SucceededResult] if future resovled succesfully
   /// Returns [FailedResult] if future throws
   Future<QueryResult<T>> asQueryResult() async {
     try {

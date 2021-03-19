@@ -74,7 +74,7 @@ extension ActionResultFutureExtension on Future {
   /// the result is flattened automatically.
   ///
   /// If input future contains [AsyncActionResult] or [AsyncQueryResult],
-  /// only [ValueResult], [CompletedResult], [FailedResult] are flattened automatically.
+  /// only [SucceededResult], [CompletedResult], [FailedResult] are flattened automatically.
   /// Other values would cause exception.
   Future<ActionResult> asActionResult() async {
     try {

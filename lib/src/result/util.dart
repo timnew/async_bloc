@@ -2,10 +2,10 @@ import 'function_types.dart';
 import 'multi_state_result.dart';
 import 'states/busy_result.dart';
 import 'states/completed_result.dart';
-import 'states/default_result.dart';
+import 'states/initial_value_result.dart';
 import 'states/failed_result.dart';
 import 'states/pending_result.dart';
-import 'states/value_result.dart';
+import 'states/succeeded_result.dart';
 
 /// Internal use utils
 extension MultiStateResultExtension on MultiStateResult {
@@ -27,15 +27,15 @@ extension MultiStateResultExtension on MultiStateResult {
       if (pendingResult != null) return pendingResult();
     } else if (this is BusyResult) {
       if (busyResult != null) return busyResult();
-    } else if (this is DefaultResult<T>) {
+    } else if (this is InitialValueResult<T>) {
       if (defaultResult != null) {
-        return defaultResult((this as DefaultResult<T>).value);
+        return defaultResult((this as InitialValueResult<T>).value);
       }
     } else if (this is CompletedResult) {
       if (completedResult != null) return completedResult();
-    } else if (this is ValueResult<T>) {
+    } else if (this is SucceededResult<T>) {
       if (valueResult != null) {
-        return valueResult((this as ValueResult<T>).value);
+        return valueResult((this as SucceededResult<T>).value);
       }
     } else if (this is FailedResult) {
       if (failedResult != null) {

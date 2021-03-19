@@ -12,7 +12,7 @@ class QueryResultNotifier<T> extends ValueNotifier<AsyncQueryResult<T>> {
       : super(initialState ?? AsyncQueryResult<T>());
 
   /// Create new Notifier with given intial value of the query
-  /// [DefaultResult] will be used
+  /// [InitialValueResult] will be used
   QueryResultNotifier.initialValue(T initialValue)
       : super(AsyncQueryResult<T>.initialValue(initialValue));
 

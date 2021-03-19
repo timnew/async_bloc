@@ -10,8 +10,8 @@ import '../multi_state_result.dart';
 /// All states:
 /// * [PendingResult]
 /// * [BusyResult]
-/// * [DefaultResult]
-/// * [ValueResult]
+/// * [InitialValueResult]
+/// * [SucceededResult]
 /// * [CompletedResult]
 /// * [FailedResult]
 ///

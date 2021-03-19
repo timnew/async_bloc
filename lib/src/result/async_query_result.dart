@@ -1,9 +1,9 @@
 import 'function_types.dart';
 import 'multi_state_result.dart';
 import 'states/pending_result.dart';
-import 'states/default_result.dart';
+import 'states/initial_value_result.dart';
 import 'states/busy_result.dart';
-import 'states/value_result.dart';
+import 'states/succeeded_result.dart';
 import 'states/failed_result.dart';
 import 'util.dart';
 
@@ -14,10 +14,10 @@ import 'util.dart';
 ///
 /// [AsyncQueryResult] creates the [PendingResult], indicates the query hasn't started
 /// [AsyncQueryResult.busy] creates the [BusyResult], indicates the query is in progress
-/// [AsyncQueryResult.succeeded] creates the [ValueResult], indicates the query is succeded with a value
+/// [AsyncQueryResult.succeeded] creates the [SucceededResult], indicates the query is succeded with a value
 /// [AsyncQueryResult.failed] creates the [FailedResult], indicates the query is failed
 ///
-/// Optionally, [AsyncQueryResult.initialValue] can be used to create [DefaultResult],
+/// Optionally, [AsyncQueryResult.initialValue] can be used to create [InitialValueResult],
 /// indicates the query hasn't started, but a default value is given.
 ///
 /// See also
@@ -28,13 +28,13 @@ abstract class AsyncQueryResult<T> implements MultiStateResult {
   /// Creates the [PendingResult], indicates the query hasn't started
   factory AsyncQueryResult() => const _Pending();
 
-  /// Create [DefaultResult], indicates the query hasn't started but a default value is given.
+  /// Create [InitialValueResult], indicates the query hasn't started but a default value is given.
   const factory AsyncQueryResult.initialValue(T initialValue) = _Default;
 
   /// Creates the [BusyResult], indicates the query is in progress
   factory AsyncQueryResult.busy() => const _Busy();
 
-  /// Creates the [ValueResult], indicates the query is succeded with a value
+  /// Creates the [SucceededResult], indicates the query is succeded with a value
   const factory AsyncQueryResult.succeeded(T result) = _Succeeded;
 
   /// Creates the [FailedResult], indicates the query is failed
@@ -104,7 +104,7 @@ class _Pending<T> extends PendingResult with AsyncQueryResult<T> {
   const _Pending();
 }
 
-class _Default<T> extends DefaultResult<T> with AsyncQueryResult<T> {
+class _Default<T> extends InitialValueResult<T> with AsyncQueryResult<T> {
   const _Default(T initialValue) : super(initialValue);
 }
 
@@ -112,7 +112,7 @@ class _Busy<T> extends BusyResult with AsyncQueryResult<T> {
   const _Busy();
 }
 
-class _Succeeded<T> extends ValueResult<T> with AsyncQueryResult<T> {
+class _Succeeded<T> extends SucceededResult<T> with AsyncQueryResult<T> {
   const _Succeeded(T value) : super(value);
 }
 

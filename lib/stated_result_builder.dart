@@ -1,6 +1,6 @@
 library stated_result_builder;
 
-export 'src/result_builder/function_types.dart';
+export 'src/result_builder/widget_builders.dart';
 
 export 'src/result_builder/default_busy_result_builder.dart';
 export 'src/result_builder/default_failed_result_builder.dart';

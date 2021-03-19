@@ -2,35 +2,36 @@ import 'package:collection/collection.dart';
 
 import '../multi_state_result.dart';
 
-/// State indicates the query has not been started yet, but provided with a default initial value
+/// State indicates the query is finished successfully
 ///
-/// the [value] is the initial value
+/// [value] is the result returned by the query
 ///
 /// All states:
 /// * [PendingResult]
 /// * [BusyResult]
-/// * [DefaultResult]
-/// * [ValueResult]
+/// * [InitialValueResult]
+/// * [SucceededResult]
 /// * [CompletedResult]
 /// * [FailedResult]
 ///
 /// Used by
+/// * [QueryResult]
 /// * [AsyncQueryResult]
-abstract class DefaultResult<T> with MultiStateResult implements HasValue<T> {
-  /// Initial value given
+abstract class SucceededResult<T> with MultiStateResult implements HasValue<T> {
+  /// Return value of the query
   final T value;
 
-  const DefaultResult(this.value);
+  const SucceededResult(this.value);
 
   @override
   bool operator ==(dynamic other) =>
       const DeepCollectionEquality().equals(this, other) ||
-      (other is DefaultResult &&
+      (other is SucceededResult &&
           const DeepCollectionEquality().equals(other.value, value));
 
   @override
   int get hashCode =>
-      (DefaultResult).hashCode ^
+      (SucceededResult).hashCode ^
       (T).hashCode ^
       const DeepCollectionEquality().hash(value);
 

@@ -15,7 +15,7 @@ abstract class QueryCubit<T> extends Cubit<AsyncQueryResult<T>> {
       : super(initialState ?? AsyncQueryResult());
 
   /// Create new Cubit with given intial value of the query
-  /// [DefaultResult] will be set
+  /// [InitialValueResult] will be set
   QueryCubit.initialValue(T intialValue)
       : super(AsyncQueryResult.initialValue(intialValue));
 
