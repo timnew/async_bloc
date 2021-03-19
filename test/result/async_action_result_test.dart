@@ -13,6 +13,16 @@ void main() {
       test('gives the same instance', () {
         expect(AsyncActionResult(), same(result));
       });
+
+      test("should have correct states", () {
+        expect(result.isPending, isTrue);
+        expect(result.isBusy, isFalse);
+        expect(result.isFinished, isFalse);
+        expect(result.isSucceeded, isFalse);
+        expect(result.isFailed, isFalse);
+        expect(result.hasValue, isFalse);
+        expect(() => result.ensureNotBusy(), returnsNormally);
+      });
     });
 
     group(".busy", () {
@@ -25,6 +35,16 @@ void main() {
       test('gives the same instance', () {
         expect(AsyncActionResult.busy(), same(result));
       });
+
+      test("should have correct states", () {
+        expect(result.isPending, isFalse);
+        expect(result.isBusy, isTrue);
+        expect(result.isFinished, isFalse);
+        expect(result.isSucceeded, isFalse);
+        expect(result.isFailed, isFalse);
+        expect(result.hasValue, isFalse);
+        expect(() => result.ensureNotBusy(), throwsStateError);
+      });
     });
 
     group(".completed", () {
@@ -36,6 +56,16 @@ void main() {
 
       test('gives the same instance', () {
         expect(AsyncActionResult.completed(), same(result));
+      });
+
+      test("should have correct states", () {
+        expect(result.isPending, isFalse);
+        expect(result.isBusy, isFalse);
+        expect(result.isFinished, isTrue);
+        expect(result.isSucceeded, isTrue);
+        expect(result.isFailed, isFalse);
+        expect(result.hasValue, isFalse);
+        expect(() => result.ensureNotBusy(), returnsNormally);
       });
     });
 
@@ -61,6 +91,16 @@ void main() {
 
         expect(failed.error, same(error));
         expect(failed.stackTrace, isNull);
+      });
+
+      test("should have correct states", () {
+        expect(result.isPending, isFalse);
+        expect(result.isBusy, isFalse);
+        expect(result.isFinished, isTrue);
+        expect(result.isSucceeded, isFalse);
+        expect(result.isFailed, isTrue);
+        expect(result.hasValue, isFalse);
+        expect(() => result.ensureNotBusy(), returnsNormally);
       });
     });
   });

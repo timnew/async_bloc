@@ -14,17 +14,15 @@ void main() {
       test('gives the same instance', () {
         expect(AsyncQueryResult(), same(result));
       });
-    });
 
-    group("default constructor", () {
-      final result = AsyncQueryResult<String>();
-
-      test('should be a PendingResult', () {
-        expect(result, isInstanceOf<PendingResult>());
-      });
-
-      test('gives the same instance', () {
-        expect(AsyncQueryResult(), same(result));
+      test("should have correct states", () {
+        expect(result.isPending, isTrue);
+        expect(result.isBusy, isFalse);
+        expect(result.isFinished, isFalse);
+        expect(result.isSucceeded, isFalse);
+        expect(result.isFailed, isFalse);
+        expect(result.hasValue, isFalse);
+        expect(() => result.ensureNotBusy(), returnsNormally);
       });
     });
 
@@ -39,6 +37,16 @@ void main() {
         final succeeded = result as InitialValueResult<String>;
         expect(value, succeeded.value);
       });
+
+      test("should have correct states", () {
+        expect(result.isPending, isTrue);
+        expect(result.isBusy, isFalse);
+        expect(result.isFinished, isFalse);
+        expect(result.isSucceeded, isFalse);
+        expect(result.isFailed, isFalse);
+        expect(result.hasValue, isTrue);
+        expect(() => result.ensureNotBusy(), returnsNormally);
+      });
     });
 
     group(".busy", () {
@@ -50,6 +58,16 @@ void main() {
 
       test('gives the same instance', () {
         expect(AsyncQueryResult.busy(), same(result));
+      });
+
+      test("should have correct states", () {
+        expect(result.isPending, isFalse);
+        expect(result.isBusy, isTrue);
+        expect(result.isFinished, isFalse);
+        expect(result.isSucceeded, isFalse);
+        expect(result.isFailed, isFalse);
+        expect(result.hasValue, isFalse);
+        expect(() => result.ensureNotBusy(), throwsStateError);
       });
     });
 
@@ -63,6 +81,16 @@ void main() {
       test("should has value", () {
         final succeeded = result as SucceededResult<String>;
         expect(value, succeeded.value);
+      });
+
+      test("should have correct states", () {
+        expect(result.isPending, isFalse);
+        expect(result.isBusy, isFalse);
+        expect(result.isFinished, isTrue);
+        expect(result.isSucceeded, isTrue);
+        expect(result.isFailed, isFalse);
+        expect(result.hasValue, isTrue);
+        expect(() => result.ensureNotBusy(), returnsNormally);
       });
     });
 
@@ -88,6 +116,16 @@ void main() {
 
         expect(failed.error, same(error));
         expect(failed.stackTrace, isNull);
+      });
+
+      test("should have correct states", () {
+        expect(result.isPending, isFalse);
+        expect(result.isBusy, isFalse);
+        expect(result.isFinished, isTrue);
+        expect(result.isSucceeded, isFalse);
+        expect(result.isFailed, isTrue);
+        expect(result.hasValue, isFalse);
+        expect(() => result.ensureNotBusy(), returnsNormally);
       });
     });
   });

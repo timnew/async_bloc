@@ -12,6 +12,16 @@ void main() {
       test('gives the same instance', () {
         expect(const QueryResult("value"), same(result));
       });
+
+      test("should have correct states", () {
+        expect(result.isPending, isFalse);
+        expect(result.isBusy, isFalse);
+        expect(result.isFinished, isTrue);
+        expect(result.isSucceeded, isTrue);
+        expect(result.isFailed, isFalse);
+        expect(result.hasValue, isTrue);
+        expect(() => result.ensureNotBusy(), returnsNormally);
+      });
     });
 
     group(".failed", () {
@@ -36,6 +46,16 @@ void main() {
 
         expect(failed.error, same(error));
         expect(failed.stackTrace, isNull);
+      });
+
+      test("should have correct states", () {
+        expect(result.isPending, isFalse);
+        expect(result.isBusy, isFalse);
+        expect(result.isFinished, isTrue);
+        expect(result.isSucceeded, isFalse);
+        expect(result.isFailed, isTrue);
+        expect(result.hasValue, isFalse);
+        expect(() => result.ensureNotBusy(), returnsNormally);
       });
     });
   });
