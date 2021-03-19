@@ -4,7 +4,7 @@ import 'async_action_result.dart';
 import 'function_types.dart';
 import 'states/completed_result.dart';
 import 'states/failed_result.dart';
-import 'multi_state_result.dart';
+import 'stated_result.dart';
 import 'util.dart';
 
 /// A 2-state result represents synchronised action with no return value
@@ -22,7 +22,7 @@ import 'util.dart';
 /// * [AsyncActionResult]
 /// * [QueryResult]
 /// * [AsyncQueryResult]
-abstract class ActionResult implements MultiStateResult {
+abstract class ActionResult implements StatedResult {
   /// creates the [CompletedResult]
   /// This factory always returns a const result
   factory ActionResult.completed() => const _Completed();
@@ -81,7 +81,7 @@ extension ActionResultFutureExtension on Future {
     try {
       final result = await this;
 
-      if (result is MultiStateResult) {
+      if (result is StatedResult) {
         return result.completeMapOr(
           isSucceeded: () => ActionResult.completed(),
           failedResult: (error, stackTrace) =>

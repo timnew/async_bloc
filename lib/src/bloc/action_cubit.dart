@@ -30,7 +30,7 @@ abstract class ActionCubit extends Cubit<AsyncActionResult> {
   Future<AsyncActionResult> updateWithAsyncResult(
     Future<AsyncActionResult> future,
   ) async {
-    this.state.ensureNotBusy();
+    this.state.ensureNoParallelRun();
 
     this.emit(AsyncActionResult.busy());
 

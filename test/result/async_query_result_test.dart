@@ -22,7 +22,7 @@ void main() {
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
         expect(result.hasValue, isFalse);
-        expect(() => result.ensureNotBusy(), returnsNormally);
+        expect(() => result.ensureNoParallelRun(), returnsNormally);
       });
     });
 
@@ -45,7 +45,7 @@ void main() {
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
         expect(result.hasValue, isTrue);
-        expect(() => result.ensureNotBusy(), returnsNormally);
+        expect(() => result.ensureNoParallelRun(), returnsNormally);
       });
     });
 
@@ -67,7 +67,7 @@ void main() {
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
         expect(result.hasValue, isFalse);
-        expect(() => result.ensureNotBusy(), throwsStateError);
+        expect(() => result.ensureNoParallelRun(), throwsStateError);
       });
     });
 
@@ -90,7 +90,7 @@ void main() {
         expect(result.isSucceeded, isTrue);
         expect(result.isFailed, isFalse);
         expect(result.hasValue, isTrue);
-        expect(() => result.ensureNotBusy(), returnsNormally);
+        expect(() => result.ensureNoParallelRun(), returnsNormally);
       });
     });
 
@@ -125,7 +125,7 @@ void main() {
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isTrue);
         expect(result.hasValue, isFalse);
-        expect(() => result.ensureNotBusy(), returnsNormally);
+        expect(() => result.ensureNoParallelRun(), returnsNormally);
       });
     });
   });

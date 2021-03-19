@@ -1,8 +1,8 @@
-import '../../multi_state_result.dart';
+import '../../stated_result.dart';
 
 /// Base class for state result without fields
-abstract class SingletonResultBase<SELF extends MultiStateResult>
-    with MultiStateResult {
+abstract class SingletonResultBase<SELF extends StatedResult>
+    with StatedResult {
   const SingletonResultBase();
 
   @override

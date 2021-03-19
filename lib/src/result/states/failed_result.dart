@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 
-import '../multi_state_result.dart';
+import '../stated_result.dart';
 
 /// State indicates the query/action is failed
 ///
@@ -20,7 +20,7 @@ import '../multi_state_result.dart';
 /// * [QueryResult]
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
-abstract class FailedResult with MultiStateResult {
+abstract class FailedResult with StatedResult {
   /// Error or exception caught
   final dynamic error;
 

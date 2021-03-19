@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'async_query_result.dart';
 import 'function_types.dart';
-import 'multi_state_result.dart';
+import 'stated_result.dart';
 import 'states/succeeded_result.dart';
 import 'states/failed_result.dart';
 import 'util.dart';
@@ -22,7 +22,7 @@ import 'util.dart';
 /// * [ActionResult]
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
-abstract class QueryResult<T> implements MultiStateResult {
+abstract class QueryResult<T> implements StatedResult {
   /// Creates the [SucceededResult] with [value]
   const factory QueryResult(T value) = _Succeeded;
 

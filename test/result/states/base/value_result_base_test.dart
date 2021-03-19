@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stated_result/src/result/multi_state_result.dart';
+import 'package:stated_result/src/result/stated_result.dart';
 import 'package:stated_result/src/result/states/base/value_result_base.dart';
 
 class TestValueResult extends ValueResultBase<String, TestValueResult> {
@@ -70,8 +70,8 @@ void main() {
     });
 
     test("instances should be instance of MultiStateResult", () {
-      expect(TestResult(value1), isInstanceOf<MultiStateResult>());
-      expect(AnotherTestResult(value2), isInstanceOf<MultiStateResult>());
+      expect(TestResult(value1), isInstanceOf<StatedResult>());
+      expect(AnotherTestResult(value2), isInstanceOf<StatedResult>());
     });
 
     test("instances should be instance of HasValue", () {

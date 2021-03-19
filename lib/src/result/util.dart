@@ -1,5 +1,5 @@
 import 'function_types.dart';
-import 'multi_state_result.dart';
+import 'stated_result.dart';
 import 'states/busy_result.dart';
 import 'states/completed_result.dart';
 import 'states/initial_value_result.dart';
@@ -8,7 +8,7 @@ import 'states/pending_result.dart';
 import 'states/succeeded_result.dart';
 
 /// Internal use utils
-extension MultiStateResultExtension on MultiStateResult {
+extension MultiStateResultExtension on StatedResult {
   /// Internal used unsafe mapping function
   TR completeMapOr<T, TR>({
     ResultMapper<TR>? pendingResult,

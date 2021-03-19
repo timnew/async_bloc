@@ -3,7 +3,7 @@ import 'states/completed_result.dart';
 import 'states/failed_result.dart';
 import 'states/pending_result.dart';
 import 'states/busy_result.dart';
-import 'multi_state_result.dart';
+import 'stated_result.dart';
 import 'util.dart';
 
 /// A 4-state result represents asychronised action with no return value
@@ -20,7 +20,7 @@ import 'util.dart';
 /// * [ActionResult]
 /// * [QueryResult]
 /// * [AsyncQueryResult]
-abstract class AsyncActionResult implements MultiStateResult {
+abstract class AsyncActionResult implements StatedResult {
   /// Creates the [PendingResult], indicates the action hasn't started
   factory AsyncActionResult() => const _Pending();
 

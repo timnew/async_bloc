@@ -22,7 +22,7 @@ class ActionResultNotifier extends ValueNotifier<AsyncActionResult> {
   Future<AsyncActionResult> updateWithAsyncResult(
     Future<AsyncActionResult> future,
   ) async {
-    this.value.ensureNotBusy();
+    this.value.ensureNoParallelRun();
 
     this.value = AsyncActionResult.busy();
 

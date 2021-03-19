@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stated_result/src/result/multi_state_result.dart';
+import 'package:stated_result/src/result/stated_result.dart';
 import 'package:stated_result/src/result/states/base/singleton_result_base.dart';
 
 class TestState extends SingletonResultBase<TestState> {
@@ -39,8 +39,8 @@ void main() {
     });
 
     test("instances should be instance of MultiStateResult", () {
-      expect(result1, isInstanceOf<MultiStateResult>());
-      expect(anotherResult, isInstanceOf<MultiStateResult>());
+      expect(result1, isInstanceOf<StatedResult>());
+      expect(anotherResult, isInstanceOf<StatedResult>());
     });
 
     test("toString() should get State name", () {

@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
 
-import '../../multi_state_result.dart';
+import '../../stated_result.dart';
 
 abstract class ValueResultBase<T, SELF extends HasValue<T>>
-    with MultiStateResult
+    with StatedResult
     implements HasValue<T> {
   /// The value of the result
   final T value;

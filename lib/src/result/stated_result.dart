@@ -6,7 +6,7 @@ import 'states/pending_result.dart';
 import 'states/succeeded_result.dart';
 
 /// Common behaviors for [ActionResult], [QueryResult], [AsyncActionResult], [AsyncQueryResult]
-mixin MultiStateResult {
+mixin StatedResult {
   /// Return true when query/action hasn't been started
   bool get isNotStarted => this is PendingResult || this is InitialValueResult;
 
@@ -26,12 +26,12 @@ mixin MultiStateResult {
   /// It also indicates whether state implemented the [HasValue] contract, regardless the type of the value
   bool get hasValue => this is HasValue;
 
-  /// Ensure the query/action is not running
+  /// Ensure no trigger parallel running
   /// Throw [StateError] if [isBusy] returns true
   ///
   /// Can be used as state check before kicking off new action/query to avoid parallel run
-  void ensureNotBusy() {
-    if (this.isBusy) throw StateError("Query/Action is in progress");
+  void ensureNoParallelRun() {
+    if (this.isBusy) throw StateError("Parallel run");
   }
 }
 

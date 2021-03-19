@@ -1,5 +1,5 @@
 import 'function_types.dart';
-import 'multi_state_result.dart';
+import 'stated_result.dart';
 import 'states/pending_result.dart';
 import 'states/initial_value_result.dart';
 import 'states/busy_result.dart';
@@ -24,7 +24,7 @@ import 'util.dart';
 /// * [ActionResult]
 /// * [AsyncActionResult]
 /// * [QueryResult]
-abstract class AsyncQueryResult<T> implements MultiStateResult {
+abstract class AsyncQueryResult<T> implements StatedResult {
   /// Creates the [PendingResult], indicates the query hasn't started
   factory AsyncQueryResult() => const _Pending();
 
