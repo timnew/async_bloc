@@ -72,7 +72,7 @@ abstract class AsyncQueryResult<T> implements MultiStateResult {
   /// [failed] is called with error and stackTrace if result is failed
   ///
   /// [notStarted] is called on [pending] or [initialValue]. Not called if [pending] or [initialValue] is given.
-  /// [finished] is either completed or failed. Not called if [failed] or [completed] is given.
+  /// [finished] is either completed or failed. Not called if [failed] or [succeeded] is given.
   /// [hasValue] is called on [initialValue] or [succeeded]. Not called if [initialValue] or [succeeded] is given.
   ///
   /// [orElse] is called if no specific state mapper is given
