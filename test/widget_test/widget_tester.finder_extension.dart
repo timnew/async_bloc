@@ -1,4 +1,4 @@
-part of 'widget_test.dart';
+part of 'widget_tester.dart';
 
 extension AssertionExtension on Finder {
   Finder should(

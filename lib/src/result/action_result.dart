@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'query_result.dart';
 import 'async_action_result.dart';
+import 'async_query_result.dart';
 import 'contracts.dart';
 import 'states/completed_result.dart';
 import 'states/failed_result.dart';
@@ -23,6 +25,9 @@ import 'util.dart';
 /// * [QueryResult]
 /// * [AsyncQueryResult]
 abstract class ActionResult implements StatedResult {
+  /// Alias to [ActionResult.completed]
+  factory ActionResult() = ActionResult.completed;
+
   /// creates the [CompletedResult]
   /// This factory always returns a const result
   factory ActionResult.completed() => const _Completed();

@@ -6,12 +6,16 @@ import 'states/waiting_result.dart';
 import 'stated_result.dart';
 import 'util.dart';
 
+import 'action_result.dart';
+import 'query_result.dart';
+import 'async_query_result.dart';
+
 /// A 4-state result represents asychronised action with no return value
 /// It could be either pending, waiting, succeeded, or failed
 ///
 /// Typically used with `Bloc` or `ValueNotifier`
 ///
-/// [AsyncActionResult] creates the [PendingResult], indicates the action hasn't started
+/// [AsyncActionResult.pending] creates the [PendingResult], indicates the action hasn't started
 /// [AsyncActionResult.waiting] creates the [WaitingResult], indicates the action is in progress
 /// [AsyncActionResult.completed] creates the [CompletedResult], indicates the action is completed
 /// [AsyncActionResult.failed] creates the [FailedResult], indicates the action is failed
@@ -21,8 +25,11 @@ import 'util.dart';
 /// * [QueryResult]
 /// * [AsyncQueryResult]
 abstract class AsyncActionResult implements StatedResult {
+  /// Alias to [AsyncActionResult.pending]
+  factory AsyncActionResult() = AsyncActionResult.pending;
+
   /// Creates the [PendingResult], indicates the action hasn't started
-  factory AsyncActionResult() => const _Pending();
+  factory AsyncActionResult.pending() => const _Pending();
 
   /// Creates the [WaitingResult], indicates the action is in progress
   factory AsyncActionResult.waiting() => const _Waiting();

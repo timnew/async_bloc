@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'action_result.dart';
+import 'async_action_result.dart';
 import 'async_query_result.dart';
 import 'contracts.dart';
 import 'stated_result.dart';
@@ -12,19 +14,22 @@ import 'util.dart';
 ///
 /// Typically wrapped in a future as the return value of an action execution.
 /// ```dart
-/// Future<ActionResult> deleteObject(String id);
+/// Future<QueryResult<User>> findUser(String userId);
 /// ```
 ///
-/// [ActionResult] creates the [SucceededResult], indicates the query is succeded with a value
-/// [ActionResult.failed] creates the [FailedResult], indicates the query is failed
+/// [QueryResult.succeeded] creates the [SucceededResult], indicates the query is succeded with a value
+/// [QueryResult.failed] creates the [FailedResult], indicates the query is failed
 ///
 /// See also
 /// * [ActionResult]
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
 abstract class QueryResult<T> implements StatedResult {
+  /// Alias to [QueryResult.succeeded]
+  const factory QueryResult(T value) = QueryResult.succeeded;
+
   /// Creates the [SucceededResult] with [value]
-  const factory QueryResult(T value) = _Succeeded;
+  const factory QueryResult.succeeded(T value) = _Succeeded;
 
   /// creates the [FailedResult]
   /// [error] is the [Error]/[Exception] fails the action

@@ -60,6 +60,7 @@ class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
     required ActionResult result,
   }) : this(
           key: key,
+          failedBuilder: failedBuilder,
           completedBuilder: completedBuilder,
           result: result.asAsyncResult(),
         );

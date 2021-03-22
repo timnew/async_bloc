@@ -7,12 +7,16 @@ import 'states/succeeded_result.dart';
 import 'states/failed_result.dart';
 import 'util.dart';
 
+import 'action_result.dart';
+import 'query_result.dart';
+import 'async_action_result.dart';
+
 /// A 4-state result represents asychronised query with single query value
 /// It could be either pending, waiting, succeeded, or failed
 ///
 /// Typically used with `Bloc` or `ValueNotifier`
 ///
-/// [AsyncQueryResult] creates the [PendingResult], indicates the query hasn't started
+/// [AsyncQueryResult.pending] creates the [PendingResult], indicates the query hasn't started.
 /// [AsyncQueryResult.waiting] creates the [WaitingResult], indicates the query is in progress
 /// [AsyncQueryResult.succeeded] creates the [SucceededResult], indicates the query is succeded with a value
 /// [AsyncQueryResult.failed] creates the [FailedResult], indicates the query is failed
@@ -25,8 +29,11 @@ import 'util.dart';
 /// * [AsyncActionResult]
 /// * [QueryResult]
 abstract class AsyncQueryResult<T> implements StatedResult {
+  /// Alias to [AsyncQueryResult.pending]
+  factory AsyncQueryResult() = AsyncQueryResult.pending;
+
   /// Creates the [PendingResult], indicates the query hasn't started
-  factory AsyncQueryResult() => const _Pending();
+  factory AsyncQueryResult.pending() => const _Pending();
 
   /// Create [InitialValueResult], indicates the query hasn't started but a default value is given.
   const factory AsyncQueryResult.initialValue(T initialValue) = _Default;
