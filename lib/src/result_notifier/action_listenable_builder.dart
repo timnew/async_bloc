@@ -7,14 +7,14 @@ import 'package:stated_result/stated_result_builder.dart';
 class ActionListenableBuilder extends StatelessWidget {
   final ValueListenable<AsyncActionResult> valueListenable;
   final WidgetBuilder? pendingBuilder;
-  final WidgetBuilder? busyBuilder;
+  final WidgetBuilder? waitingBuilder;
   final FailedResultBuilder? failedBuilder;
   final WidgetBuilder completedBuilder;
 
   const ActionListenableBuilder({
     Key? key,
     this.pendingBuilder,
-    this.busyBuilder,
+    this.waitingBuilder,
     this.failedBuilder,
     required this.completedBuilder,
     required this.valueListenable,
@@ -27,7 +27,7 @@ class ActionListenableBuilder extends StatelessWidget {
         builder: (context, result, _) => ActionResultBuilder(
           result: result,
           pendingBuilder: pendingBuilder,
-          busyBuilder: busyBuilder,
+          waitingBuilder: waitingBuilder,
           failedBuilder: failedBuilder,
           completedBuilder: completedBuilder,
         ),

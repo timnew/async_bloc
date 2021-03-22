@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import 'widget_builders.dart';
-import 'default_busy_result_builder.dart';
+import 'default_waiting_result_builder.dart';
 import 'default_failed_result_builder.dart';
 import 'default_pending_result_builder.dart';
 import 'default_empty_builder.dart';
@@ -10,15 +10,15 @@ import 'default_empty_builder.dart';
 ///
 /// See also
 /// * [DefaultPendingResultBuilder]
-/// * [DefaultBusyResultBuilder]
+/// * [DefaultWaitingResultBuilder]
 /// * [DefaultFailedResultBuilder]
 /// * [DefaultEmptyBuilder]
 class DefaultResultBuilder extends StatelessWidget {
   /// Default pending builder
   final WidgetBuilder? pendingBuilder;
 
-  /// Default busy builder
-  final WidgetBuilder? busyBuilder;
+  /// Default waiting builder
+  final WidgetBuilder? waitingBuilder;
 
   /// Default failed builder
   final FailedResultBuilder? failedBuilder;
@@ -29,19 +29,19 @@ class DefaultResultBuilder extends StatelessWidget {
   /// child widget
   final Widget child;
 
-  /// Provider default busy builders to [child].
+  /// Provider default waiting builders to [child].
   ///
-  /// [pendingBuilder], [busyBuilder], [failedBuilder] should at least 1 have value.
+  /// [pendingBuilder], [waitingBuilder], [failedBuilder] should at least 1 have value.
   const DefaultResultBuilder({
     Key? key,
     this.pendingBuilder,
-    this.busyBuilder,
+    this.waitingBuilder,
     this.failedBuilder,
     this.emptyBuilder,
     required this.child,
   })   : assert(
           pendingBuilder != null ||
-              busyBuilder != null ||
+              waitingBuilder != null ||
               failedBuilder != null,
         ),
         super(key: key);
@@ -55,8 +55,9 @@ class DefaultResultBuilder extends StatelessWidget {
           DefaultFailedResultBuilder(builder: failedBuilder!, child: result);
     }
 
-    if (busyBuilder != null) {
-      result = DefaultBusyResultBuilder(builder: busyBuilder!, child: result);
+    if (waitingBuilder != null) {
+      result =
+          DefaultWaitingResultBuilder(builder: waitingBuilder!, child: result);
     }
 
     if (failedBuilder != null) {
@@ -74,7 +75,7 @@ class DefaultResultBuilder extends StatelessWidget {
   /// Configue global builders in batch
   static void setGlobalBuilder({
     WidgetBuilder? pendingBuilder,
-    WidgetBuilder? busyBuilder,
+    WidgetBuilder? waitingBuilder,
     FailedResultBuilder? failedBuilder,
     WidgetBuilder? emptyBuilder,
   }) {
@@ -82,8 +83,8 @@ class DefaultResultBuilder extends StatelessWidget {
       DefaultPendingResultBuilder.globalBuilder = pendingBuilder;
     }
 
-    if (busyBuilder != null) {
-      DefaultBusyResultBuilder.globalBuilder = busyBuilder;
+    if (waitingBuilder != null) {
+      DefaultWaitingResultBuilder.globalBuilder = waitingBuilder;
     }
 
     if (failedBuilder != null) {

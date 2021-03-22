@@ -16,7 +16,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isNotStarted, isTrue);
-        expect(result.isBusy, isFalse);
+        expect(result.isWaiting, isFalse);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
@@ -25,20 +25,20 @@ void main() {
       });
     });
 
-    group(".busy", () {
-      final result = AsyncActionResult.busy();
+    group(".waiting", () {
+      final result = AsyncActionResult.waiting();
 
-      test('should be a BusyResult', () {
-        expect(result, isInstanceOf<BusyResult>());
+      test('should be a WaitingResult', () {
+        expect(result, isInstanceOf<WaitingResult>());
       });
 
       test('gives the same instance', () {
-        expect(AsyncActionResult.busy(), same(result));
+        expect(AsyncActionResult.waiting(), same(result));
       });
 
       test("should have correct states", () {
         expect(result.isNotStarted, isFalse);
-        expect(result.isBusy, isTrue);
+        expect(result.isWaiting, isTrue);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
@@ -60,7 +60,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isNotStarted, isFalse);
-        expect(result.isBusy, isFalse);
+        expect(result.isWaiting, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isTrue);
         expect(result.isFailed, isFalse);
@@ -95,7 +95,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isNotStarted, isFalse);
-        expect(result.isBusy, isFalse);
+        expect(result.isWaiting, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isTrue);

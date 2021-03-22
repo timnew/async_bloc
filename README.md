@@ -12,9 +12,9 @@ This library includes 4 sub-modules:
 The library includes 4 different types of `MultiStateResult`, each has different state to indicates its internal state. The type is immutable data type, and can be pattern matched like enum.
 
 * `ActionResult`: A result has 2 states: `Completed` and `Failed`. It can be used to represents the result of an action without return value.
-* `AsyncActionResult`: A result has 4 states: `Pending`, `Busy`, `Completed`, and `Failed`. It represents the full lifecycle of an async action without a return value.
+* `AsyncActionResult`: A result has 4 states: `Pending`, `Waiting`, `Completed`, and `Failed`. It represents the full lifecycle of an async action without a return value.
 * `QueryResult<T>`: A result has 2 states: `Succeeded` and `Failed`, in which `Succeeded` would holds a value of given type `T`. It represents the result of a query that returns a certain type of data.
-* `AsyncQueryResult<T>`: A result has 4, states: `Pending`, `Busy`, `Suceeded`, and `Failed`. It represents a full lifecycle of a query that returns a certain type of data. Potentially, an extra state `Default` can be used, it is like `Pending` indicates the query hasn't been started yet, but also holds a `value` like `Succeeded`. It can be used to indicates the scenario which app provides default value as optimistic updates.
+* `AsyncQueryResult<T>`: A result has 4, states: `Pending`, `Waiting`, `Suceeded`, and `Failed`. It represents a full lifecycle of a query that returns a certain type of data. Potentially, an extra state `Default` can be used, it is like `Pending` indicates the query hasn't been started yet, but also holds a `value` like `Succeeded`. It can be used to indicates the scenario which app provides default value as optimistic updates.
 
 ### How it works
 
@@ -60,7 +60,7 @@ Widget build(BuildContext context, AsyncActionResult result) =>
   ActionResultBuilder(
       result: result,
       pendingBuilder: (_context) => Center(child: Text("No Data")),
-      busyBuilder:  (_context) => Center(child: CircularProgressIndicator()),
+      waitingBuilder:  (_context) => Center(child: CircularProgressIndicator()),
       failedBuilder: (_context, error, _stackTrace) => Center(
         child: Text("Error: $error"),
       ),
@@ -69,11 +69,11 @@ Widget build(BuildContext context, AsyncActionResult result) =>
 ```
 ### Non critical state default builders
 
-For `ActionResultBuilder` and `QueryResultBuilder`, `completed` and `succeeded` are considered as critical builder, which is mandatory each time to instantiate the Widget. While `pendingBuilder`, `busyBuilder`, and `failedBuilder` are optional, which can be omitted.
+For `ActionResultBuilder` and `QueryResultBuilder`, `completed` and `succeeded` are considered as critical builder, which is mandatory each time to instantiate the Widget. While `pendingBuilder`, `waitingBuilder`, and `failedBuilder` are optional, which can be omitted.
 
 When the given builder is omitted, the `ResultBuilder` would search the widget hierarchy to find any default builder has been given. Just like `Text` would search `DefaultTextStyle` if `textStyle` is not explicitly given.
 
-Accordingly, `DefaultPendingResultBuilder`, `DefaultBusyResultBuilder`, and `DefaultFailedResultBuilder` can be used to provide those default builders to their children along the widget tree.
+Accordingly, `DefaultPendingResultBuilder`, `DefaultWaitingResultBuilder`, and `DefaultFailedResultBuilder` can be used to provide those default builders to their children along the widget tree.
 
 ### DefaultResultBuilder
 
@@ -87,7 +87,7 @@ If optional builders are omitted, and no default builder are given. The `ResultB
 Which can be setup via
 
 * `DefaultPendingResultBuilder.globalBuilder`
-* `DefaultBusyResultBuilder.globalBuilder`
+* `DefaultWaitingResultBuilder.globalBuilder`
 * `DefaultFailedResultBuilder.globalBuilder`
 
 It also can be configured in batch via `DefaultResultBuilder.setGlobalBuilder`

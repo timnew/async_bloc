@@ -37,7 +37,7 @@ abstract class QueryCubit<T> extends Cubit<AsyncQueryResult<T>> {
   ) async {
     this.state.ensureNoParallelRun();
 
-    this.emit(AsyncQueryResult.busy());
+    this.emit(AsyncQueryResult.waiting());
 
     this.emit(await future);
 

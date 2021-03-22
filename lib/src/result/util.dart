@@ -1,6 +1,6 @@
 import 'contracts.dart';
 import 'stated_result.dart';
-import 'states/busy_result.dart';
+import 'states/waiting_result.dart';
 import 'states/completed_result.dart';
 import 'states/initial_value_result.dart';
 import 'states/failed_result.dart';
@@ -12,7 +12,7 @@ extension MultiStateResultExtension on StatedResult {
   /// Internal used unsafe mapping function
   TR completeMapOr<T, TR>({
     ResultMapper<TR>? pendingResult,
-    ResultMapper<TR>? busyResult,
+    ResultMapper<TR>? waitingResult,
     ValueResultMapper<T, TR>? defaultResult,
     ResultMapper<TR>? completedResult,
     ValueResultMapper<T, TR>? valueResult,
@@ -25,8 +25,8 @@ extension MultiStateResultExtension on StatedResult {
   }) {
     if (this is PendingResult) {
       if (pendingResult != null) return pendingResult();
-    } else if (this is BusyResult) {
-      if (busyResult != null) return busyResult();
+    } else if (this is WaitingResult) {
+      if (waitingResult != null) return waitingResult();
     } else if (this is InitialValueResult<T>) {
       if (defaultResult != null) {
         return defaultResult(this as InitialValueResult<T>);

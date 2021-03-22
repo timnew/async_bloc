@@ -10,7 +10,7 @@ class ActionBlocBuilder<B extends Bloc<Object?, AsyncActionResult>>
     Key? key,
     B? bloc,
     WidgetBuilder? pendingBuilder,
-    WidgetBuilder? busyBuilder,
+    WidgetBuilder? waitingBuilder,
     FailedResultBuilder? failedBuilder,
     required WidgetBuilder completedBuilder,
     BlocBuilderCondition<AsyncActionResult>? buildWhen,
@@ -20,7 +20,7 @@ class ActionBlocBuilder<B extends Bloc<Object?, AsyncActionResult>>
           builder: (context, result) => ActionResultBuilder(
             result: result,
             pendingBuilder: pendingBuilder,
-            busyBuilder: busyBuilder,
+            waitingBuilder: waitingBuilder,
             failedBuilder: failedBuilder,
             completedBuilder: completedBuilder,
           ),

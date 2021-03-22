@@ -9,7 +9,7 @@ class QueryBlocConsumer<T, B extends Bloc<Object?, AsyncQueryResult<T>>>
   QueryBlocConsumer({
     Key? key,
     WidgetBuilder? pendingBuilder,
-    WidgetBuilder? busyBuilder,
+    WidgetBuilder? waitingBuilder,
     FailedResultBuilder? failedBuilder,
     required final ValueResultBuilder<T> valueBuilder,
     required BlocWidgetListener<AsyncQueryResult<T>> listener,
@@ -22,7 +22,7 @@ class QueryBlocConsumer<T, B extends Bloc<Object?, AsyncQueryResult<T>>>
           builder: (context, result) => QueryResultBuilder(
             result: result,
             pendingBuilder: pendingBuilder,
-            busyBuilder: busyBuilder,
+            waitingBuilder: waitingBuilder,
             failedBuilder: failedBuilder,
             valueBuilder: valueBuilder,
           ),

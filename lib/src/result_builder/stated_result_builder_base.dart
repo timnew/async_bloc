@@ -4,7 +4,7 @@ import 'package:stated_result/src/result/stated_result.dart';
 import 'package:stated_result/src/result/util.dart';
 import 'package:stated_result/stated_result.dart';
 
-import 'default_busy_result_builder.dart';
+import 'default_waiting_result_builder.dart';
 import 'default_failed_result_builder.dart';
 import 'default_pending_result_builder.dart';
 import 'widget_builders.dart';
@@ -17,10 +17,10 @@ abstract class StatedResultBuilderBase<TS extends StatedResult>
   /// Default pending builder provided by [DefaultPendingResultBuilder] will be used if not explicitly given.
   final WidgetBuilder? pendingBuilder;
 
-  /// Builder to be used when [BusyResult] is given.
+  /// Builder to be used when [WaitingResult] is given.
   ///
-  /// Default pending builder provided by [DefaultBusyResultBuilder] will be used if not explicitly given.
-  final WidgetBuilder? busyBuilder;
+  /// Default pending builder provided by [DefaultWaitingResultBuilder] will be used if not explicitly given.
+  final WidgetBuilder? waitingBuilder;
 
   /// Builder to be used when [FailedResult] is given.
   ///
@@ -34,7 +34,7 @@ abstract class StatedResultBuilderBase<TS extends StatedResult>
   StatedResultBuilderBase({
     Key? key,
     this.pendingBuilder,
-    this.busyBuilder,
+    this.waitingBuilder,
     this.failedBuilder,
     required this.result,
   }) : super(key: key);
@@ -43,8 +43,8 @@ abstract class StatedResultBuilderBase<TS extends StatedResult>
   Widget build(BuildContext context) => result.completeMapOr(
         pendingResult: () =>
             DefaultPendingResultBuilder.ensureBuild(context, pendingBuilder),
-        busyResult: () =>
-            DefaultBusyResultBuilder.ensureBuild(context, busyBuilder),
+        waitingResult: () =>
+            DefaultWaitingResultBuilder.ensureBuild(context, waitingBuilder),
         failedResult: (result) => DefaultFailedResultBuilder.ensureBuild(
             context, failedBuilder, result),
         completedResult: () => buildData(context),

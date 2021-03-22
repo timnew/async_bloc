@@ -2,17 +2,17 @@ import 'contracts.dart';
 import 'states/completed_result.dart';
 import 'states/failed_result.dart';
 import 'states/pending_result.dart';
-import 'states/busy_result.dart';
+import 'states/waiting_result.dart';
 import 'stated_result.dart';
 import 'util.dart';
 
 /// A 4-state result represents asychronised action with no return value
-/// It could be either pending, busy, succeeded, or failed
+/// It could be either pending, waiting, succeeded, or failed
 ///
 /// Typically used with `Bloc` or `ValueNotifier`
 ///
 /// [AsyncActionResult] creates the [PendingResult], indicates the action hasn't started
-/// [AsyncActionResult.busy] creates the [BusyResult], indicates the action is in progress
+/// [AsyncActionResult.waiting] creates the [WaitingResult], indicates the action is in progress
 /// [AsyncActionResult.completed] creates the [CompletedResult], indicates the action is completed
 /// [AsyncActionResult.failed] creates the [FailedResult], indicates the action is failed
 ///
@@ -24,8 +24,8 @@ abstract class AsyncActionResult implements StatedResult {
   /// Creates the [PendingResult], indicates the action hasn't started
   factory AsyncActionResult() => const _Pending();
 
-  /// Creates the [BusyResult], indicates the action is in progress
-  factory AsyncActionResult.busy() => const _Busy();
+  /// Creates the [WaitingResult], indicates the action is in progress
+  factory AsyncActionResult.waiting() => const _Waiting();
 
   /// Creates the [CompletedResult], indicates the action is completed
   factory AsyncActionResult.completed() => const _Completed();
@@ -37,18 +37,18 @@ abstract class AsyncActionResult implements StatedResult {
   /// Pattern match the result on all branches
   ///
   /// [pending] is called with action hasn't started
-  /// [busy] is called when action is in progress
+  /// [waiting] is called when action is in progress
   /// [completed] is called if result is completed
   /// [failed] is called with error and stackTrace if result is failed
   TR map<TR>({
     required ResultMapper<TR> pending,
-    required ResultMapper<TR> busy,
+    required ResultMapper<TR> waiting,
     required ResultMapper<TR> completed,
     required FailedResultMapper<TR> failed,
   }) =>
       completeMapOr(
         pendingResult: pending,
-        busyResult: busy,
+        waitingResult: waiting,
         completedResult: completed,
         failedResult: failed,
       );
@@ -56,7 +56,7 @@ abstract class AsyncActionResult implements StatedResult {
   /// Pattern match the result with else branch
   ///
   /// [pending] is called with action hasn't started
-  /// [busy] is called when action is in progress
+  /// [waiting] is called when action is in progress
   /// [completed] is called if result is completed
   /// [failed] is called with error and stackTrace if result is failed
   ///
@@ -65,7 +65,7 @@ abstract class AsyncActionResult implements StatedResult {
   /// [orElse] is called if no specific state mapper is given
   TR mapOr<TR>({
     ResultMapper<TR>? pending,
-    ResultMapper<TR>? busy,
+    ResultMapper<TR>? waiting,
     ResultMapper<TR>? completed,
     FailedResultMapper<TR>? failed,
     ResultMapper<TR>? finished,
@@ -73,7 +73,7 @@ abstract class AsyncActionResult implements StatedResult {
   }) =>
       completeMapOr(
         pendingResult: pending,
-        busyResult: busy,
+        waitingResult: waiting,
         completedResult: completed,
         failedResult: failed,
         isFinished: finished,
@@ -85,8 +85,8 @@ class _Pending extends PendingResult with AsyncActionResult {
   const _Pending();
 }
 
-class _Busy extends BusyResult with AsyncActionResult {
-  const _Busy();
+class _Waiting extends WaitingResult with AsyncActionResult {
+  const _Waiting();
 }
 
 class _Completed extends CompletedResult with AsyncActionResult {

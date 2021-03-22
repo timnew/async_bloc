@@ -2,7 +2,7 @@ library stated_result;
 
 export 'src/result/contracts.dart';
 
-export 'src/result/states/busy_result.dart';
+export 'src/result/states/waiting_result.dart';
 export 'src/result/states/initial_value_result.dart';
 export 'src/result/states/pending_result.dart';
 export 'src/result/states/completed_result.dart';

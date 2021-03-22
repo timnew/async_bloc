@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 /// Provide defauilt pending builder to child
 ///
 /// See also
-/// * [DefaultBusyResultBuilder]
+/// * [DefaultWaitingResultBuilder]
 /// * [DefaultFailedResultBuilder]
 /// * [DefaultResultBuilder]
 class DefaultEmptyBuilder extends InheritedWidget {

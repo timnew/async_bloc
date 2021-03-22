@@ -1,14 +1,14 @@
 import 'package:flutter/widgets.dart';
 
 import 'default_failed_result_builder.dart';
-import 'default_busy_result_builder.dart';
+import 'default_waiting_result_builder.dart';
 import 'default_empty_builder.dart';
 import 'default_result_builder.dart';
 
 /// Provide defauilt pending builder to child
 ///
 /// See also
-/// * [DefaultBusyResultBuilder]
+/// * [DefaultWaitingResultBuilder]
 /// * [DefaultFailedResultBuilder]
 /// * [DefaultEmptyBuilder]
 /// * [DefaultResultBuilder]

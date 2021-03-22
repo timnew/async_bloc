@@ -10,7 +10,7 @@ import '../stated_result.dart';
 ///
 /// All states:
 /// * [PendingResult]
-/// * [BusyResult]
+/// * [WaitingResult]
 /// * [InitialValueResult]
 /// * [SucceededResult]
 /// * [CompletedResult]

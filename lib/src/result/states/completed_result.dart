@@ -4,7 +4,7 @@ import 'abstract/unit_result_base.dart';
 ///
 /// All states:
 /// * [PendingResult]
-/// * [BusyResult]
+/// * [WaitingResult]
 /// * [InitialValueResult]
 /// * [SucceededResult]
 /// * [CompletedResult]

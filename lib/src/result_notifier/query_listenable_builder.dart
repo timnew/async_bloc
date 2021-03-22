@@ -7,14 +7,14 @@ import 'package:stated_result/stated_result_builder.dart';
 class QueryListenableBuilder<T> extends StatelessWidget {
   final ValueListenable<AsyncQueryResult<T>> valueListenable;
   final WidgetBuilder? pendingBuilder;
-  final WidgetBuilder? busyBuilder;
+  final WidgetBuilder? waitingBuilder;
   final FailedResultBuilder? failedBuilder;
   final ValueResultBuilder<T> valueBuilder;
 
   const QueryListenableBuilder({
     Key? key,
     this.pendingBuilder,
-    this.busyBuilder,
+    this.waitingBuilder,
     this.failedBuilder,
     required this.valueBuilder,
     required this.valueListenable,
@@ -27,7 +27,7 @@ class QueryListenableBuilder<T> extends StatelessWidget {
         builder: (context, result, _) => QueryResultBuilder<T>(
           result: result,
           pendingBuilder: pendingBuilder,
-          busyBuilder: busyBuilder,
+          waitingBuilder: waitingBuilder,
           failedBuilder: failedBuilder,
           valueBuilder: valueBuilder,
         ),

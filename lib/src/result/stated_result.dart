@@ -1,5 +1,5 @@
 import 'contracts.dart';
-import 'states/busy_result.dart';
+import 'states/waiting_result.dart';
 import 'states/completed_result.dart';
 import 'states/initial_value_result.dart';
 import 'states/failed_result.dart';
@@ -12,7 +12,7 @@ mixin StatedResult {
   bool get isNotStarted => this is PendingResult || this is InitialValueResult;
 
   /// Return true when query/action is being processed
-  bool get isBusy => this is BusyResult;
+  bool get isWaiting => this is WaitingResult;
 
   /// Return true when query/action has been finished either with or without error
   bool get isFinished => isSucceeded || isFailed;
@@ -28,11 +28,11 @@ mixin StatedResult {
   bool get hasValue => this is ValueResult;
 
   /// Ensure no trigger parallel running
-  /// Throw [StateError] if [isBusy] returns true
+  /// Throw [StateError] if [isWaiting] returns true
   ///
   /// Can be used as state check before kicking off new action/query to avoid parallel run
   void ensureNoParallelRun() {
-    if (this.isBusy) throw StateError("Parallel run");
+    if (this.isWaiting) throw StateError("Parallel run");
   }
 
   FailedResult? asFailed() => isFailed ? this as FailedResult : null;

@@ -9,7 +9,7 @@ class ActionBlocConsumer<B extends Bloc<Object?, AsyncActionResult>>
   ActionBlocConsumer({
     Key? key,
     WidgetBuilder? pendingBuilder,
-    WidgetBuilder? busyBuilder,
+    WidgetBuilder? waitingBuilder,
     FailedResultBuilder? failedBuilder,
     required WidgetBuilder completedBuilder,
     required BlocWidgetListener<AsyncActionResult> listener,
@@ -22,7 +22,7 @@ class ActionBlocConsumer<B extends Bloc<Object?, AsyncActionResult>>
           builder: (context, result) => ActionResultBuilder(
             result: result,
             pendingBuilder: pendingBuilder,
-            busyBuilder: busyBuilder,
+            waitingBuilder: waitingBuilder,
             failedBuilder: failedBuilder,
             completedBuilder: completedBuilder,
           ),

@@ -31,7 +31,7 @@ class QueryResultNotifier<T> extends ValueNotifier<AsyncQueryResult<T>> {
   ) async {
     this.value.ensureNoParallelRun();
 
-    this.value = AsyncQueryResult.busy();
+    this.value = AsyncQueryResult.waiting();
 
     this.value = await future;
 

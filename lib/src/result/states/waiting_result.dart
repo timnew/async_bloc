@@ -4,7 +4,7 @@ import 'abstract/unit_result_base.dart';
 ///
 /// All states:
 /// * [PendingResult]
-/// * [BusyResult]
+/// * [WaitingResult]
 /// * [InitialValueResult]
 /// * [SucceededResult]
 /// * [CompletedResult]
@@ -13,6 +13,6 @@ import 'abstract/unit_result_base.dart';
 /// Used by
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
-abstract class BusyResult extends UnitResultBase<BusyResult> {
-  const BusyResult();
+abstract class WaitingResult extends UnitResultBase<WaitingResult> {
+  const WaitingResult();
 }

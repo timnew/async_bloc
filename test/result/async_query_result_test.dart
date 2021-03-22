@@ -17,7 +17,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isNotStarted, isTrue);
-        expect(result.isBusy, isFalse);
+        expect(result.isWaiting, isFalse);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
@@ -40,7 +40,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isNotStarted, isTrue);
-        expect(result.isBusy, isFalse);
+        expect(result.isWaiting, isFalse);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
@@ -49,20 +49,20 @@ void main() {
       });
     });
 
-    group(".busy", () {
-      final result = AsyncQueryResult.busy();
+    group(".waiting", () {
+      final result = AsyncQueryResult.waiting();
 
-      test('should be a BusyResult', () {
-        expect(result, isInstanceOf<BusyResult>());
+      test('should be a WaitingResult', () {
+        expect(result, isInstanceOf<WaitingResult>());
       });
 
       test('gives the same instance', () {
-        expect(AsyncQueryResult.busy(), same(result));
+        expect(AsyncQueryResult.waiting(), same(result));
       });
 
       test("should have correct states", () {
         expect(result.isNotStarted, isFalse);
-        expect(result.isBusy, isTrue);
+        expect(result.isWaiting, isTrue);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
@@ -85,7 +85,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isNotStarted, isFalse);
-        expect(result.isBusy, isFalse);
+        expect(result.isWaiting, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isTrue);
         expect(result.isFailed, isFalse);
@@ -120,7 +120,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isNotStarted, isFalse);
-        expect(result.isBusy, isFalse);
+        expect(result.isWaiting, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isTrue);

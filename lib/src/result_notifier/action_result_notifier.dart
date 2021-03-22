@@ -24,7 +24,7 @@ class ActionResultNotifier extends ValueNotifier<AsyncActionResult> {
   ) async {
     this.value.ensureNoParallelRun();
 
-    this.value = AsyncActionResult.busy();
+    this.value = AsyncActionResult.waiting();
 
     this.value = await future;
 
