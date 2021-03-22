@@ -80,19 +80,19 @@ class DefaultResultBuilder extends StatelessWidget {
     WidgetBuilder? emptyBuilder,
   }) {
     if (pendingBuilder != null) {
-      DefaultPendingResultBuilder.globalBuilder = pendingBuilder;
+      DefaultPendingResultBuilder.setGlobalBuilder(pendingBuilder);
     }
 
     if (waitingBuilder != null) {
-      DefaultWaitingResultBuilder.globalBuilder = waitingBuilder;
+      DefaultWaitingResultBuilder.setGlobalBuilder(waitingBuilder);
     }
 
     if (failedBuilder != null) {
-      DefaultFailedResultBuilder.globalBuilder = failedBuilder;
+      DefaultFailedResultBuilder.setGlobalBuilder(failedBuilder);
     }
 
     if (emptyBuilder != null) {
-      DefaultEmptyBuilder.globalBuilder = emptyBuilder;
+      DefaultEmptyBuilder.setGlobalBuilder(emptyBuilder);
     }
   }
 }

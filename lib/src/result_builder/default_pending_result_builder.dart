@@ -28,10 +28,18 @@ class DefaultPendingResultBuilder extends InheritedWidget {
       oldWidget is! DefaultPendingResultBuilder ||
       oldWidget.builder != this.builder;
 
-  /// The global default builder, which will be used if no default builder can be found.
-  static WidgetBuilder globalBuilder = _globalBuilderImp;
+  static WidgetBuilder _globalBuilder = defaltGlobalBuilder;
 
-  static Widget _globalBuilderImp(BuildContext context) => Container();
+  /// The global default builder, which will be used if no default builder can be found.
+  static WidgetBuilder get globalBuilder => _globalBuilder;
+
+  /// Set global default builder, if [builder] is `null`, it revert it to default one.
+  static void setGlobalBuilder(WidgetBuilder? builder) {
+    _globalBuilder = builder ?? defaltGlobalBuilder;
+  }
+
+  /// Default global builder implementation
+  static Widget defaltGlobalBuilder(BuildContext context) => Container();
 
   /// Search for default builder from ancesters of [context].
   /// When no default builder can be found, [globalBuilder] will be returned

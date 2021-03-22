@@ -31,11 +31,19 @@ class DefaultFailedResultBuilder extends InheritedWidget {
       oldWidget is! DefaultFailedResultBuilder ||
       oldWidget.builder != this.builder;
 
-  /// The global default builder, which will be used if no default builder can be found.
-  static FailedResultBuilder globalBuilder = _globalBuilderImp;
+  static FailedResultBuilder _globalBuilder = defaultGlobalBuilder;
 
-  static Widget _globalBuilderImp(
-          BuildContext context, ErrorWithStack result) =>
+  /// The global default builder, which will be used if no default builder can be found.
+  static FailedResultBuilder get globalBuilder => _globalBuilder;
+
+  /// Set global default builder, if [builder] is `null`, it revert it to default one.
+  static void setGlobalBuilder(FailedResultBuilder? builder) {
+    _globalBuilder = builder ?? defaultGlobalBuilder;
+  }
+
+  /// Default global builder implementation
+  static Widget defaultGlobalBuilder(
+          BuildContext context, ErrorWithStack errorInfo) =>
       Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -47,7 +55,7 @@ class DefaultFailedResultBuilder extends InheritedWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            Text(result.error.toString()),
+            Text(errorInfo.error.toString()),
           ],
         ),
       );
