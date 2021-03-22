@@ -1,13 +1,13 @@
 part of 'widget_test.dart';
 
-class InitialWidget extends StatelessWidget {
+class PendingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container();
   }
 }
 
-final findInitialWidget = find.byType(InitialWidget);
+final findPendingWidget = find.byType(PendingWidget);
 
 class EmptyWidget extends StatelessWidget {
   @override
