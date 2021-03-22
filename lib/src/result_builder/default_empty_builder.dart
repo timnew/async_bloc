@@ -1,23 +1,17 @@
 import 'package:flutter/widgets.dart';
 
-import 'default_failed_result_builder.dart';
-import 'default_busy_result_builder.dart';
-import 'default_empty_builder.dart';
-import 'default_result_builder.dart';
-
 /// Provide defauilt pending builder to child
 ///
 /// See also
 /// * [DefaultBusyResultBuilder]
 /// * [DefaultFailedResultBuilder]
-/// * [DefaultEmptyBuilder]
 /// * [DefaultResultBuilder]
-class DefaultPendingResultBuilder extends InheritedWidget {
+class DefaultEmptyBuilder extends InheritedWidget {
   /// The default builder
   final WidgetBuilder builder;
 
   /// Provider default pending builder to [child].
-  DefaultPendingResultBuilder({
+  DefaultEmptyBuilder({
     Key? key,
     required this.builder,
     required Widget child,
@@ -25,8 +19,7 @@ class DefaultPendingResultBuilder extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) =>
-      oldWidget is! DefaultPendingResultBuilder ||
-      oldWidget.builder != this.builder;
+      oldWidget is! DefaultEmptyBuilder || oldWidget.builder != this.builder;
 
   /// The global default builder, which will be used if no default builder can be found.
   static WidgetBuilder globalBuilder = _globalBuilderImp;
@@ -37,7 +30,7 @@ class DefaultPendingResultBuilder extends InheritedWidget {
   /// When no default builder can be found, [globalBuilder] will be returned
   static WidgetBuilder findBuilder(BuildContext context) =>
       context
-          .dependOnInheritedWidgetOfExactType<DefaultPendingResultBuilder>()
+          .dependOnInheritedWidgetOfExactType<DefaultEmptyBuilder>()
           ?.builder ??
       globalBuilder;
 

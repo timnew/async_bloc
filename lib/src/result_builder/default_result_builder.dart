@@ -1,9 +1,10 @@
 import 'package:flutter/widgets.dart';
 
+import 'widget_builders.dart';
 import 'default_busy_result_builder.dart';
 import 'default_failed_result_builder.dart';
 import 'default_pending_result_builder.dart';
-import 'widget_builders.dart';
+import 'default_empty_builder.dart';
 
 /// Provide multiple defauilt builders to child
 ///
@@ -11,6 +12,7 @@ import 'widget_builders.dart';
 /// * [DefaultPendingResultBuilder]
 /// * [DefaultBusyResultBuilder]
 /// * [DefaultFailedResultBuilder]
+/// * [DefaultEmptyBuilder]
 class DefaultResultBuilder extends StatelessWidget {
   /// Default pending builder
   final WidgetBuilder? pendingBuilder;
@@ -20,6 +22,9 @@ class DefaultResultBuilder extends StatelessWidget {
 
   /// Default failed builder
   final FailedResultBuilder? failedBuilder;
+
+  /// Default empty builder
+  final WidgetBuilder? emptyBuilder;
 
   /// child widget
   final Widget child;
@@ -32,6 +37,7 @@ class DefaultResultBuilder extends StatelessWidget {
     this.pendingBuilder,
     this.busyBuilder,
     this.failedBuilder,
+    this.emptyBuilder,
     required this.child,
   })   : assert(
           pendingBuilder != null ||
@@ -58,6 +64,10 @@ class DefaultResultBuilder extends StatelessWidget {
           DefaultPendingResultBuilder(builder: pendingBuilder!, child: result);
     }
 
+    if (emptyBuilder != null) {
+      result = DefaultEmptyBuilder(builder: pendingBuilder!, child: result);
+    }
+
     return result;
   }
 
@@ -66,6 +76,7 @@ class DefaultResultBuilder extends StatelessWidget {
     WidgetBuilder? pendingBuilder,
     WidgetBuilder? busyBuilder,
     FailedResultBuilder? failedBuilder,
+    WidgetBuilder? emptyBuilder,
   }) {
     if (pendingBuilder != null) {
       DefaultPendingResultBuilder.globalBuilder = pendingBuilder;
@@ -77,6 +88,10 @@ class DefaultResultBuilder extends StatelessWidget {
 
     if (failedBuilder != null) {
       DefaultFailedResultBuilder.globalBuilder = failedBuilder;
+    }
+
+    if (emptyBuilder != null) {
+      DefaultEmptyBuilder.globalBuilder = emptyBuilder;
     }
   }
 }
