@@ -126,5 +126,30 @@ Like `ListenableBuilder, the following classes are provided:
 * `ActionListenableBuilder`: `ListenableBuilder` that consumes `ActionNotifier` via `ActionResultBuilder`
 * `QueryListenableBuilder`: `ListenableBuilder` that consumes `QueryNotifier` via `QueryResultBuilder`
 
+## Deal with empty list or nullable value
+
+It could be kind of annoying to build a `ListView`/`GridView` from a `List`, which could be `empty`, or to build UI from a field of a JSON which could be `null`.
+`BlankableBuilder` is the widget designed to deal with those cases
+
+```dart
+Widget build(BuildContext context) {
+  return QueryBlocBuilder(
+    bloc: context.read<MyStringListBloc>(),
+    builder: (_, list) => BlankableBuilder(
+      value: list,
+      blankBuilder: (_) => Center(child: Text("List is empty")),
+      builder: (_, list) => ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (_, index) => ItemWidget(item: list[index]),
+      ),
+    );
+  )
+}
+```
+
+`BlankableBuilder` supports empty checking for `List` `Map` `Iterable` and `String` by default, also it treats `null` as empty too.
+To make `BlankableBuilder` works with other types, `blankChecker` checker can be provided.
+
+
 [Bloc_Flutter]:https://pub.dev/packages/flutter_bloc
 [Provider]:https://pub.dev/packages/provider

@@ -69,9 +69,7 @@ class BlankableBuilder<T> extends StatelessWidget {
       return value.isEmpty;
     }
 
-    throw UnsupportedError(
-      "Do not support blank check for type ${value.runtimeType}",
-    );
+    return false;
   }
 
   /// Default blank builder
