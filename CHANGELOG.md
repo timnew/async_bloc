@@ -6,6 +6,12 @@
 * Add documents for `stated_result_builder`
 * Add tests for `stated_result_builder`
 * Rename all result builders' default builder property from `valueBuilder` to `builder`
+* Add new `.from` conversion factory method to convert `StatedResult` from one to another
+* Add `updateWith` on `AsyncStatedResult`
+* Add `captureResult` to `Cubit` and `ValueNotifier`
+* Update `updateWith` parameter type on `Cubit` and `ValueNotifier`
+* Remove `updateWithAsync` method
+* Added `FutureResultBuilder` to consume future directly
 
 ## [0.2.0-preview.3] - 2021-03-20
 
