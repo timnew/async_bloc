@@ -12,7 +12,7 @@ class ActionBlocBuilder<B extends Bloc<Object?, AsyncActionResult>>
     WidgetBuilder? pendingBuilder,
     WidgetBuilder? waitingBuilder,
     FailedResultBuilder? failedBuilder,
-    required WidgetBuilder completedBuilder,
+    required WidgetBuilder builder,
     BlocBuilderCondition<AsyncActionResult>? buildWhen,
   }) : super(
           key: key,
@@ -22,7 +22,7 @@ class ActionBlocBuilder<B extends Bloc<Object?, AsyncActionResult>>
             pendingBuilder: pendingBuilder,
             waitingBuilder: waitingBuilder,
             failedBuilder: failedBuilder,
-            completedBuilder: completedBuilder,
+            builder: builder,
           ),
           buildWhen: buildWhen,
         );

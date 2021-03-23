@@ -13,14 +13,14 @@ class QueryResultBuilder<T>
     extends StatedResultBuilderBase<AsyncQueryResult<T>> {
   /// Builder to be used when [ValueResult] is given,
   /// which could be either [SucceededResult] or [InitialValueResult].
-  final ValueResultBuilder<T> valueBuilder;
+  final ValueResultBuilder<T> builder;
 
   /// Build UI with [AsyncQueryResult]
   ///
   /// * [pendingBuilder] - Builder to be used when [PendingResult] is given.
   /// * [waitingBuilder] - Builder to be used when [WaitingResult] is given.
   /// * [failedBuilder] - Builder to be used when [FailedResult] is given.
-  /// * [valueBuilder] - Builder to be used when [SucceededResult] or [InitialValueResult] is given.
+  /// * [builder] - Builder to be used when [SucceededResult] or [InitialValueResult] is given.
   ///
   /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
   /// if not given default builder provided by [DefaultPendingResultBuilder],
@@ -34,7 +34,7 @@ class QueryResultBuilder<T>
     WidgetBuilder? pendingBuilder,
     WidgetBuilder? waitingBuilder,
     FailedResultBuilder? failedBuilder,
-    required this.valueBuilder,
+    required this.builder,
     required AsyncQueryResult<T> result,
   }) : super(
           key: key,
@@ -49,7 +49,7 @@ class QueryResultBuilder<T>
   /// * [pendingBuilder] - Builder to be used when [PendingResult] is given.
   /// * [waitingBuilder] - Builder to be used when [WaitingResult] is given.
   /// * [failedBuilder] - Builder to be used when [FailedResult] is given.
-  /// * [valueBuilder] - Builder to be used when [SucceededResult] or [InitialValueResult] is given.
+  /// * [builder] - Builder to be used when [SucceededResult] or [InitialValueResult] is given.
   ///
   /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
   /// if not given default builder provided by [DefaultPendingResultBuilder],
@@ -58,16 +58,16 @@ class QueryResultBuilder<T>
   QueryResultBuilder.sync({
     Key? key,
     FailedResultBuilder? failedBuilder,
-    required ValueResultBuilder<T> valueBuilder,
+    required ValueResultBuilder<T> builder,
     required QueryResult<T> result,
   }) : this(
           key: key,
           failedBuilder: failedBuilder,
-          valueBuilder: valueBuilder,
+          builder: builder,
           result: result.asAsyncResult(),
         );
 
   @override
   Widget buildData(BuildContext context) =>
-      valueBuilder(context, result.asValueResult<T>()!.value);
+      builder(context, result.asValueResult<T>()!.value);
 }

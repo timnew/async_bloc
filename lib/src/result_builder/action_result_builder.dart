@@ -11,14 +11,14 @@ import 'widget_builders.dart';
 /// Widget that builds UI according to the state of [AsyncActionResult] or [ActionResult]
 class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
   /// Builder to be used when [CompletedResult] is given.
-  final WidgetBuilder completedBuilder;
+  final WidgetBuilder builder;
 
   /// Build UI with [AsyncActionResult]
   ///
   /// * [pendingBuilder] - Builder to be used when [PendingResult] is given.
   /// * [waitingBuilder] - Builder to be used when [WaitingResult] is given.
   /// * [failedBuilder] - Builder to be used when [FailedResult] is given.
-  /// * [completedBuilder] - Builder to be used when [CompletedResult] is given.
+  /// * [builder] - Builder to be used when [CompletedResult] is given.
   ///
   /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
   /// if not given default builder provided by [DefaultPendingResultBuilder],
@@ -32,7 +32,7 @@ class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
     WidgetBuilder? pendingBuilder,
     WidgetBuilder? waitingBuilder,
     FailedResultBuilder? failedBuilder,
-    required this.completedBuilder,
+    required this.builder,
     required AsyncActionResult result,
   }) : super(
           key: key,
@@ -47,7 +47,7 @@ class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
   /// * [pendingBuilder] - Builder to be used when [PendingResult] is given.
   /// * [waitingBuilder] - Builder to be used when [WaitingResult] is given.
   /// * [failedBuilder] - Builder to be used when [FailedResult] is given.
-  /// * [completedBuilder] - Builder to be used when [CompletedResult] is given.
+  /// * [builder] - Builder to be used when [CompletedResult] is given.
   ///
   /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
   /// if not given default builder provided by [DefaultPendingResultBuilder],
@@ -56,15 +56,15 @@ class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
   ActionResultBuilder.sync({
     Key? key,
     FailedResultBuilder? failedBuilder,
-    required WidgetBuilder completedBuilder,
+    required WidgetBuilder builder,
     required ActionResult result,
   }) : this(
           key: key,
           failedBuilder: failedBuilder,
-          completedBuilder: completedBuilder,
+          builder: builder,
           result: result.asAsyncResult(),
         );
 
   @override
-  Widget buildData(BuildContext context) => completedBuilder(context);
+  Widget buildData(BuildContext context) => builder(context);
 }

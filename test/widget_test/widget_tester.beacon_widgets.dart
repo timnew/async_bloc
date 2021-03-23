@@ -35,13 +35,13 @@ class WaitingBeacon extends StatelessWidget {
 final findWaitingBeacon = find.byType(WaitingBeacon);
 
 class ContentBeacon extends StatelessWidget {
-  final String? content;
+  final dynamic? content;
 
   ContentBeacon([this.content]);
 
   @override
   Widget build(BuildContext context) =>
-      content == null ? Container() : Text(content!);
+      content == null ? Container() : Text("$content");
 }
 
 Finder findContentBeacon([String? content]) => content == null

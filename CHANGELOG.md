@@ -5,6 +5,7 @@
 * Rename `Busy` to `Waiting`
 * Add documents for `stated_result_builder`
 * Add tests for `stated_result_builder`
+* Rename all result builders' default builder property from `valueBuilder` to `builder`
 
 ## [0.2.0-preview.3] - 2021-03-20
 

@@ -5,27 +5,30 @@ import 'package:stated_result/stated_result_builder.dart';
 import '../widget_test/widget_tester.dart';
 
 void main() {
-  group("ActionResultBuilder", () {
+  group("QueryResultBuilder", () {
+    final value = "value";
+
     group("with explicit builders", () {
       Future _buildAsyncResult(
-          WidgetTester tester, AsyncActionResult result) async {
+          WidgetTester tester, AsyncQueryResult<String> result) async {
         await tester.pumpWidget(
           TestBench(
-            child: ActionResultBuilder(
+            child: QueryResultBuilder<String>(
               pendingBuilder: (_) => PendingBeacon(),
               waitingBuilder: (_) => WaitingBeacon(),
               failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
-              builder: (_) => ContentBeacon(),
+              builder: (_, value) => ContentBeacon(value),
               result: result,
             ),
           ),
         );
       }
 
-      Future _buildSyncResult(WidgetTester tester, ActionResult result) async {
+      Future _buildSyncResult(
+          WidgetTester tester, QueryResult<String> result) async {
         await tester.pumpWidget(
           TestBench(
-            child: ActionResultBuilder.sync(
+            child: QueryResultBuilder.sync<String>(
               failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
               builder: (_) => ContentBeacon(),
               result: result,
