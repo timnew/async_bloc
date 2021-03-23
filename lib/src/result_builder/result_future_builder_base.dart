@@ -9,7 +9,7 @@ import 'widget_builders.dart';
 
 abstract class ResultFutureBuilderBase<TS extends StatedResult>
     extends StatelessWidget {
-  final Future<TS> future;
+  final Future<TS>? future;
 
   final WidgetBuilder? pendingBuilder;
   final WidgetBuilder? waitingBuilder;

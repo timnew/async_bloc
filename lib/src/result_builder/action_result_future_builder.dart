@@ -11,7 +11,7 @@ class ActionResultFutureBuilder extends ResultFutureBuilderBase<ActionResult> {
 
   ActionResultFutureBuilder({
     Key? key,
-    required Future<ActionResult> future,
+    required Future<ActionResult>? future,
     WidgetBuilder? pendingBuilder,
     WidgetBuilder? waitingBuilder,
     FailedResultBuilder? failedBuilder,
@@ -26,14 +26,14 @@ class ActionResultFutureBuilder extends ResultFutureBuilderBase<ActionResult> {
 
   ActionResultFutureBuilder.fromFuture({
     Key? key,
-    required Future future,
+    required Future? future,
     WidgetBuilder? pendingBuilder,
     WidgetBuilder? waitingBuilder,
     FailedResultBuilder? failedBuilder,
     required WidgetBuilder builder,
   }) : this(
           key: key,
-          future: future.asActionResult(),
+          future: future?.asActionResult(),
           pendingBuilder: pendingBuilder,
           waitingBuilder: waitingBuilder,
           failedBuilder: failedBuilder,

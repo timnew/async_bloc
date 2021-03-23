@@ -12,7 +12,7 @@ class QueryResultFutureBuilder<T>
 
   QueryResultFutureBuilder({
     Key? key,
-    required Future<QueryResult<T>> future,
+    required Future<QueryResult<T>>? future,
     WidgetBuilder? pendingBuilder,
     WidgetBuilder? waitingBuilder,
     FailedResultBuilder? failedBuilder,
@@ -27,14 +27,14 @@ class QueryResultFutureBuilder<T>
 
   QueryResultFutureBuilder.fromFuture({
     Key? key,
-    required Future<T> future,
+    required Future<T>? future,
     WidgetBuilder? pendingBuilder,
     WidgetBuilder? waitingBuilder,
     FailedResultBuilder? failedBuilder,
     required ValueResultBuilder<T> builder,
   }) : this(
           key: key,
-          future: future.asQueryResult(),
+          future: future?.asQueryResult(),
           pendingBuilder: pendingBuilder,
           waitingBuilder: waitingBuilder,
           failedBuilder: failedBuilder,
