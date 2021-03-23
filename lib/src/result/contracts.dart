@@ -11,9 +11,23 @@ abstract class ValueResult<T> implements StatedResult {
   T get value;
 }
 
+/// Error and its stack trace
 abstract class ErrorWithStack {
+  /// the exception or error
   dynamic get error;
+
+  /// The stack trace of the error/exception
   StackTrace? get stackTrace;
+
+  /// Create an instance
+  const factory ErrorWithStack(dynamic error, [StackTrace? stackTrace]) =
+      _ErrorWithStack;
+}
+
+/// Generic implementation of [ErrorWithStack]
+class _ErrorWithStack extends FailedResult {
+  const _ErrorWithStack(error, [StackTrace? stackTrace])
+      : super(error, stackTrace);
 }
 
 /// Mapper function for general result state

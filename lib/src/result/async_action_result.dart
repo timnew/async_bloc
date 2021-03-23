@@ -1,7 +1,9 @@
 import 'contracts.dart';
 import 'states/completed_result.dart';
 import 'states/failed_result.dart';
+import 'states/initial_value_result.dart';
 import 'states/pending_result.dart';
+import 'states/succeeded_result.dart';
 import 'states/waiting_result.dart';
 import 'stated_result.dart';
 import 'util.dart';
@@ -24,6 +26,7 @@ import 'async_query_result.dart';
 /// * [ActionResult]
 /// * [QueryResult]
 /// * [AsyncQueryResult]
+
 abstract class AsyncActionResult implements StatedResult {
   /// Alias to [AsyncActionResult.pending]
   factory AsyncActionResult() = AsyncActionResult.pending;
@@ -41,6 +44,24 @@ abstract class AsyncActionResult implements StatedResult {
   const factory AsyncActionResult.failed(dynamic error,
       [StackTrace? stackTrace]) = _Failed;
 
+  /// Create [AsyncActionResult] from any other result
+  ///
+  /// [PendingResult], [InitialValueResult] converts to [AsyncActionResult.pending]
+  /// [WaitingResult] converts to [AsyncActionResult.waiting]
+  /// [FailedResult] converts to [AsyncActionResult.failed]
+  /// [CompletedResult], [SucceededResult] converts to [AsyncActionResult.completed]
+  ///  Otherwise [UnsupportedError] is thrown
+  factory AsyncActionResult.from(StatedResult result) =>
+      result.unsafeMapOr<dynamic, AsyncActionResult>(
+        isNotStarted: () => AsyncActionResult.pending(),
+        waitingResult: () => AsyncActionResult.waiting(),
+        failedResult: (result) =>
+            AsyncActionResult.failed(result.error, result.stackTrace),
+        isSucceeded: () => AsyncActionResult.completed(),
+        orElse: () => throw UnsupportedError(
+            "Cannot convert $result to AsyncActionResult"),
+      );
+
   /// Pattern match the result on all branches
   ///
   /// [pending] is called with action hasn't started
@@ -53,7 +74,7 @@ abstract class AsyncActionResult implements StatedResult {
     required ResultMapper<TR> completed,
     required FailedResultMapper<TR> failed,
   }) =>
-      completeMapOr(
+      unsafeMapOr(
         pendingResult: pending,
         waitingResult: waiting,
         completedResult: completed,
@@ -78,7 +99,7 @@ abstract class AsyncActionResult implements StatedResult {
     ResultMapper<TR>? finished,
     required ResultMapper<TR> orElse,
   }) =>
-      completeMapOr(
+      unsafeMapOr(
         pendingResult: pending,
         waitingResult: waiting,
         completedResult: completed,
@@ -86,6 +107,19 @@ abstract class AsyncActionResult implements StatedResult {
         isFinished: finished,
         orElse: orElse,
       );
+
+  /// Update self with future [ActionResult]
+  Stream<AsyncActionResult> updateWith(Future<ActionResult> future) async* {
+    ensureNoParallelRun();
+
+    yield AsyncActionResult.waiting();
+
+    try {
+      yield AsyncActionResult.from(await future);
+    } catch (error, stackTrace) {
+      yield AsyncActionResult.failed(error, stackTrace);
+    }
+  }
 }
 
 class _Pending extends PendingResult with AsyncActionResult {

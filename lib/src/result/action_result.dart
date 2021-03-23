@@ -7,6 +7,7 @@ import 'contracts.dart';
 import 'states/completed_result.dart';
 import 'states/failed_result.dart';
 import 'stated_result.dart';
+import 'states/succeeded_result.dart';
 import 'util.dart';
 
 /// A 2-state result represents synchronised action with no return value
@@ -38,6 +39,20 @@ abstract class ActionResult implements StatedResult {
   const factory ActionResult.failed(dynamic error, [StackTrace? stackTrace]) =
       _Failed;
 
+  /// Create [ActionResult] from any other result
+  ///
+  /// [FailedResult] converts to [ActionResult.failed]
+  /// [SucceededResult]. [CompletedResult] converts to [ActionResult.completed]
+  ///  Otherwise [UnsupportedError] is thrown
+  factory ActionResult.from(StatedResult result) =>
+      result.unsafeMapOr<dynamic, ActionResult>(
+        failedResult: (result) =>
+            ActionResult.failed(result.error, result.stackTrace),
+        isSucceeded: () => ActionResult.completed(),
+        orElse: () =>
+            throw UnsupportedError("Cannot convert $result to ActionResult"),
+      );
+
   /// Pattern match the result
   ///
   /// [completed] is called if result is completed
@@ -46,16 +61,9 @@ abstract class ActionResult implements StatedResult {
     required ResultMapper<TR> completed,
     required FailedResultMapper<TR> failed,
   }) =>
-      completeMapOr<Never, TR>(
+      unsafeMapOr<Never, TR>(
         completedResult: completed,
         failedResult: failed,
-      );
-
-  /// Convert the [ActionResult] into [AsyncActionResult] with corresponding state
-  AsyncActionResult asAsyncResult() => map(
-        completed: () => AsyncActionResult.completed(),
-        failed: (result) =>
-            AsyncActionResult.failed(result.error, result.stackTrace),
       );
 }
 
@@ -87,11 +95,7 @@ extension ActionResultFutureExtension on Future {
       final result = await this;
 
       if (result is StatedResult) {
-        return result.completeMapOr(
-          isSucceeded: () => ActionResult.completed(),
-          failedResult: (result) =>
-              ActionResult.failed(result.error, result.stackTrace),
-        );
+        return ActionResult.from(result);
       }
 
       return ActionResult.completed();
@@ -99,12 +103,4 @@ extension ActionResultFutureExtension on Future {
       return ActionResult.failed(error, stackTrace);
     }
   }
-}
-
-/// Provides extension methods on `Future<ActionResult>` for [ActionResult]
-extension FutureActionResultExtension on Future<ActionResult> {
-  /// Same as `ActionResult.asAsyncResult` provided by [ActionResultFutureExtension] but applies on Future
-  /// Convert Future of [ActionResult] to Future of [AsyncActionResult]
-  Future<AsyncActionResult> asAsyncResult() async =>
-      (await this).asAsyncResult();
 }

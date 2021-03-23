@@ -27,15 +27,6 @@ mixin StatedResult {
   /// It also indicates whether state implemented the [ValueResult] contract, regardless the type of the value
   bool get hasValue => this is ValueResult;
 
-  /// Ensure no trigger parallel running
-  /// Throw [StateError] if [isWaiting] returns true
-  ///
-  /// Can be used as state check before kicking off new action/query to avoid parallel run
-  void ensureNoParallelRun() {
-    if (this.isWaiting) throw StateError("Parallel run");
-  }
-
-  FailedResult? asFailed() => isFailed ? this as FailedResult : null;
-  ValueResult<T>? asValueResult<T>() =>
-      this is ValueResult<T> ? this as ValueResult<T> : null;
+  FailedResult asFailed() => this as FailedResult;
+  ValueResult<T> asValueResult<T>() => this as ValueResult<T>;
 }

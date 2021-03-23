@@ -32,15 +32,15 @@ abstract class StatedResultBuilderBase<TS extends StatedResult>
 
   /// @nodoc
   StatedResultBuilderBase({
-    Key? key,
-    this.pendingBuilder,
-    this.waitingBuilder,
-    this.failedBuilder,
+    required Key? key,
+    required this.pendingBuilder,
+    required this.waitingBuilder,
+    required this.failedBuilder,
     required this.result,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => result.completeMapOr(
+  Widget build(BuildContext context) => result.unsafeMapOr(
         pendingResult: () =>
             DefaultPendingResultBuilder.ensureBuild(context, pendingBuilder),
         waitingResult: () =>

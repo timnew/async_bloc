@@ -48,6 +48,27 @@ abstract class AsyncQueryResult<T> implements StatedResult {
   const factory AsyncQueryResult.failed(dynamic error,
       [StackTrace? stackTrace]) = _Failed;
 
+  /// Create [AsyncQueryResult] from any other result
+  ///
+  /// [PendingResult] converts to [AsyncQueryResult.pending]
+  /// [InitialValueResult] converts to [AsyncQueryResult.initialValue]
+  /// [WaitingResult] converts to [AsyncQueryResult.waiting]
+  /// [FailedResult] converts to [AsyncQueryResult.failed]
+  /// [SucceededResult] with type [T] converts to [AsyncQueryResult.succeeded]
+  ///  Otherwise [UnsupportedError] is thrown
+  factory AsyncQueryResult.from(StatedResult result) =>
+      result.unsafeMapOr<T, AsyncQueryResult<T>>(
+        pendingResult: () => AsyncQueryResult.pending(),
+        initialValueResult: (result) =>
+            AsyncQueryResult.initialValue(result.value),
+        waitingResult: () => AsyncQueryResult.waiting(),
+        failedResult: (result) =>
+            AsyncQueryResult.failed(result.error, result.stackTrace),
+        succeededResult: (result) => AsyncQueryResult.succeeded(result.value),
+        orElse: () => throw UnsupportedError(
+            "Cannot convert $result to AsyncQueryResult"),
+      );
+
   /// Pattern match the result on all branches
   ///
   /// [pending] is called with action hasn't started
@@ -62,11 +83,11 @@ abstract class AsyncQueryResult<T> implements StatedResult {
     required ValueResultMapper<T, TR> succeeded,
     required FailedResultMapper<TR> failed,
   }) =>
-      completeMapOr(
+      unsafeMapOr(
         pendingResult: pending,
-        defaultResult: initialValue,
+        initialValueResult: initialValue,
         waitingResult: waiting,
-        valueResult: succeeded,
+        succeededResult: succeeded,
         failedResult: failed,
       );
 
@@ -94,17 +115,30 @@ abstract class AsyncQueryResult<T> implements StatedResult {
     ValueResultMapper<T, TR>? hasValue,
     required ResultMapper<TR> orElse,
   }) =>
-      completeMapOr(
+      unsafeMapOr(
         pendingResult: pending,
         waitingResult: waiting,
-        defaultResult: initialValue,
-        valueResult: succeeded,
+        initialValueResult: initialValue,
+        succeededResult: succeeded,
         failedResult: failed,
         isNotStarted: notStarted,
         isFinished: finished,
         hasValue: hasValue,
         orElse: orElse,
       );
+
+  /// Update self with future [QueryResult]
+  Stream<AsyncQueryResult<T>> updateWith(Future<QueryResult<T>> future) async* {
+    ensureNoParallelRun();
+
+    yield AsyncQueryResult.waiting();
+
+    try {
+      yield AsyncQueryResult.from(await future);
+    } catch (error, stackTrace) {
+      yield AsyncQueryResult.failed(error, stackTrace);
+    }
+  }
 }
 
 class _Pending<T> extends PendingResult with AsyncQueryResult<T> {

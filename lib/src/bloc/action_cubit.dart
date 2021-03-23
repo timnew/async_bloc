@@ -14,28 +14,16 @@ abstract class ActionCubit extends Cubit<AsyncActionResult> {
   ActionCubit([AsyncActionResult? initialState])
       : super(initialState ?? AsyncActionResult());
 
-  /// Update Cubit with a `Future` of any type
-  /// `Future` will be materialized first
+  /// Capture the result of a generic aync action
   @protected
-  Future<AsyncActionResult> updateWithGeneralFuture(Future future) =>
-      updateWithAsyncResult(future.asActionResult().asAsyncResult());
+  Future<ActionResult> captureResult(Future future) =>
+      updateWith(future.asActionResult());
 
-  /// Update Cubit with a `Future` of [ActionResult]
+  /// Update self with future [ActionResult]
   @protected
-  Future<AsyncActionResult> updateWithResult(Future<ActionResult> future) =>
-      updateWithAsyncResult(future.asAsyncResult());
+  Future<ActionResult> updateWith(Future<ActionResult> future) async {
+    await state.updateWith(future).forEach(emit);
 
-  /// Update Cubit with a `Future` of [AsyncActionResult]
-  @protected
-  Future<AsyncActionResult> updateWithAsyncResult(
-    Future<AsyncActionResult> future,
-  ) async {
-    this.state.ensureNoParallelRun();
-
-    this.emit(AsyncActionResult.waiting());
-
-    this.emit(await future);
-
-    return this.state;
+    return ActionResult.from(this.state);
   }
 }

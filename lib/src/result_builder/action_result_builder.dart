@@ -62,7 +62,7 @@ class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
           key: key,
           failedBuilder: failedBuilder,
           builder: builder,
-          result: result.asAsyncResult(),
+          result: AsyncActionResult.from(result),
         );
 
   @override

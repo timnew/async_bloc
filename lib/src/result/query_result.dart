@@ -5,6 +5,7 @@ import 'async_action_result.dart';
 import 'async_query_result.dart';
 import 'contracts.dart';
 import 'stated_result.dart';
+import 'states/initial_value_result.dart';
 import 'states/succeeded_result.dart';
 import 'states/failed_result.dart';
 import 'util.dart';
@@ -37,6 +38,20 @@ abstract class QueryResult<T> implements StatedResult {
   const factory QueryResult.failed(dynamic error, [StackTrace? stackTrace]) =
       _Failed;
 
+  /// Create [QueryResult] from any other result
+  ///
+  /// [FailedResult] converts to [QueryResult.failed]
+  /// [SucceededResult]. [InitialValueResult] with type [T] converts to [QueryResult.succeeded]
+  ///  Otherwise [UnsupportedError] is thrown
+  factory QueryResult.from(StatedResult result) =>
+      result.unsafeMapOr<T, QueryResult<T>>(
+        failedResult: (result) =>
+            QueryResult.failed(result.error, result.stackTrace),
+        hasValue: (result) => QueryResult.succeeded(result.value),
+        orElse: () =>
+            throw UnsupportedError("Cannot convert $result to QueryResult<$T>"),
+      );
+
   /// Pattern match the result
   ///
   /// [succeeded] is called with value if result is succeeded
@@ -45,16 +60,9 @@ abstract class QueryResult<T> implements StatedResult {
     required ValueResultMapper<T, TR> succeeded,
     required FailedResultMapper<TR> failed,
   }) =>
-      completeMapOr<T, TR>(
-        valueResult: succeeded,
+      unsafeMapOr<T, TR>(
+        succeededResult: succeeded,
         failedResult: failed,
-      );
-
-  /// Convert the [QueryResult] into [AsyncQueryResult] with corresponding state
-  AsyncQueryResult<T> asAsyncResult() => map(
-        succeeded: (result) => AsyncQueryResult.succeeded(result.value),
-        failed: (result) =>
-            AsyncQueryResult.failed(result.error, result.stackTrace),
       );
 }
 
@@ -76,19 +84,9 @@ extension QueryResultFutureExtension<T> on Future<T> {
   /// Returns [FailedResult] if future throws
   Future<QueryResult<T>> asQueryResult() async {
     try {
-      final result = await this;
-
-      return QueryResult(result);
+      return QueryResult.succeeded(await this);
     } catch (error, stackTrace) {
       return QueryResult<T>.failed(error, stackTrace);
     }
   }
-}
-
-/// Provides extension methods on `Future<QueryResult<T>>` for [QueryResult]
-extension FutureQueryResultExtension<T> on Future<QueryResult<T>> {
-  /// Same as [QueryResult.asAsyncResult] but applies on Future
-  /// Convert Future of [QueryResult] to Future of [AsyncQueryResult]
-  Future<AsyncQueryResult<T>> asAsyncResult() async =>
-      (await this).asAsyncResult();
 }

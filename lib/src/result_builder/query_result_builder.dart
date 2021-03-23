@@ -64,10 +64,10 @@ class QueryResultBuilder<T>
           key: key,
           failedBuilder: failedBuilder,
           builder: builder,
-          result: result.asAsyncResult(),
+          result: AsyncQueryResult<T>.from(result),
         );
 
   @override
   Widget buildData(BuildContext context) =>
-      builder(context, result.asValueResult<T>()!.value);
+      builder(context, result.asValueResult<T>().value);
 }

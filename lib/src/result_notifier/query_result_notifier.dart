@@ -16,25 +16,14 @@ class QueryResultNotifier<T> extends ValueNotifier<AsyncQueryResult<T>> {
   QueryResultNotifier.initialValue(T initialValue)
       : super(AsyncQueryResult<T>.initialValue(initialValue));
 
-  /// Update Cubit with a `Future`
-  /// `Future` will be materialized first
-  Future<AsyncQueryResult<T>> updateWithGeneralFuture(Future<T> future) =>
-      updateWithAsyncResult(future.asQueryResult().asAsyncResult());
+  /// Capture the result of a generic aync query
+  Future<QueryResult<T>> captureResult(Future<T> future) =>
+      updateWith(future.asQueryResult());
 
-  /// Update `ValueNotifier` with a `Future` of [ActionResult]
-  Future<AsyncQueryResult<T>> updateWithResult(Future<QueryResult<T>> future) =>
-      updateWithAsyncResult(future.asAsyncResult());
+  /// Update self with future [QueryResult]
+  Future<QueryResult<T>> updateWith(Future<QueryResult<T>> future) async {
+    await value.updateWith(future).forEach((v) => this.value = v);
 
-  /// Update `ValueNotifier` with a `Future` of [AsyncQueryResult<T>]
-  Future<AsyncQueryResult<T>> updateWithAsyncResult(
-    Future<AsyncQueryResult<T>> future,
-  ) async {
-    this.value.ensureNoParallelRun();
-
-    this.value = AsyncQueryResult.waiting();
-
-    this.value = await future;
-
-    return this.value;
+    return QueryResult<T>.from(this.value);
   }
 }

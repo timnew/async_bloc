@@ -11,23 +11,14 @@ class ActionResultNotifier extends ValueNotifier<AsyncActionResult> {
   ActionResultNotifier([AsyncActionResult? initialState])
       : super(initialState ?? AsyncActionResult());
 
-  Future<AsyncActionResult> updateWithGeneralFuture(Future future) =>
-      updateWithAsyncResult(future.asActionResult().asAsyncResult());
+  /// Capture the result of a generic aync action
+  Future<ActionResult> captureResult(Future future) =>
+      updateWith(future.asActionResult());
 
-  /// Update `ValueNotifier` with a `Future` of [ActionResult]
-  Future<AsyncActionResult> updateWithResult(Future<ActionResult> future) =>
-      updateWithAsyncResult(future.asAsyncResult());
+  /// Update self with future [ActionResult]
+  Future<ActionResult> updateWith(Future<ActionResult> future) async {
+    await value.updateWith(future).forEach((v) => this.value = v);
 
-  /// Update `ValueNotifier` with a `Future` of [AsyncActionResult]
-  Future<AsyncActionResult> updateWithAsyncResult(
-    Future<AsyncActionResult> future,
-  ) async {
-    this.value.ensureNoParallelRun();
-
-    this.value = AsyncActionResult.waiting();
-
-    this.value = await future;
-
-    return this.value;
+    return ActionResult.from(this.value);
   }
 }
