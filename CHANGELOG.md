@@ -1,6 +1,10 @@
 # Change Log
 
-## [0.2.0-preview.4] - 2021-03-
+## [0.2.0-preview.5] - TBD
+
+* Add `mapValue`
+
+## [0.2.0-preview.4] - 2021-03-23
 
 * Rename `Busy` to `Waiting`
 * Add documents for `stated_result_builder`

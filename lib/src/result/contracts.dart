@@ -38,3 +38,5 @@ typedef TR ValueResultMapper<T, TR>(ValueResult<T> result);
 
 /// Mapper fucntion for result state has error
 typedef TR FailedResultMapper<TR>(FailedResult result);
+
+typedef TR ValueMapper<T, TR>(T value);

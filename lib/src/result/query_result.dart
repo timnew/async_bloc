@@ -64,6 +64,15 @@ abstract class QueryResult<T> implements StatedResult {
         succeededResult: succeeded,
         failedResult: failed,
       );
+
+  /// map the value of query.
+  /// If it is a [SucceededResult], map its value with [mapper].
+  /// Otherwise, keep the result.
+  QueryResult<TR> mapValue<TR>(ValueMapper<T, TR> mapper) =>
+      map<QueryResult<TR>>(
+        succeeded: (r) => QueryResult(mapper(r.value)),
+        failed: (r) => QueryResult<TR>.failed(r.error, r.stackTrace),
+      );
 }
 
 class _Succeeded<T> extends SucceededResult<T> with QueryResult<T> {

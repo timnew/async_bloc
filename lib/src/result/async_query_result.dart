@@ -36,13 +36,13 @@ abstract class AsyncQueryResult<T> implements StatedResult {
   factory AsyncQueryResult.pending() => const _Pending();
 
   /// Create [InitialValueResult], indicates the query hasn't started but a default value is given.
-  const factory AsyncQueryResult.initialValue(T initialValue) = _Default;
+  const factory AsyncQueryResult.initialValue(T value) = _Default;
 
   /// Creates the [WaitingResult], indicates the query is in progress
   factory AsyncQueryResult.waiting() => const _Waiting();
 
   /// Creates the [SucceededResult], indicates the query is succeded with a value
-  const factory AsyncQueryResult.succeeded(T result) = _Succeeded;
+  const factory AsyncQueryResult.succeeded(T value) = _Succeeded;
 
   /// Creates the [FailedResult], indicates the query is failed
   const factory AsyncQueryResult.failed(dynamic error,
@@ -139,6 +139,19 @@ abstract class AsyncQueryResult<T> implements StatedResult {
       yield AsyncQueryResult.failed(error, stackTrace);
     }
   }
+
+  /// map the value of query.
+  /// If it is a [SucceededResult] or [InitialValueResult], map its value with [mapper].
+  /// Otherwise, keep the result.
+  AsyncQueryResult<TR> mapValue<TR>(
+    ValueMapper<T, TR> mapper,
+  ) =>
+      mapOr(
+        succeeded: (r) => AsyncQueryResult.succeeded(mapper(r.value)),
+        initialValue: (r) => AsyncQueryResult.initialValue(mapper(r.value)),
+        failed: (r) => AsyncQueryResult.failed(r.error, r.stackTrace),
+        orElse: () => this as AsyncQueryResult<TR>,
+      );
 }
 
 class _Pending<T> extends PendingResult with AsyncQueryResult<T> {

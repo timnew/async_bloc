@@ -56,5 +56,25 @@ void main() {
         expect(result.hasValue, isFalse);
       });
     });
+
+    group(".mapValue", () {
+      test("should map success", () {
+        final result = QueryResult<int>.succeeded(100);
+        expect(
+          result.mapValue((value) => value.toString()),
+          QueryResult("100"),
+        );
+      });
+
+      test("should map failed", () {
+        final error = "error";
+        final result = QueryResult<int>.failed(error);
+
+        expect(
+          result.mapValue((value) => value.toString()),
+          QueryResult.failed(error),
+        );
+      });
+    });
   });
 }

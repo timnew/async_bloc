@@ -123,5 +123,50 @@ void main() {
         expect(result.hasValue, isFalse);
       });
     });
+
+    group(".mapValue", () {
+      test("should map pending", () {
+        final result = AsyncQueryResult<int>.pending();
+
+        expect(
+          result.mapValue((value) => value.toString()),
+          AsyncQueryResult<String>.pending(),
+        );
+      });
+
+      test("should map initialValue", () {
+        final result = AsyncQueryResult<int>.initialValue(100);
+        expect(
+          result.mapValue((value) => value.toString()),
+          AsyncQueryResult<String>.initialValue("100"),
+        );
+      });
+
+      test("should map waiting", () {
+        final result = AsyncQueryResult<int>.waiting();
+
+        expect(
+          result.mapValue((value) => value.toString()),
+          AsyncQueryResult<String>.waiting(),
+        );
+      });
+      test("should map success", () {
+        final result = AsyncQueryResult<int>.succeeded(100);
+        expect(
+          result.mapValue((value) => value.toString()),
+          AsyncQueryResult.succeeded("100"),
+        );
+      });
+
+      test("should map failed", () {
+        final error = "error";
+        final result = AsyncQueryResult<int>.failed(error);
+
+        expect(
+          result.mapValue((value) => value.toString()),
+          AsyncQueryResult<String>.failed(error),
+        );
+      });
+    });
   });
 }
