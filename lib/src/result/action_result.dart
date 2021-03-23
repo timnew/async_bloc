@@ -91,16 +91,18 @@ extension ActionResultFutureExtension on Future {
   /// only [SucceededResult], [CompletedResult], [FailedResult] are flattened automatically.
   /// Other values would cause exception.
   Future<ActionResult> asActionResult() async {
+    final dynamic result;
+
     try {
-      final result = await this;
-
-      if (result is StatedResult) {
-        return ActionResult.from(result);
-      }
-
-      return ActionResult.completed();
+      result = await this;
     } catch (error, stackTrace) {
       return ActionResult.failed(error, stackTrace);
     }
+
+    if (result is StatedResult) {
+      return ActionResult.from(result);
+    }
+
+    return ActionResult.completed();
   }
 }
