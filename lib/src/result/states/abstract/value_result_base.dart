@@ -24,5 +24,5 @@ abstract class ValueResultBase<T, SELF extends ValueResult<T>>
       const DeepCollectionEquality().hash(value);
 
   @override
-  String toString() => "$SELF<$T>: $value";
+  String toString() => "$SELF: $value";
 }

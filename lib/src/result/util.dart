@@ -45,11 +45,14 @@ extension MultiStateResultExtension on StatedResult {
 
     if (this is ValueResult<T>) {
       if (hasValue != null) return hasValue(this as ValueResult<T>);
-    } else if (this.isNotStarted) {
+    }
+    if (this.isNotStarted) {
       if (isNotStarted != null) return isNotStarted();
-    } else if (this.isSucceeded) {
+    }
+    if (this.isSucceeded) {
       if (isSucceeded != null) return isSucceeded();
-    } else if (this.isFinished) {
+    }
+    if (this.isFinished) {
       if (isFinished != null) return isFinished();
     }
 

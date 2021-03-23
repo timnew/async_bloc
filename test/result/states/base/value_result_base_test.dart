@@ -81,10 +81,10 @@ void main() {
     });
 
     test("toString() should contains State name and value", () {
-      expect(TestResult(value1).toString(), "TestValueResult<String>: value1");
-      expect(TestResult(value1).toString(), "TestValueResult<String>: value1");
+      expect(TestResult(value1).toString(), "TestValueResult: value1");
+      expect(TestResult(value1).toString(), "TestValueResult: value1");
       expect(DifferentResult(value1).toString(),
-          "DifferentTestValueResult<String>: value1");
+          "DifferentTestValueResult: value1");
     });
   });
 }
