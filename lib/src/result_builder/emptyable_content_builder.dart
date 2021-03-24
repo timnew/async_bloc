@@ -26,7 +26,7 @@ class EmptyableContentBuilder<T> extends StatelessWidget {
   final WidgetBuilder? emptyBuilder;
 
   /// Builder to be used when [content] isn't blank
-  final ValueResultBuilder builder;
+  final ValueResultBuilder<T> builder;
 
   /// Create the widget
   ///
