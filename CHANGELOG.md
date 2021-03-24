@@ -3,6 +3,7 @@
 ## [0.2.0-preview.5] - TBD
 
 * Add `mapValue`
+* Fix builder type issue for `EmptyableContentBuilder`
 
 ## [0.2.0-preview.4] - 2021-03-23
 
