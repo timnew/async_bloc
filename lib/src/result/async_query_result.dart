@@ -128,7 +128,8 @@ abstract class AsyncQueryResult<T> implements StatedResult {
       );
 
   /// Update self with future [QueryResult]
-  Stream<AsyncQueryResult<T>> updateWith(Future<QueryResult<T>> future) async* {
+  Stream<AsyncQueryResult<TR>> updateWith<TR>(
+      Future<QueryResult<TR>> future) async* {
     ensureNoParallelRun();
 
     yield AsyncQueryResult.waiting();
