@@ -4,11 +4,16 @@ import 'package:stated_result/stated_result.dart';
 void main() {
   group("AsyncQueryResult", () {
     final value = "value";
+    final error = "error";
     group("default constructor", () {
       final result = AsyncQueryResult<String>();
 
       test('should be a PendingResult', () {
         expect(result, isInstanceOf<PendingResult>());
+      });
+
+      test('should be a AsyncQueryResult', () {
+        expect(result, isInstanceOf<AsyncQueryResult<String>>());
       });
 
       test('gives the same instance', () {
@@ -26,12 +31,14 @@ void main() {
     });
 
     group(".initialValue", () {
-      final result = AsyncQueryResult.initialValue(value);
+      final result = AsyncQueryResult<String>.initialValue(value);
 
       test('should be a CompletedResult', () {
         expect(result, isInstanceOf<InitialValueResult<String>>());
       });
-
+      test('should be a AsyncQueryResult', () {
+        expect(result, isInstanceOf<AsyncQueryResult<String>>());
+      });
       test("should has value", () {
         final succeeded = result as InitialValueResult<String>;
         expect(value, succeeded.value);
@@ -48,10 +55,14 @@ void main() {
     });
 
     group(".waiting", () {
-      final result = AsyncQueryResult.waiting();
+      final result = AsyncQueryResult<String>.waiting();
 
       test('should be a WaitingResult', () {
         expect(result, isInstanceOf<WaitingResult>());
+      });
+
+      test('should be a AsyncQueryResult', () {
+        expect(result, isInstanceOf<AsyncQueryResult<String>>());
       });
 
       test('gives the same instance', () {
@@ -75,6 +86,10 @@ void main() {
         expect(result, isInstanceOf<SucceededResult<String>>());
       });
 
+      test('should be a AsyncQueryResult', () {
+        expect(result, isInstanceOf<AsyncQueryResult<String>>());
+      });
+
       test("should has value", () {
         final succeeded = result as SucceededResult<String>;
         expect(value, succeeded.value);
@@ -94,10 +109,14 @@ void main() {
       final error = Exception("test error");
       final stackTrace = StackTrace.empty;
 
-      final result = AsyncQueryResult.failed(error, stackTrace);
+      final result = AsyncQueryResult<String>.failed(error, stackTrace);
 
       test('should be a FailedResult', () {
         expect(result, isInstanceOf<FailedResult>());
+      });
+
+      test('should be a AsyncQueryResult', () {
+        expect(result, isInstanceOf<AsyncQueryResult<String>>());
       });
 
       test('should contain error and stack trace', () {
@@ -121,6 +140,38 @@ void main() {
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isTrue);
         expect(result.hasValue, isFalse);
+      });
+    });
+
+    group(".updateWith", () {
+      test("should update value with succeeded", () async {
+        final initial = AsyncQueryResult<String>.pending();
+
+        final future = Future.value(QueryResult.succeeded(value));
+        print(future.runtimeType);
+        final states = initial.updateWith(future);
+
+        expect(
+          states,
+          emitsInOrder([
+            AsyncQueryResult<String>.waiting(),
+            AsyncQueryResult<String>.succeeded(value),
+          ]),
+        );
+      });
+      test("should update value with failed", () async {
+        final initial = AsyncQueryResult<String>();
+
+        final states =
+            initial.updateWith(Future.value(QueryResult<String>.failed(error)));
+
+        expect(
+          states,
+          emitsInOrder([
+            AsyncQueryResult<String>.waiting(),
+            AsyncQueryResult<String>.failed(error),
+          ]),
+        );
       });
     });
 
