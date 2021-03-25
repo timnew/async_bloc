@@ -1,9 +1,10 @@
 # Change Log
 
-## [0.2.0-preview.5] - TBD
+## [0.2.0-preview.5] - 2021-03-25
 
 * Add `mapValue`
 * Fix builder type issue for `EmptyableContentBuilder`
+* Make BLoc builders and bloc consumers accept `BlocBase` instead of `Bloc`, so the `Cubit` can be applied
 * Make `ActionBloc` and `QueryBloc` non-abstract
 * Fix issue that `AsyncQueryResult.pending().updateWith` throws `AsyncQueryResult<T>` isn't subtype of `AsyncQueryResult<Never>`
 
