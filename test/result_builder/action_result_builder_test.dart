@@ -12,64 +12,62 @@ void main() {
       required buildResult<AsyncActionResult> buildAsyncResult,
       required buildResult<ActionResult> buildSyncResult,
     }) {
-      testWidgets("it should build AsyncResultAction.pending()",
-          (WidgetTester tester) async {
-        await buildAsyncResult(tester, AsyncActionResult.pending());
+      group("it should build AsyncResultAction", () {
+        testWidgets(".pending()", (WidgetTester tester) async {
+          await buildAsyncResult(tester, AsyncActionResult.pending());
 
-        findPendingBeacon.shouldFindOne();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindNothing();
+          findPendingBeacon.shouldFindOne();
+          findWaitingBeacon.shouldFindNothing();
+          findErrorBeacon().shouldFindNothing();
+          findContentBeacon().shouldFindNothing();
+        });
+
+        testWidgets(".wating()", (WidgetTester tester) async {
+          await buildAsyncResult(tester, AsyncActionResult.waiting());
+
+          findPendingBeacon.shouldFindNothing();
+          findWaitingBeacon.shouldFindOne();
+          findErrorBeacon().shouldFindNothing();
+          findContentBeacon().shouldFindNothing();
+        });
+
+        testWidgets(".completed()", (WidgetTester tester) async {
+          await buildAsyncResult(tester, AsyncActionResult.failed("error"));
+
+          findPendingBeacon.shouldFindNothing();
+          findWaitingBeacon.shouldFindNothing();
+          findErrorBeacon("error").shouldFindOne();
+          findContentBeacon().shouldFindNothing();
+        });
+
+        testWidgets(".failed()", (WidgetTester tester) async {
+          await buildAsyncResult(tester, AsyncActionResult.completed());
+
+          findPendingBeacon.shouldFindNothing();
+          findWaitingBeacon.shouldFindNothing();
+          findErrorBeacon().shouldFindNothing();
+          findContentBeacon().shouldFindOne();
+        });
       });
 
-      testWidgets("it should build AsyncResultAction.wating()",
-          (WidgetTester tester) async {
-        await buildAsyncResult(tester, AsyncActionResult.waiting());
+      group("it should build ResultAction", () {
+        testWidgets(".completed()", (WidgetTester tester) async {
+          await buildSyncResult(tester, ActionResult.completed());
 
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindOne();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindNothing();
-      });
+          findPendingBeacon.shouldFindNothing();
+          findWaitingBeacon.shouldFindNothing();
+          findErrorBeacon().shouldFindNothing();
+          findContentBeacon().shouldFindOne();
+        });
 
-      testWidgets("it should build AsyncResultAction.completed()",
-          (WidgetTester tester) async {
-        await buildAsyncResult(tester, AsyncActionResult.failed("error"));
+        testWidgets(".failed()", (WidgetTester tester) async {
+          await buildSyncResult(tester, ActionResult.failed("error"));
 
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon("error").shouldFindOne();
-        findContentBeacon().shouldFindNothing();
-      });
-
-      testWidgets("it should build AsyncResultAction.failed()",
-          (WidgetTester tester) async {
-        await buildAsyncResult(tester, AsyncActionResult.completed());
-
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindOne();
-      });
-
-      testWidgets("it should build ResultAction.completed()",
-          (WidgetTester tester) async {
-        await buildSyncResult(tester, ActionResult.completed());
-
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindOne();
-      });
-
-      testWidgets("it should build ResultAction.failed()",
-          (WidgetTester tester) async {
-        await buildSyncResult(tester, ActionResult.failed("error"));
-
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon().shouldFindOne();
-        findContentBeacon().shouldFindNothing();
+          findPendingBeacon.shouldFindNothing();
+          findWaitingBeacon.shouldFindNothing();
+          findErrorBeacon().shouldFindOne();
+          findContentBeacon().shouldFindNothing();
+        });
       });
     }
 
