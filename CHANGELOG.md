@@ -4,6 +4,8 @@
 
 * Add `mapValue`
 * Fix builder type issue for `EmptyableContentBuilder`
+* Make `ActionBloc` and `QueryBloc` non-abstract
+* Fix issue that `AsyncQueryResult.pending().updateWith` throws `AsyncQueryResult<T>` isn't subtype of `AsyncQueryResult<Never>`
 
 ## [0.2.0-preview.4] - 2021-03-23
 
