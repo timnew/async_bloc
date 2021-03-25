@@ -3,6 +3,8 @@ import 'package:stated_result/stated_result.dart';
 
 void main() {
   group("AsyncActionResult", () {
+    final error = "error";
+
     group("default constructor", () {
       final result = AsyncActionResult();
 
@@ -97,6 +99,47 @@ void main() {
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isTrue);
         expect(result.hasValue, isFalse);
+      });
+    });
+
+    group(".updateWith", () {
+      test("should update value with completed", () async {
+        final initial = AsyncActionResult.pending();
+
+        final future = Future.value(ActionResult.completed());
+        final states = initial.updateWith(future);
+
+        expect(
+          states,
+          emitsInOrder([
+            AsyncActionResult.waiting(),
+            AsyncActionResult.completed(),
+          ]),
+        );
+      });
+      test("should update value with failed", () async {
+        final initial = AsyncActionResult.pending();
+
+        final future = Future.value(ActionResult.failed(error));
+        final states = initial.updateWith(future);
+
+        expect(
+          states,
+          emitsInOrder([
+            AsyncActionResult.waiting(),
+            AsyncActionResult.failed(error),
+          ]),
+        );
+      });
+
+      test("should complains when call on waiting", () async {
+        final initial = AsyncActionResult.waiting();
+
+        final future = Future.value(ActionResult.completed());
+
+        final states = initial.updateWith(future);
+
+        await expectLater(states, emitsError(isInstanceOf<StateError>()));
       });
     });
   });

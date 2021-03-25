@@ -148,7 +148,6 @@ void main() {
         final initial = AsyncQueryResult<String>.pending();
 
         final future = Future.value(QueryResult.succeeded(value));
-        print(future.runtimeType);
         final states = initial.updateWith(future);
 
         expect(
@@ -162,8 +161,8 @@ void main() {
       test("should update value with failed", () async {
         final initial = AsyncQueryResult<String>();
 
-        final states =
-            initial.updateWith(Future.value(QueryResult<String>.failed(error)));
+        final future = Future.value(QueryResult<String>.failed(error));
+        final states = initial.updateWith(future);
 
         expect(
           states,
@@ -172,6 +171,16 @@ void main() {
             AsyncQueryResult<String>.failed(error),
           ]),
         );
+      });
+
+      test("should complain when call on waiting", () async {
+        final initial = AsyncQueryResult<String>.waiting();
+
+        final future = Future.value(QueryResult.succeeded(value));
+
+        final states = initial.updateWith(future);
+
+        await expectLater(states, emitsError(isInstanceOf<StateError>()));
       });
     });
 
