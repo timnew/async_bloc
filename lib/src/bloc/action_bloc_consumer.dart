@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../stated_result.dart';
 import '../../stated_result_builder.dart';
 
-class ActionBlocConsumer<B extends Bloc<Object?, AsyncActionResult>>
+class ActionBlocConsumer<B extends BlocBase<AsyncActionResult>>
     extends BlocConsumer<B, AsyncActionResult> {
   ActionBlocConsumer({
     Key? key,
