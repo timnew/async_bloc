@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_result.dart';
-import 'package:stated_result/stated_result_bloc.dart';
 import 'package:stated_result/stated_result_listenable.dart';
 import 'package:stated_result/stated_result_builder.dart';
 
