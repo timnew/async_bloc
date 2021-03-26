@@ -8,16 +8,17 @@ import 'package:stated_result/stated_result_builder.dart';
 
 import '../widget_tester/widget_tester.dart';
 
-typedef Widget BuildWidget(ActionResultNotifier notifier);
+typedef Widget BuildWidget(QueryResultNotifier<String> bloc);
 
 void main() {
-  group("ActionListenableBuilder", () {
+  group("QueryListenableBuilder", () {
     final error = "error";
+    final value = "value";
 
     void runTestSet(BuildWidget buildWidget) {
-      group("building AsyncActionResult", () {
-        testWidgets("omitted initial value", (WidgetTester tester) async {
-          final notifier = ActionResultNotifier();
+      group("building AsyncQueryResult", () {
+        testWidgets("omitted", (WidgetTester tester) async {
+          final notifier = QueryResultNotifier<String>();
 
           await tester.pumpWidget(buildWidget(notifier));
 
@@ -28,7 +29,7 @@ void main() {
         });
 
         testWidgets(".pending", (WidgetTester tester) async {
-          final notifier = ActionResultNotifier(AsyncActionResult.pending());
+          final notifier = QueryResultNotifier<String>(AsyncQueryResult<String>.pending());
 
           await tester.pumpWidget(buildWidget(notifier));
 
@@ -39,7 +40,7 @@ void main() {
         });
 
         testWidgets(".waiting", (WidgetTester tester) async {
-          final notifier = ActionResultNotifier(AsyncActionResult.waiting());
+          final notifier = QueryResultNotifier<String>(AsyncQueryResult<String>.waiting());
 
           await tester.pumpWidget(buildWidget(notifier));
 
@@ -50,7 +51,8 @@ void main() {
         });
 
         testWidgets(".failed", (WidgetTester tester) async {
-          final notifier = ActionResultNotifier(AsyncActionResult.failed(error));
+          final notifier =
+          QueryResultNotifier<String>(AsyncQueryResult<String>.failed(error));
 
           await tester.pumpWidget(buildWidget(notifier));
 
@@ -60,20 +62,21 @@ void main() {
           findContentBeacon().shouldFindNothing();
         });
 
-        testWidgets(".completed", (WidgetTester tester) async {
-          final notifier = ActionResultNotifier(AsyncActionResult.completed());
+        testWidgets(".succeeded", (WidgetTester tester) async {
+          final notifier =
+          QueryResultNotifier<String>(AsyncQueryResult<String>.succeeded(value));
 
           await tester.pumpWidget(buildWidget(notifier));
 
           findPendingBeacon.shouldFindNothing();
           findWaitingBeacon.shouldFindNothing();
           findErrorBeacon().shouldFindNothing();
-          findContentBeacon().shouldFindOne();
+          findContentBeacon(value).shouldFindOne();
         });
       });
 
       testWidgets("can be updated with succeeded", (WidgetTester tester) async {
-        final notifier = ActionResultNotifier();
+        final notifier = QueryResultNotifier<String>();
 
         await tester.pumpWidget(buildWidget(notifier));
 
@@ -82,7 +85,7 @@ void main() {
         findErrorBeacon().shouldFindNothing();
         findContentBeacon().shouldFindNothing();
 
-        final completer = Completer<ActionResult>();
+        final completer = Completer<QueryResult<String>>();
 
         // ignore: unawaited_futures
         notifier.updateWith(completer.future);
@@ -93,17 +96,17 @@ void main() {
         findErrorBeacon().shouldFindNothing();
         findContentBeacon().shouldFindNothing();
 
-        completer.complete(ActionResult.completed());
+        completer.complete(QueryResult<String>.succeeded(value));
         await tester.pump(Duration.zero);
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
         findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindOne();
+        findContentBeacon(value).shouldFindOne();
       });
 
       testWidgets("can be updated with failed", (WidgetTester tester) async {
-        final notifier = ActionResultNotifier();
+        final notifier = QueryResultNotifier<String>();
 
         await tester.pumpWidget(buildWidget(notifier));
 
@@ -112,7 +115,7 @@ void main() {
         findErrorBeacon().shouldFindNothing();
         findContentBeacon().shouldFindNothing();
 
-        final completer = Completer<ActionResult>();
+        final completer = Completer<QueryResult<String>>();
 
         // ignore: unawaited_futures
         notifier.updateWith(completer.future);
@@ -123,7 +126,7 @@ void main() {
         findErrorBeacon().shouldFindNothing();
         findContentBeacon().shouldFindNothing();
 
-        completer.complete(ActionResult.failed(error));
+        completer.complete(QueryResult<String>.failed(error));
         await tester.pump(Duration.zero);
 
         findPendingBeacon.shouldFindNothing();
@@ -133,7 +136,7 @@ void main() {
       });
 
       testWidgets("can capture future", (WidgetTester tester) async {
-        final notifier = ActionResultNotifier();
+        final notifier = QueryResultNotifier<String>();
 
         await tester.pumpWidget(buildWidget(notifier));
 
@@ -142,7 +145,7 @@ void main() {
         findErrorBeacon().shouldFindNothing();
         findContentBeacon().shouldFindNothing();
 
-        final completer = Completer();
+        final completer = Completer<String>();
 
         // ignore: unawaited_futures
         notifier.captureResult(completer.future);
@@ -153,17 +156,17 @@ void main() {
         findErrorBeacon().shouldFindNothing();
         findContentBeacon().shouldFindNothing();
 
-        completer.complete();
+        completer.complete(value);
         await tester.pump(Duration.zero);
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
         findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindOne();
+        findContentBeacon(value).shouldFindOne();
       });
 
       testWidgets("can capture future with error", (WidgetTester tester) async {
-        final notifier = ActionResultNotifier();
+        final notifier = QueryResultNotifier<String>();
 
         await tester.pumpWidget(buildWidget(notifier));
 
@@ -172,7 +175,7 @@ void main() {
         findErrorBeacon().shouldFindNothing();
         findContentBeacon().shouldFindNothing();
 
-        final completer = Completer();
+        final completer = Completer<String>();
 
         // ignore: unawaited_futures
         notifier.captureResult(completer.future);
@@ -194,26 +197,26 @@ void main() {
     }
 
     group("explicit builders", () {
-      runTestSet((ActionResultNotifier notifier) => TestBench(
-        child: ActionListenableBuilder(
+      runTestSet((QueryResultNotifier<String> notifier) => TestBench(
+        child: QueryListenableBuilder<String>(
           listenable: notifier,
           pendingBuilder: (_) => PendingBeacon(),
           waitingBuilder: (_) => WaitingBeacon(),
           failedBuilder: (_, result) => ErrorBeacon(result.error),
-          builder: (BuildContext context) => ContentBeacon(),
+          builder: (_, value) => ContentBeacon(value),
         ),
       ));
     });
 
     group("default builders", () {
-      runTestSet((ActionResultNotifier notifier) => TestBench(
+      runTestSet((QueryResultNotifier<String> notifier) => TestBench(
         child: DefaultResultBuilder(
           pendingBuilder: (_) => PendingBeacon(),
           waitingBuilder: (_) => WaitingBeacon(),
           failedBuilder: (_, result) => ErrorBeacon(result.error),
-          child: ActionListenableBuilder(
+          child: QueryListenableBuilder<String>(
             listenable: notifier,
-            builder: (BuildContext context) => ContentBeacon(),
+            builder: (_, value) => ContentBeacon(value),
           ),
         ),
       ));
@@ -234,10 +237,10 @@ void main() {
         DefaultFailedResultBuilder.setGlobalBuilder(null);
       });
 
-      runTestSet((ActionResultNotifier notifier) => TestBench(
-        child: ActionListenableBuilder(
+      runTestSet((QueryResultNotifier<String> notifier) => TestBench(
+        child: QueryListenableBuilder<String>(
           listenable: notifier,
-          builder: (BuildContext context) => ContentBeacon(),
+          builder: (_, value) => ContentBeacon(value),
         ),
       ));
     });
