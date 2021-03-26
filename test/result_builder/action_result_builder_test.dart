@@ -22,7 +22,7 @@ void main() {
           findContentBeacon().shouldFindNothing();
         });
 
-        testWidgets(".wating()", (WidgetTester tester) async {
+        testWidgets(".waiting()", (WidgetTester tester) async {
           await buildAsyncResult(tester, AsyncActionResult.waiting());
 
           findPendingBeacon.shouldFindNothing();

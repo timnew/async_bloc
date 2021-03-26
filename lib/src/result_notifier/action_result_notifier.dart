@@ -11,7 +11,7 @@ class ActionResultNotifier extends ValueNotifier<AsyncActionResult> {
   ActionResultNotifier([AsyncActionResult? initialState])
       : super(initialState ?? AsyncActionResult());
 
-  /// Capture the result of a generic aync action
+  /// Capture the result of a generic async action
   Future<ActionResult> captureResult(Future future) =>
       updateWith(future.asActionResult());
 
