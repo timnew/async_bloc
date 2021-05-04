@@ -6,6 +6,7 @@ import 'package:stated_result/stated_result.dart';
 import 'package:stated_result/stated_result_bloc.dart';
 import 'package:stated_result/stated_result_builder.dart';
 
+import '../widget_tester/custom_matchers.dart';
 import '../widget_tester/widget_tester.dart';
 
 typedef Widget BuildWidget(QueryCubit<String> bloc);
@@ -136,8 +137,7 @@ void main() {
 
         final completer = Completer<String>();
 
-        // ignore: unawaited_futures
-        cubit.captureResult(completer.future);
+        final capturedResult = cubit.captureResult(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -147,6 +147,10 @@ void main() {
 
         completer.complete(value);
         await tester.pump(Duration.zero);
+        await expectLater(
+          capturedResult,
+          completion(AsyncQueryResult.succeeded(value)),
+        );
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -166,8 +170,7 @@ void main() {
 
         final completer = Completer<String>();
 
-        // ignore: unawaited_futures
-        cubit.captureResult(completer.future);
+        final capturedResult = cubit.captureResult(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -177,6 +180,10 @@ void main() {
 
         completer.completeError(error);
         await tester.pump(Duration.zero);
+        await expectLater(
+          capturedResult,
+          completion(HasError(equals(error))),
+        );
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -187,7 +194,7 @@ void main() {
 
     group("explicit builders", () {
       runTestSet((QueryCubit<String> bloc) => TestBench(
-            child: QueryBlocBuilder<String, QueryCubit<String>>(
+            child: QueryBlocBuilder<QueryCubit<String>, String>(
               bloc: bloc,
               pendingBuilder: (_) => PendingBeacon(),
               waitingBuilder: (_) => WaitingBeacon(),
@@ -203,7 +210,7 @@ void main() {
               pendingBuilder: (_) => PendingBeacon(),
               waitingBuilder: (_) => WaitingBeacon(),
               failedBuilder: (_, result) => ErrorBeacon(result.error),
-              child: QueryBlocBuilder<String, QueryCubit<String>>(
+              child: QueryBlocBuilder<QueryCubit<String>, String>(
                 bloc: bloc,
                 builder: (_, value) => ContentBeacon(value),
               ),
@@ -227,7 +234,7 @@ void main() {
       });
 
       runTestSet((QueryCubit<String> bloc) => TestBench(
-            child: QueryBlocBuilder<String, QueryCubit<String>>(
+            child: QueryBlocBuilder<QueryCubit<String>, String>(
               bloc: bloc,
               builder: (_, value) => ContentBeacon(value),
             ),

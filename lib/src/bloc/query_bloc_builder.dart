@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../stated_result.dart';
 import '../../stated_result_builder.dart';
 
-class QueryBlocBuilder<T, B extends BlocBase<AsyncQueryResult<T>>>
+class QueryBlocBuilder<B extends BlocBase<AsyncQueryResult<T>>, T>
     extends BlocBuilder<B, AsyncQueryResult<T>> {
   QueryBlocBuilder({
     Key? key,
