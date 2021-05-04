@@ -13,8 +13,10 @@ class ActionCubit extends Cubit<AsyncActionResult> {
       : super(initialState ?? AsyncActionResult());
 
   /// Capture the result of a generic aync action
-  Future<ActionResult> captureResult(Future future) =>
-      updateWith(future.asActionResult());
+  Future<T> captureResult<T>(Future<T> future) {
+    updateWith(future.asActionResult());
+    return future;
+  }
 
   /// Update self with future [ActionResult]
   Future<ActionResult> updateWith(Future<ActionResult> future) async {

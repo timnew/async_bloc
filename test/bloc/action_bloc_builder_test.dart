@@ -6,6 +6,7 @@ import 'package:stated_result/stated_result.dart';
 import 'package:stated_result/stated_result_bloc.dart';
 import 'package:stated_result/stated_result_builder.dart';
 
+import '../widget_tester/custom_matchers.dart';
 import '../widget_tester/widget_tester.dart';
 
 typedef Widget BuildWidget(ActionCubit bloc);
@@ -73,8 +74,7 @@ void main() {
 
         final completer = Completer<ActionResult>();
 
-        // ignore: unawaited_futures
-        cubit.updateWith(completer.future);
+        final updatedResult = cubit.updateWith(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -84,6 +84,7 @@ void main() {
 
         completer.complete(ActionResult.completed());
         await tester.pump(Duration.zero);
+        await expectLater(updatedResult, completion(ActionResult.completed()));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -103,8 +104,7 @@ void main() {
 
         final completer = Completer<ActionResult>();
 
-        // ignore: unawaited_futures
-        cubit.updateWith(completer.future);
+        final updatedResult = cubit.updateWith(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -114,6 +114,7 @@ void main() {
 
         completer.complete(ActionResult.failed(error));
         await tester.pump(Duration.zero);
+        await expectLater(updatedResult, completion(HasError(equals(error))));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -131,10 +132,9 @@ void main() {
         findErrorBeacon().shouldFindNothing();
         findContentBeacon().shouldFindNothing();
 
-        final completer = Completer();
+        final completer = Completer<String>();
 
-        // ignore: unawaited_futures
-        cubit.captureResult(completer.future);
+        final capturedResult = cubit.captureResult(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -142,8 +142,10 @@ void main() {
         findErrorBeacon().shouldFindNothing();
         findContentBeacon().shouldFindNothing();
 
-        completer.complete();
+        final value = "value";
+        completer.complete(value);
         await tester.pump(Duration.zero);
+        await expectLater(capturedResult, completion(value));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -163,8 +165,7 @@ void main() {
 
         final completer = Completer();
 
-        // ignore: unawaited_futures
-        cubit.captureResult(completer.future);
+        final capturedResult = cubit.captureResult(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -174,6 +175,7 @@ void main() {
 
         completer.completeError(error);
         await tester.pump(Duration.zero);
+        await expectLater(capturedResult, throwsA(equals(error)));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();

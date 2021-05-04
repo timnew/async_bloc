@@ -6,6 +6,7 @@ import 'package:stated_result/stated_result.dart';
 import 'package:stated_result/stated_result_listenable.dart';
 import 'package:stated_result/stated_result_builder.dart';
 
+import '../widget_tester/custom_matchers.dart';
 import '../widget_tester/widget_tester.dart';
 
 typedef Widget BuildWidget(ActionResultNotifier notifier);
@@ -50,7 +51,8 @@ void main() {
         });
 
         testWidgets(".failed", (WidgetTester tester) async {
-          final notifier = ActionResultNotifier(AsyncActionResult.failed(error));
+          final notifier =
+              ActionResultNotifier(AsyncActionResult.failed(error));
 
           await tester.pumpWidget(buildWidget(notifier));
 
@@ -84,8 +86,7 @@ void main() {
 
         final completer = Completer<ActionResult>();
 
-        // ignore: unawaited_futures
-        notifier.updateWith(completer.future);
+        final updatedValue = notifier.updateWith(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -95,6 +96,7 @@ void main() {
 
         completer.complete(ActionResult.completed());
         await tester.pump(Duration.zero);
+        await expectLater(updatedValue, completion(ActionResult.completed()));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -114,8 +116,7 @@ void main() {
 
         final completer = Completer<ActionResult>();
 
-        // ignore: unawaited_futures
-        notifier.updateWith(completer.future);
+        final updatedValue = notifier.updateWith(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -125,6 +126,7 @@ void main() {
 
         completer.complete(ActionResult.failed(error));
         await tester.pump(Duration.zero);
+        await expectLater(updatedValue, completion(HasError(equals(error))));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -142,10 +144,9 @@ void main() {
         findErrorBeacon().shouldFindNothing();
         findContentBeacon().shouldFindNothing();
 
-        final completer = Completer();
+        final completer = Completer<String>();
 
-        // ignore: unawaited_futures
-        notifier.captureResult(completer.future);
+        final capturedResult = notifier.captureResult(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -153,8 +154,10 @@ void main() {
         findErrorBeacon().shouldFindNothing();
         findContentBeacon().shouldFindNothing();
 
-        completer.complete();
+        final value = "value";
+        completer.complete(value);
         await tester.pump(Duration.zero);
+        await expectLater(capturedResult, completion(value));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -174,8 +177,7 @@ void main() {
 
         final completer = Completer();
 
-        // ignore: unawaited_futures
-        notifier.captureResult(completer.future);
+        final capturedResult = notifier.captureResult(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -185,6 +187,7 @@ void main() {
 
         completer.completeError(error);
         await tester.pump(Duration.zero);
+        await expectLater(capturedResult, throwsA(error));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -195,28 +198,28 @@ void main() {
 
     group("explicit builders", () {
       runTestSet((ActionResultNotifier notifier) => TestBench(
-        child: ActionListenableBuilder(
-          listenable: notifier,
-          pendingBuilder: (_) => PendingBeacon(),
-          waitingBuilder: (_) => WaitingBeacon(),
-          failedBuilder: (_, result) => ErrorBeacon(result.error),
-          builder: (BuildContext context) => ContentBeacon(),
-        ),
-      ));
+            child: ActionListenableBuilder(
+              listenable: notifier,
+              pendingBuilder: (_) => PendingBeacon(),
+              waitingBuilder: (_) => WaitingBeacon(),
+              failedBuilder: (_, result) => ErrorBeacon(result.error),
+              builder: (BuildContext context) => ContentBeacon(),
+            ),
+          ));
     });
 
     group("default builders", () {
       runTestSet((ActionResultNotifier notifier) => TestBench(
-        child: DefaultResultBuilder(
-          pendingBuilder: (_) => PendingBeacon(),
-          waitingBuilder: (_) => WaitingBeacon(),
-          failedBuilder: (_, result) => ErrorBeacon(result.error),
-          child: ActionListenableBuilder(
-            listenable: notifier,
-            builder: (BuildContext context) => ContentBeacon(),
-          ),
-        ),
-      ));
+            child: DefaultResultBuilder(
+              pendingBuilder: (_) => PendingBeacon(),
+              waitingBuilder: (_) => WaitingBeacon(),
+              failedBuilder: (_, result) => ErrorBeacon(result.error),
+              child: ActionListenableBuilder(
+                listenable: notifier,
+                builder: (BuildContext context) => ContentBeacon(),
+              ),
+            ),
+          ));
     });
 
     group("global default builders", () {
@@ -235,11 +238,11 @@ void main() {
       });
 
       runTestSet((ActionResultNotifier notifier) => TestBench(
-        child: ActionListenableBuilder(
-          listenable: notifier,
-          builder: (BuildContext context) => ContentBeacon(),
-        ),
-      ));
+            child: ActionListenableBuilder(
+              listenable: notifier,
+              builder: (BuildContext context) => ContentBeacon(),
+            ),
+          ));
     });
   });
 }
