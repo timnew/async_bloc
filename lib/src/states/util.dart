@@ -1,11 +1,10 @@
-import 'contracts.dart';
 import 'stated_result.dart';
-import 'states/waiting_result.dart';
-import 'states/completed_result.dart';
-import 'states/initial_value_result.dart';
-import 'states/failed_result.dart';
-import 'states/pending_result.dart';
-import 'states/succeeded_result.dart';
+import 'results/waiting_result.dart';
+import 'results/completed_result.dart';
+import 'results/initial_value_result.dart';
+import 'results/failed_result.dart';
+import 'results/pending_result.dart';
+import 'results/succeeded_result.dart';
 
 /// Internal StatedResult helpers
 extension MultiStateResultExtension on StatedResult {

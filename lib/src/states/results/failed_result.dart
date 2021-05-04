@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 
-import '../contracts.dart';
 import '../stated_result.dart';
 
 /// State indicates the query/action is failed

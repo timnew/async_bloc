@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stated_result/src/result/stated_result.dart';
-import 'package:stated_result/src/result/states/abstract/unit_result_base.dart';
+import 'package:stated_result/src/states/stated_result.dart';
+import 'package:stated_result/src/states/results/base/unit_result_base.dart';
 
 class TestState extends UnitResultBase<TestState> {
   const TestState();

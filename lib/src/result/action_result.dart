@@ -1,14 +1,11 @@
 import 'dart:async';
 
+import 'package:stated_result/stated_result_states.dart';
+import 'package:stated_result/internal.dart';
+
 import 'query_result.dart';
 import 'async_action_result.dart';
 import 'async_query_result.dart';
-import 'contracts.dart';
-import 'states/completed_result.dart';
-import 'states/failed_result.dart';
-import 'stated_result.dart';
-import 'states/succeeded_result.dart';
-import 'util.dart';
 
 /// A 2-state result represents synchronised action with no return value
 /// It could be either succeeded or failed

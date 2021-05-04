@@ -1,4 +1,4 @@
-import 'abstract/value_result_base.dart';
+import 'base/value_result_base.dart';
 
 /// State indicates the query is finished successfully
 ///

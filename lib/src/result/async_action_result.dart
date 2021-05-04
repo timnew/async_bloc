@@ -1,12 +1,5 @@
-import 'contracts.dart';
-import 'states/completed_result.dart';
-import 'states/failed_result.dart';
-import 'states/initial_value_result.dart';
-import 'states/pending_result.dart';
-import 'states/succeeded_result.dart';
-import 'states/waiting_result.dart';
-import 'stated_result.dart';
-import 'util.dart';
+import 'package:stated_result/stated_result_states.dart';
+import 'package:stated_result/internal.dart';
 
 import 'action_result.dart';
 import 'query_result.dart';

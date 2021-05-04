@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:stated_result/src/result/stated_result.dart';
+import 'package:stated_result/src/states/stated_result.dart';
 
-import 'package:stated_result/src/result/util.dart';
+import 'package:stated_result/src/states/util.dart';
 import 'package:stated_result/stated_result.dart';
 
 import 'default_waiting_result_builder.dart';

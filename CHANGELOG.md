@@ -6,6 +6,7 @@
 * Change `ErrorResult.error` type from `dynamic` to `Object` to avoid `null`
 * Renamed `StatedResult.asFailed` to `StatedResult.asError`
 * Renamed `StatedResult.asValueResult` to `StatedResult.asValueResult`
+* Moved results into `stated_result_states` lib.
 
 ## [0.2.0] - 2021-05-04
 

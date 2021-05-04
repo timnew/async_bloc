@@ -1,4 +1,4 @@
-import 'abstract/unit_result_base.dart';
+import 'base/unit_result_base.dart';
 
 /// State indicates the query/action hasn't started yet
 ///
