@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.2.0] - 2021-05-04
+
+* Upgraded dependencies
+* Aligned generic parameter order of `QueryBlocBuilder` and `QueryBlocConsumer` to `BlocBuilder` and `BlocConsumer`
+* `ActionBloc.captureResult` and `ActionResultNotifier.captureResult` returns original future.
+* Added `AsyncQueryResult.fromValue` to create instance from value
+* Added more tests
+
 ## [0.2.0-preview.5] - 2021-03-25
 
 * Add `mapValue`
