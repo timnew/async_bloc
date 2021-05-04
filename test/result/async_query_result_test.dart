@@ -143,6 +143,18 @@ void main() {
       });
     });
 
+    group(".fromValue", () {
+      test("value is SucceededResult", () {
+        final result = AsyncQueryResult.fromValue(value);
+        expect(result, AsyncQueryResult.succeeded(value));
+      });
+
+      test("null is PendingResult", () {
+        final result = AsyncQueryResult.fromValue(null);
+        expect(result, AsyncQueryResult.pending());
+      });
+    });
+
     group(".updateWith", () {
       test("should update value with succeeded", () async {
         final initial = AsyncQueryResult<String>.pending();

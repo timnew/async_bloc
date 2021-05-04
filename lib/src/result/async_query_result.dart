@@ -48,6 +48,13 @@ abstract class AsyncQueryResult<T> implements StatedResult {
   const factory AsyncQueryResult.failed(dynamic error,
       [StackTrace? stackTrace]) = _Failed;
 
+  /// Create the result from [value].
+  /// If `value` is `null`, [PendingResult] is created
+  /// Otherwise [SucceededResult] holds `value` is created
+  factory AsyncQueryResult.fromValue(T? value) => value == null
+      ? AsyncQueryResult.pending()
+      : AsyncQueryResult.succeeded(value);
+
   /// Create [AsyncQueryResult] from any other result
   ///
   /// [PendingResult] converts to [AsyncQueryResult.pending]
