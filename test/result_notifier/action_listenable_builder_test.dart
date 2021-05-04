@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_result.dart';
 import 'package:stated_result/stated_result_listenable.dart';
 import 'package:stated_result/stated_result_builder.dart';
+import 'package:test_beacon/test_beacon.dart';
 
 import '../widget_tester/custom_matchers.dart';
 import '../widget_tester/widget_tester.dart';
@@ -20,7 +21,7 @@ void main() {
         testWidgets("omitted initial value", (WidgetTester tester) async {
           final notifier = ActionResultNotifier();
 
-          await tester.pumpWidget(buildWidget(notifier));
+          await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
           findPendingBeacon.shouldFindOne();
           findWaitingBeacon.shouldFindNothing();
@@ -31,7 +32,7 @@ void main() {
         testWidgets(".pending", (WidgetTester tester) async {
           final notifier = ActionResultNotifier(AsyncActionResult.pending());
 
-          await tester.pumpWidget(buildWidget(notifier));
+          await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
           findPendingBeacon.shouldFindOne();
           findWaitingBeacon.shouldFindNothing();
@@ -42,7 +43,7 @@ void main() {
         testWidgets(".waiting", (WidgetTester tester) async {
           final notifier = ActionResultNotifier(AsyncActionResult.waiting());
 
-          await tester.pumpWidget(buildWidget(notifier));
+          await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
           findPendingBeacon.shouldFindNothing();
           findWaitingBeacon.shouldFindOne();
@@ -54,7 +55,7 @@ void main() {
           final notifier =
               ActionResultNotifier(AsyncActionResult.failed(error));
 
-          await tester.pumpWidget(buildWidget(notifier));
+          await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
           findPendingBeacon.shouldFindNothing();
           findWaitingBeacon.shouldFindNothing();
@@ -65,7 +66,7 @@ void main() {
         testWidgets(".completed", (WidgetTester tester) async {
           final notifier = ActionResultNotifier(AsyncActionResult.completed());
 
-          await tester.pumpWidget(buildWidget(notifier));
+          await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
           findPendingBeacon.shouldFindNothing();
           findWaitingBeacon.shouldFindNothing();
@@ -77,7 +78,7 @@ void main() {
       testWidgets("can be updated with succeeded", (WidgetTester tester) async {
         final notifier = ActionResultNotifier();
 
-        await tester.pumpWidget(buildWidget(notifier));
+        await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -107,7 +108,7 @@ void main() {
       testWidgets("can be updated with failed", (WidgetTester tester) async {
         final notifier = ActionResultNotifier();
 
-        await tester.pumpWidget(buildWidget(notifier));
+        await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -137,7 +138,7 @@ void main() {
       testWidgets("can capture future", (WidgetTester tester) async {
         final notifier = ActionResultNotifier();
 
-        await tester.pumpWidget(buildWidget(notifier));
+        await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -168,7 +169,7 @@ void main() {
       testWidgets("can capture future with error", (WidgetTester tester) async {
         final notifier = ActionResultNotifier();
 
-        await tester.pumpWidget(buildWidget(notifier));
+        await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -197,27 +198,23 @@ void main() {
     }
 
     group("explicit builders", () {
-      runTestSet((ActionResultNotifier notifier) => TestBench(
-            child: ActionListenableBuilder(
-              listenable: notifier,
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, result) => ErrorBeacon(result.error),
-              builder: (BuildContext context) => ContentBeacon(),
-            ),
+      runTestSet((ActionResultNotifier notifier) => ActionListenableBuilder(
+            listenable: notifier,
+            pendingBuilder: (_) => PendingBeacon(),
+            waitingBuilder: (_) => WaitingBeacon(),
+            failedBuilder: (_, result) => ErrorBeacon(result.error),
+            builder: (BuildContext context) => ContentBeacon(null),
           ));
     });
 
     group("default builders", () {
-      runTestSet((ActionResultNotifier notifier) => TestBench(
-            child: DefaultResultBuilder(
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, result) => ErrorBeacon(result.error),
-              child: ActionListenableBuilder(
-                listenable: notifier,
-                builder: (BuildContext context) => ContentBeacon(),
-              ),
+      runTestSet((ActionResultNotifier notifier) => DefaultResultBuilder(
+            pendingBuilder: (_) => PendingBeacon(),
+            waitingBuilder: (_) => WaitingBeacon(),
+            failedBuilder: (_, result) => ErrorBeacon(result.error),
+            child: ActionListenableBuilder(
+              listenable: notifier,
+              builder: (BuildContext context) => ContentBeacon(null),
             ),
           ));
     });
@@ -237,11 +234,9 @@ void main() {
         DefaultFailedResultBuilder.setGlobalBuilder(null);
       });
 
-      runTestSet((ActionResultNotifier notifier) => TestBench(
-            child: ActionListenableBuilder(
-              listenable: notifier,
-              builder: (BuildContext context) => ContentBeacon(),
-            ),
+      runTestSet((ActionResultNotifier notifier) => ActionListenableBuilder(
+            listenable: notifier,
+            builder: (BuildContext context) => ContentBeacon(null),
           ));
     });
   });

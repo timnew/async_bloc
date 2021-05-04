@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_result.dart';
 import 'package:stated_result/stated_result_builder.dart';
+import 'package:test_beacon/test_beacon.dart';
 
 import '../widget_tester/widget_tester.dart';
 
@@ -78,28 +79,24 @@ void main() {
     group("with explicit builders", () {
       Future _buildAsyncResult(
           WidgetTester tester, AsyncQueryResult<String> result) async {
-        await tester.pumpWidget(
-          TestBench(
-            child: QueryResultBuilder<String>(
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
-              builder: (_, value) => ContentBeacon(value),
-              result: result,
-            ),
+        await tester.pumpWidgetOnScaffold(
+          QueryResultBuilder<String>(
+            pendingBuilder: (_) => PendingBeacon(),
+            waitingBuilder: (_) => WaitingBeacon(),
+            failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
+            builder: (_, value) => ContentBeacon(value),
+            result: result,
           ),
         );
       }
 
       Future _buildSyncResult(
           WidgetTester tester, QueryResult<String> result) async {
-        await tester.pumpWidget(
-          TestBench(
-            child: QueryResultBuilder<String>.sync(
-              failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
-              builder: (_, value) => ContentBeacon(value),
-              result: result,
-            ),
+        await tester.pumpWidgetOnScaffold(
+          QueryResultBuilder<String>.sync(
+            failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
+            builder: (_, value) => ContentBeacon(value),
+            result: result,
           ),
         );
       }
@@ -113,8 +110,8 @@ void main() {
     group("with default buidlers", () {
       Future _buildAsyncResult(
           WidgetTester tester, AsyncQueryResult<String> result) async {
-        await tester.pumpWidget(
-          TestBench(
+        await tester.pumpWidgetOnScaffold(
+          TestScaffold(
             child: DefaultResultBuilder(
               pendingBuilder: (_) => PendingBeacon(),
               waitingBuilder: (_) => WaitingBeacon(),
@@ -130,16 +127,14 @@ void main() {
 
       Future _buildSyncResult(
           WidgetTester tester, QueryResult<String> result) async {
-        await tester.pumpWidget(
-          TestBench(
-            child: DefaultResultBuilder(
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
-              child: QueryResultBuilder<String>.sync(
-                builder: (_, value) => ContentBeacon(value),
-                result: result,
-              ),
+        await tester.pumpWidgetOnScaffold(
+          DefaultResultBuilder(
+            pendingBuilder: (_) => PendingBeacon(),
+            waitingBuilder: (_) => WaitingBeacon(),
+            failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
+            child: QueryResultBuilder<String>.sync(
+              builder: (_, value) => ContentBeacon(value),
+              result: result,
             ),
           ),
         );
@@ -154,24 +149,20 @@ void main() {
     group("with global default builders", () {
       Future _buildAsyncResult(
           WidgetTester tester, AsyncQueryResult<String> result) async {
-        await tester.pumpWidget(
-          TestBench(
-            child: QueryResultBuilder<String>(
-              builder: (_, value) => ContentBeacon(value),
-              result: result,
-            ),
+        await tester.pumpWidgetOnScaffold(
+          QueryResultBuilder<String>(
+            builder: (_, value) => ContentBeacon(value),
+            result: result,
           ),
         );
       }
 
       Future _buildSyncResult(
           WidgetTester tester, QueryResult<String> result) async {
-        await tester.pumpWidget(
-          TestBench(
-            child: QueryResultBuilder<String>.sync(
-              builder: (_, value) => ContentBeacon(value),
-              result: result,
-            ),
+        await tester.pumpWidgetOnScaffold(
+          QueryResultBuilder<String>.sync(
+            builder: (_, value) => ContentBeacon(value),
+            result: result,
           ),
         );
       }

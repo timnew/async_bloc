@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_result.dart';
 import 'package:stated_result/stated_result_builder.dart';
+import 'package:test_beacon/test_beacon.dart';
 
 import '../widget_tester/widget_tester.dart';
 
@@ -74,27 +75,23 @@ void main() {
     group("with explicit builders", () {
       Future _buildAsyncResult(
           WidgetTester tester, AsyncActionResult result) async {
-        await tester.pumpWidget(
-          TestBench(
-            child: ActionResultBuilder(
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
-              builder: (_) => ContentBeacon(),
-              result: result,
-            ),
+        await tester.pumpWidgetOnScaffold(
+          ActionResultBuilder(
+            pendingBuilder: (_) => PendingBeacon(),
+            waitingBuilder: (_) => WaitingBeacon(),
+            failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
+            builder: (_) => ContentBeacon(null),
+            result: result,
           ),
         );
       }
 
       Future _buildSyncResult(WidgetTester tester, ActionResult result) async {
-        await tester.pumpWidget(
-          TestBench(
-            child: ActionResultBuilder.sync(
-              failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
-              builder: (_) => ContentBeacon(),
-              result: result,
-            ),
+        await tester.pumpWidgetOnScaffold(
+          ActionResultBuilder.sync(
+            failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
+            builder: (_) => ContentBeacon(null),
+            result: result,
           ),
         );
       }
@@ -108,30 +105,28 @@ void main() {
     group("with default buidlers", () {
       Future _buildAsyncResult(
           WidgetTester tester, AsyncActionResult result) async {
-        await tester.pumpWidget(
-          TestBench(
-            child: DefaultResultBuilder(
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
-              child: ActionResultBuilder(
-                builder: (_) => ContentBeacon(),
-                result: result,
-              ),
+        await tester.pumpWidgetOnScaffold(
+          DefaultResultBuilder(
+            pendingBuilder: (_) => PendingBeacon(),
+            waitingBuilder: (_) => WaitingBeacon(),
+            failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
+            child: ActionResultBuilder(
+              builder: (_) => ContentBeacon(null),
+              result: result,
             ),
           ),
         );
       }
 
       Future _buildSyncResult(WidgetTester tester, ActionResult result) async {
-        await tester.pumpWidget(
-          TestBench(
+        await tester.pumpWidgetOnScaffold(
+          TestScaffold(
             child: DefaultResultBuilder(
               pendingBuilder: (_) => PendingBeacon(),
               waitingBuilder: (_) => WaitingBeacon(),
               failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
               child: ActionResultBuilder.sync(
-                builder: (_) => ContentBeacon(),
+                builder: (_) => ContentBeacon(null),
                 result: result,
               ),
             ),
@@ -148,23 +143,19 @@ void main() {
     group("with global default builders", () {
       Future _buildAsyncResult(
           WidgetTester tester, AsyncActionResult result) async {
-        await tester.pumpWidget(
-          TestBench(
-            child: ActionResultBuilder(
-              builder: (_) => ContentBeacon(),
-              result: result,
-            ),
+        await tester.pumpWidgetOnScaffold(
+          ActionResultBuilder(
+            builder: (_) => ContentBeacon(null),
+            result: result,
           ),
         );
       }
 
       Future _buildSyncResult(WidgetTester tester, ActionResult result) async {
-        await tester.pumpWidget(
-          TestBench(
-            child: ActionResultBuilder.sync(
-              builder: (_) => ContentBeacon(),
-              result: result,
-            ),
+        await tester.pumpWidgetOnScaffold(
+          ActionResultBuilder.sync(
+            builder: (_) => ContentBeacon(null),
+            result: result,
           ),
         );
       }

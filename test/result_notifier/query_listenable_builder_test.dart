@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_result.dart';
 import 'package:stated_result/stated_result_listenable.dart';
 import 'package:stated_result/stated_result_builder.dart';
+import 'package:test_beacon/test_beacon.dart';
 
 import '../widget_tester/custom_matchers.dart';
 import '../widget_tester/widget_tester.dart';
@@ -21,7 +22,7 @@ void main() {
         testWidgets("omitted", (WidgetTester tester) async {
           final notifier = QueryResultNotifier<String>();
 
-          await tester.pumpWidget(buildWidget(notifier));
+          await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
           findPendingBeacon.shouldFindOne();
           findWaitingBeacon.shouldFindNothing();
@@ -33,7 +34,7 @@ void main() {
           final notifier =
               QueryResultNotifier<String>(AsyncQueryResult<String>.pending());
 
-          await tester.pumpWidget(buildWidget(notifier));
+          await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
           findPendingBeacon.shouldFindOne();
           findWaitingBeacon.shouldFindNothing();
@@ -45,7 +46,7 @@ void main() {
           final notifier =
               QueryResultNotifier<String>(AsyncQueryResult<String>.waiting());
 
-          await tester.pumpWidget(buildWidget(notifier));
+          await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
           findPendingBeacon.shouldFindNothing();
           findWaitingBeacon.shouldFindOne();
@@ -57,7 +58,7 @@ void main() {
           final notifier = QueryResultNotifier<String>(
               AsyncQueryResult<String>.failed(error));
 
-          await tester.pumpWidget(buildWidget(notifier));
+          await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
           findPendingBeacon.shouldFindNothing();
           findWaitingBeacon.shouldFindNothing();
@@ -69,7 +70,7 @@ void main() {
           final notifier = QueryResultNotifier<String>(
               AsyncQueryResult<String>.succeeded(value));
 
-          await tester.pumpWidget(buildWidget(notifier));
+          await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
           findPendingBeacon.shouldFindNothing();
           findWaitingBeacon.shouldFindNothing();
@@ -81,7 +82,7 @@ void main() {
       testWidgets("can be updated with succeeded", (WidgetTester tester) async {
         final notifier = QueryResultNotifier<String>();
 
-        await tester.pumpWidget(buildWidget(notifier));
+        await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -114,7 +115,7 @@ void main() {
       testWidgets("can be updated with failed", (WidgetTester tester) async {
         final notifier = QueryResultNotifier<String>();
 
-        await tester.pumpWidget(buildWidget(notifier));
+        await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -147,7 +148,7 @@ void main() {
       testWidgets("can capture future", (WidgetTester tester) async {
         final notifier = QueryResultNotifier<String>();
 
-        await tester.pumpWidget(buildWidget(notifier));
+        await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -180,7 +181,7 @@ void main() {
       testWidgets("can capture future with error", (WidgetTester tester) async {
         final notifier = QueryResultNotifier<String>();
 
-        await tester.pumpWidget(buildWidget(notifier));
+        await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -212,27 +213,24 @@ void main() {
     }
 
     group("explicit builders", () {
-      runTestSet((QueryResultNotifier<String> notifier) => TestBench(
-            child: QueryListenableBuilder<String>(
-              listenable: notifier,
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, result) => ErrorBeacon(result.error),
-              builder: (_, value) => ContentBeacon(value),
-            ),
+      runTestSet((QueryResultNotifier<String> notifier) =>
+          QueryListenableBuilder<String>(
+            listenable: notifier,
+            pendingBuilder: (_) => PendingBeacon(),
+            waitingBuilder: (_) => WaitingBeacon(),
+            failedBuilder: (_, result) => ErrorBeacon(result.error),
+            builder: (_, value) => ContentBeacon(value),
           ));
     });
 
     group("default builders", () {
-      runTestSet((QueryResultNotifier<String> notifier) => TestBench(
-            child: DefaultResultBuilder(
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, result) => ErrorBeacon(result.error),
-              child: QueryListenableBuilder<String>(
-                listenable: notifier,
-                builder: (_, value) => ContentBeacon(value),
-              ),
+      runTestSet((QueryResultNotifier<String> notifier) => DefaultResultBuilder(
+            pendingBuilder: (_) => PendingBeacon(),
+            waitingBuilder: (_) => WaitingBeacon(),
+            failedBuilder: (_, result) => ErrorBeacon(result.error),
+            child: QueryListenableBuilder<String>(
+              listenable: notifier,
+              builder: (_, value) => ContentBeacon(value),
             ),
           ));
     });
@@ -252,11 +250,10 @@ void main() {
         DefaultFailedResultBuilder.setGlobalBuilder(null);
       });
 
-      runTestSet((QueryResultNotifier<String> notifier) => TestBench(
-            child: QueryListenableBuilder<String>(
-              listenable: notifier,
-              builder: (_, value) => ContentBeacon(value),
-            ),
+      runTestSet((QueryResultNotifier<String> notifier) =>
+          QueryListenableBuilder<String>(
+            listenable: notifier,
+            builder: (_, value) => ContentBeacon(value),
           ));
     });
   });

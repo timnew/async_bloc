@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_result.dart';
 import 'package:stated_result/stated_result_bloc.dart';
 import 'package:stated_result/stated_result_builder.dart';
+import 'package:test_beacon/test_beacon.dart';
 
 import '../widget_tester/custom_matchers.dart';
 import '../widget_tester/widget_tester.dart';
@@ -21,7 +22,7 @@ void main() {
         testWidgets(".pending", (WidgetTester tester) async {
           final cubit = QueryCubit<String>(AsyncQueryResult<String>.pending());
 
-          await tester.pumpWidget(buildWidget(cubit));
+          await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
           findPendingBeacon.shouldFindOne();
           findWaitingBeacon.shouldFindNothing();
@@ -32,7 +33,7 @@ void main() {
         testWidgets(".waiting", (WidgetTester tester) async {
           final cubit = QueryCubit<String>(AsyncQueryResult<String>.waiting());
 
-          await tester.pumpWidget(buildWidget(cubit));
+          await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
           findPendingBeacon.shouldFindNothing();
           findWaitingBeacon.shouldFindOne();
@@ -44,7 +45,7 @@ void main() {
           final cubit =
               QueryCubit<String>(AsyncQueryResult<String>.failed(error));
 
-          await tester.pumpWidget(buildWidget(cubit));
+          await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
           findPendingBeacon.shouldFindNothing();
           findWaitingBeacon.shouldFindNothing();
@@ -56,7 +57,7 @@ void main() {
           final cubit =
               QueryCubit<String>(AsyncQueryResult<String>.succeeded(value));
 
-          await tester.pumpWidget(buildWidget(cubit));
+          await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
           findPendingBeacon.shouldFindNothing();
           findWaitingBeacon.shouldFindNothing();
@@ -68,7 +69,7 @@ void main() {
       testWidgets("can be updated with succeeded", (WidgetTester tester) async {
         final cubit = QueryCubit<String>();
 
-        await tester.pumpWidget(buildWidget(cubit));
+        await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -98,7 +99,7 @@ void main() {
       testWidgets("can be updated with failed", (WidgetTester tester) async {
         final cubit = QueryCubit<String>();
 
-        await tester.pumpWidget(buildWidget(cubit));
+        await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -128,7 +129,7 @@ void main() {
       testWidgets("can capture future", (WidgetTester tester) async {
         final cubit = QueryCubit<String>();
 
-        await tester.pumpWidget(buildWidget(cubit));
+        await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -161,7 +162,7 @@ void main() {
       testWidgets("can capture future with error", (WidgetTester tester) async {
         final cubit = QueryCubit<String>();
 
-        await tester.pumpWidget(buildWidget(cubit));
+        await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -193,29 +194,30 @@ void main() {
     }
 
     group("explicit builders", () {
-      runTestSet((QueryCubit<String> bloc) => TestBench(
-            child: QueryBlocBuilder<QueryCubit<String>, String>(
-              bloc: bloc,
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, result) => ErrorBeacon(result.error),
-              builder: (_, value) => ContentBeacon(value),
-            ),
-          ));
+      runTestSet(
+        (QueryCubit<String> bloc) =>
+            QueryBlocBuilder<QueryCubit<String>, String>(
+          bloc: bloc,
+          pendingBuilder: (_) => PendingBeacon(),
+          waitingBuilder: (_) => WaitingBeacon(),
+          failedBuilder: (_, result) => ErrorBeacon(result.error),
+          builder: (_, value) => ContentBeacon(value),
+        ),
+      );
     });
 
     group("default builders", () {
-      runTestSet((QueryCubit<String> bloc) => TestBench(
-            child: DefaultResultBuilder(
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, result) => ErrorBeacon(result.error),
-              child: QueryBlocBuilder<QueryCubit<String>, String>(
-                bloc: bloc,
-                builder: (_, value) => ContentBeacon(value),
-              ),
-            ),
-          ));
+      runTestSet(
+        (QueryCubit<String> bloc) => DefaultResultBuilder(
+          pendingBuilder: (_) => PendingBeacon(),
+          waitingBuilder: (_) => WaitingBeacon(),
+          failedBuilder: (_, result) => ErrorBeacon(result.error),
+          child: QueryBlocBuilder<QueryCubit<String>, String>(
+            bloc: bloc,
+            builder: (_, value) => ContentBeacon(value),
+          ),
+        ),
+      );
     });
 
     group("global default builders", () {
@@ -233,12 +235,13 @@ void main() {
         DefaultFailedResultBuilder.setGlobalBuilder(null);
       });
 
-      runTestSet((QueryCubit<String> bloc) => TestBench(
-            child: QueryBlocBuilder<QueryCubit<String>, String>(
-              bloc: bloc,
-              builder: (_, value) => ContentBeacon(value),
-            ),
-          ));
+      runTestSet(
+        (QueryCubit<String> bloc) =>
+            QueryBlocBuilder<QueryCubit<String>, String>(
+          bloc: bloc,
+          builder: (_, value) => ContentBeacon(value),
+        ),
+      );
     });
   });
 }

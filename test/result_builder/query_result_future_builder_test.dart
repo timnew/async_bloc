@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_result_builder.dart';
+import 'package:test_beacon/test_beacon.dart';
 
 import '../widget_tester/widget_tester.dart';
 
@@ -17,7 +18,7 @@ void main() {
       testWidgets("should build success", (WidgetTester tester) async {
         final completer = Completer<String>();
 
-        await tester.pumpWidget(buildWidget(completer.future));
+        await tester.pumpWidgetOnScaffold(buildWidget(completer.future));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindOne();
@@ -37,7 +38,7 @@ void main() {
       testWidgets("should build failed", (WidgetTester tester) async {
         final completer = Completer<String>();
 
-        await tester.pumpWidget(buildWidget(completer.future));
+        await tester.pumpWidgetOnScaffold(buildWidget(completer.future));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindOne();
@@ -55,7 +56,7 @@ void main() {
       });
 
       testWidgets("should build null", (WidgetTester tester) async {
-        await tester.pumpWidget(buildWidget(null));
+        await tester.pumpWidgetOnScaffold(buildWidget(null));
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -65,29 +66,29 @@ void main() {
     }
 
     group("explicit builders", () {
-      runTestSet((Future<String>? future) => TestBench(
-            child: QueryResultFutureBuilder<String>.fromFuture(
-              future: future,
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, result) => ErrorBeacon(result.error),
-              builder: (_, v) => ContentBeacon(v),
-            ),
-          ));
+      runTestSet(
+        (Future<String>? future) => QueryResultFutureBuilder<String>.fromFuture(
+          future: future,
+          pendingBuilder: (_) => PendingBeacon(),
+          waitingBuilder: (_) => WaitingBeacon(),
+          failedBuilder: (_, result) => ErrorBeacon(result.error),
+          builder: (_, v) => ContentBeacon(v),
+        ),
+      );
     });
 
     group("default builders", () {
-      runTestSet((Future<String>? future) => TestBench(
-            child: DefaultResultBuilder(
-              pendingBuilder: (_) => PendingBeacon(),
-              waitingBuilder: (_) => WaitingBeacon(),
-              failedBuilder: (_, result) => ErrorBeacon(result.error),
-              child: QueryResultFutureBuilder<String>.fromFuture(
-                future: future,
-                builder: (_, v) => ContentBeacon(v),
-              ),
-            ),
-          ));
+      runTestSet(
+        (Future<String>? future) => DefaultResultBuilder(
+          pendingBuilder: (_) => PendingBeacon(),
+          waitingBuilder: (_) => WaitingBeacon(),
+          failedBuilder: (_, result) => ErrorBeacon(result.error),
+          child: QueryResultFutureBuilder<String>.fromFuture(
+            future: future,
+            builder: (_, v) => ContentBeacon(v),
+          ),
+        ),
+      );
     });
 
     group("global default builders", () {
@@ -105,12 +106,12 @@ void main() {
         DefaultFailedResultBuilder.setGlobalBuilder(null);
       });
 
-      runTestSet((Future<String>? future) => TestBench(
-            child: QueryResultFutureBuilder<String>.fromFuture(
-              future: future,
-              builder: (_, v) => ContentBeacon(v),
-            ),
-          ));
+      runTestSet(
+        (Future<String>? future) => QueryResultFutureBuilder<String>.fromFuture(
+          future: future,
+          builder: (_, v) => ContentBeacon(v),
+        ),
+      );
     });
   });
 }
