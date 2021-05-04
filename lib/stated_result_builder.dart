@@ -15,3 +15,4 @@ export 'src/result_builder/action_result_future_builder.dart';
 export 'src/result_builder/query_result_future_builder.dart';
 
 export 'src/result_builder/emptyable_content_builder.dart';
+export 'src/result_builder/busy_indicator_builder.dart';
