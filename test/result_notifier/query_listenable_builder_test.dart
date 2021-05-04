@@ -6,6 +6,7 @@ import 'package:stated_result/stated_result.dart';
 import 'package:stated_result/stated_result_listenable.dart';
 import 'package:stated_result/stated_result_builder.dart';
 
+import '../widget_tester/custom_matchers.dart';
 import '../widget_tester/widget_tester.dart';
 
 typedef Widget BuildWidget(QueryResultNotifier<String> bloc);
@@ -29,7 +30,8 @@ void main() {
         });
 
         testWidgets(".pending", (WidgetTester tester) async {
-          final notifier = QueryResultNotifier<String>(AsyncQueryResult<String>.pending());
+          final notifier =
+              QueryResultNotifier<String>(AsyncQueryResult<String>.pending());
 
           await tester.pumpWidget(buildWidget(notifier));
 
@@ -40,7 +42,8 @@ void main() {
         });
 
         testWidgets(".waiting", (WidgetTester tester) async {
-          final notifier = QueryResultNotifier<String>(AsyncQueryResult<String>.waiting());
+          final notifier =
+              QueryResultNotifier<String>(AsyncQueryResult<String>.waiting());
 
           await tester.pumpWidget(buildWidget(notifier));
 
@@ -51,8 +54,8 @@ void main() {
         });
 
         testWidgets(".failed", (WidgetTester tester) async {
-          final notifier =
-          QueryResultNotifier<String>(AsyncQueryResult<String>.failed(error));
+          final notifier = QueryResultNotifier<String>(
+              AsyncQueryResult<String>.failed(error));
 
           await tester.pumpWidget(buildWidget(notifier));
 
@@ -63,8 +66,8 @@ void main() {
         });
 
         testWidgets(".succeeded", (WidgetTester tester) async {
-          final notifier =
-          QueryResultNotifier<String>(AsyncQueryResult<String>.succeeded(value));
+          final notifier = QueryResultNotifier<String>(
+              AsyncQueryResult<String>.succeeded(value));
 
           await tester.pumpWidget(buildWidget(notifier));
 
@@ -87,8 +90,7 @@ void main() {
 
         final completer = Completer<QueryResult<String>>();
 
-        // ignore: unawaited_futures
-        notifier.updateWith(completer.future);
+        final updatedResult = notifier.updateWith(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -98,6 +100,10 @@ void main() {
 
         completer.complete(QueryResult<String>.succeeded(value));
         await tester.pump(Duration.zero);
+        await expectLater(
+          updatedResult,
+          completion(QueryResult<String>.succeeded(value)),
+        );
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -117,8 +123,7 @@ void main() {
 
         final completer = Completer<QueryResult<String>>();
 
-        // ignore: unawaited_futures
-        notifier.updateWith(completer.future);
+        final updatedResult = notifier.updateWith(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -128,6 +133,10 @@ void main() {
 
         completer.complete(QueryResult<String>.failed(error));
         await tester.pump(Duration.zero);
+        await expectLater(
+          updatedResult,
+          completion(HasError(equals(error))),
+        );
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -147,8 +156,7 @@ void main() {
 
         final completer = Completer<String>();
 
-        // ignore: unawaited_futures
-        notifier.captureResult(completer.future);
+        final capturedResult = notifier.captureResult(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -158,6 +166,10 @@ void main() {
 
         completer.complete(value);
         await tester.pump(Duration.zero);
+        await expectLater(
+          capturedResult,
+          completion(QueryResult<String>.succeeded(value)),
+        );
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -177,8 +189,7 @@ void main() {
 
         final completer = Completer<String>();
 
-        // ignore: unawaited_futures
-        notifier.captureResult(completer.future);
+        final capturedResult = notifier.captureResult(completer.future);
         await tester.pump();
 
         findPendingBeacon.shouldFindNothing();
@@ -188,6 +199,10 @@ void main() {
 
         completer.completeError(error);
         await tester.pump(Duration.zero);
+        await expectLater(
+          capturedResult,
+          completion(HasError(equals(error))),
+        );
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();
@@ -198,28 +213,28 @@ void main() {
 
     group("explicit builders", () {
       runTestSet((QueryResultNotifier<String> notifier) => TestBench(
-        child: QueryListenableBuilder<String>(
-          listenable: notifier,
-          pendingBuilder: (_) => PendingBeacon(),
-          waitingBuilder: (_) => WaitingBeacon(),
-          failedBuilder: (_, result) => ErrorBeacon(result.error),
-          builder: (_, value) => ContentBeacon(value),
-        ),
-      ));
+            child: QueryListenableBuilder<String>(
+              listenable: notifier,
+              pendingBuilder: (_) => PendingBeacon(),
+              waitingBuilder: (_) => WaitingBeacon(),
+              failedBuilder: (_, result) => ErrorBeacon(result.error),
+              builder: (_, value) => ContentBeacon(value),
+            ),
+          ));
     });
 
     group("default builders", () {
       runTestSet((QueryResultNotifier<String> notifier) => TestBench(
-        child: DefaultResultBuilder(
-          pendingBuilder: (_) => PendingBeacon(),
-          waitingBuilder: (_) => WaitingBeacon(),
-          failedBuilder: (_, result) => ErrorBeacon(result.error),
-          child: QueryListenableBuilder<String>(
-            listenable: notifier,
-            builder: (_, value) => ContentBeacon(value),
-          ),
-        ),
-      ));
+            child: DefaultResultBuilder(
+              pendingBuilder: (_) => PendingBeacon(),
+              waitingBuilder: (_) => WaitingBeacon(),
+              failedBuilder: (_, result) => ErrorBeacon(result.error),
+              child: QueryListenableBuilder<String>(
+                listenable: notifier,
+                builder: (_, value) => ContentBeacon(value),
+              ),
+            ),
+          ));
     });
 
     group("global default builders", () {
@@ -238,11 +253,11 @@ void main() {
       });
 
       runTestSet((QueryResultNotifier<String> notifier) => TestBench(
-        child: QueryListenableBuilder<String>(
-          listenable: notifier,
-          builder: (_, value) => ContentBeacon(value),
-        ),
-      ));
+            child: QueryListenableBuilder<String>(
+              listenable: notifier,
+              builder: (_, value) => ContentBeacon(value),
+            ),
+          ));
     });
   });
 }
