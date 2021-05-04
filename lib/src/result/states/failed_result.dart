@@ -21,9 +21,9 @@ import '../stated_result.dart';
 /// * [QueryResult]
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
-abstract class FailedResult with StatedResult implements ErrorWithStack {
+abstract class FailedResult with StatedResult implements ErrorResult {
   /// Error or exception caught
-  final dynamic error;
+  final Object error;
 
   /// Stack trace of the error
   final StackTrace? stackTrace;

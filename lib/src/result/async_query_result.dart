@@ -45,7 +45,7 @@ abstract class AsyncQueryResult<T> implements StatedResult {
   const factory AsyncQueryResult.succeeded(T value) = _Succeeded;
 
   /// Creates the [FailedResult], indicates the query is failed
-  const factory AsyncQueryResult.failed(dynamic error,
+  const factory AsyncQueryResult.failed(Object error,
       [StackTrace? stackTrace]) = _Failed;
 
   /// Create the result from [value].
@@ -179,6 +179,6 @@ class _Succeeded<T> extends SucceededResult<T> with AsyncQueryResult<T> {
 }
 
 class _Failed<T> extends FailedResult with AsyncQueryResult<T> {
-  const _Failed(dynamic error, [StackTrace? stackTrace])
+  const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
 }

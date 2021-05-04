@@ -41,7 +41,7 @@ abstract class AsyncActionResult implements StatedResult {
   factory AsyncActionResult.completed() => const _Completed();
 
   /// Creates the [FailedResult], indicates the action is failed
-  const factory AsyncActionResult.failed(dynamic error,
+  const factory AsyncActionResult.failed(Object error,
       [StackTrace? stackTrace]) = _Failed;
 
   /// Create [AsyncActionResult] from any other result
@@ -135,6 +135,6 @@ class _Completed extends CompletedResult with AsyncActionResult {
 }
 
 class _Failed extends FailedResult with AsyncActionResult {
-  const _Failed(dynamic error, [StackTrace? stackTrace])
+  const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
 }

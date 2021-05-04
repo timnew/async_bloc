@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.3.0]
+
+* Renamed `ErrorWithStack` to `ErrorResult`
+* Change `ErrorResult.error` type from `dynamic` to `Object` to avoid `null`
+* Renamed `StatedResult.asFailed` to `StatedResult.asError`
+* Renamed `StatedResult.asValueResult` to `StatedResult.asValueResult`
+
 ## [0.2.0] - 2021-05-04
 
 * Upgraded dependencies
@@ -52,4 +59,3 @@
 ## [0.1.0] - 2021-03-18
 
 * First release
-

@@ -6,5 +6,5 @@ class HasError extends CustomMatcher {
       : super("ErrorWithStack with error that is", "error", matcher);
 
   @override
-  Object? featureValueOf(actual) => (actual as ErrorWithStack).error;
+  Object? featureValueOf(actual) => (actual as ErrorResult).error;
 }

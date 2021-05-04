@@ -43,7 +43,9 @@ class DefaultFailedResultBuilder extends InheritedWidget {
 
   /// Default global builder implementation
   static Widget defaultGlobalBuilder(
-          BuildContext context, ErrorWithStack errorInfo) =>
+    BuildContext context,
+    ErrorResult errorInfo,
+  ) =>
       Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -75,7 +77,7 @@ class DefaultFailedResultBuilder extends InheritedWidget {
   static Widget ensureBuild(
     BuildContext context,
     FailedResultBuilder? customBuilder,
-    FailedResult result,
+    ErrorResult result,
   ) =>
       (customBuilder != null)
           ? customBuilder(context, result)

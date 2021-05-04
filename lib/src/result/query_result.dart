@@ -35,7 +35,7 @@ abstract class QueryResult<T> implements StatedResult {
   /// creates the [FailedResult]
   /// [error] is the [Error]/[Exception] fails the action
   /// [stackTrace] indicates where the [error] was thrown, it is optional
-  const factory QueryResult.failed(dynamic error, [StackTrace? stackTrace]) =
+  const factory QueryResult.failed(Object error, [StackTrace? stackTrace]) =
       _Failed;
 
   /// Create [QueryResult] from any other result
@@ -80,7 +80,7 @@ class _Succeeded<T> extends SucceededResult<T> with QueryResult<T> {
 }
 
 class _Failed<T> extends FailedResult with QueryResult<T> {
-  const _Failed(dynamic error, [StackTrace? stackTrace])
+  const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
 }
 

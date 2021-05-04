@@ -36,7 +36,7 @@ abstract class ActionResult implements StatedResult {
   /// creates the [FailedResult]
   /// [error] is the [Error]/[Exception] fails the action
   /// [stackTrace] indicates where the [error] was thrown, it is optional
-  const factory ActionResult.failed(dynamic error, [StackTrace? stackTrace]) =
+  const factory ActionResult.failed(Object error, [StackTrace? stackTrace]) =
       _Failed;
 
   /// Create [ActionResult] from any other result
@@ -72,7 +72,7 @@ class _Completed extends CompletedResult with ActionResult {
 }
 
 class _Failed extends FailedResult with ActionResult {
-  const _Failed(dynamic error, [StackTrace? stackTrace])
+  const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
 }
 

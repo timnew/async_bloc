@@ -6,28 +6,18 @@ import 'states/failed_result.dart';
 /// Used by
 /// * [SucceededResult]
 /// * [InitialValueResult]
-abstract class ValueResult<T> implements StatedResult {
+mixin ValueResult<T> implements StatedResult {
   /// The given value of the result
   T get value;
 }
 
 /// Error and its stack trace
-abstract class ErrorWithStack {
+mixin ErrorResult implements StatedResult {
   /// the exception or error
-  dynamic get error;
+  Object get error;
 
   /// The stack trace of the error/exception
   StackTrace? get stackTrace;
-
-  /// Create an instance
-  const factory ErrorWithStack(dynamic error, [StackTrace? stackTrace]) =
-      _ErrorWithStack;
-}
-
-/// Generic implementation of [ErrorWithStack]
-class _ErrorWithStack extends FailedResult {
-  const _ErrorWithStack(error, [StackTrace? stackTrace])
-      : super(error, stackTrace);
 }
 
 /// Mapper function for general result state

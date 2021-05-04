@@ -42,7 +42,7 @@ abstract class ResultFutureBuilderBase<TS extends StatedResult>
           return DefaultFailedResultBuilder.ensureBuild(
             context,
             failedBuilder,
-            ActionResult.failed(snapshot.error!).asFailed(),
+            ActionResult.failed(snapshot.error!).asError(),
           );
         }
 

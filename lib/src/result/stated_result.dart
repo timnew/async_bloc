@@ -1,3 +1,5 @@
+import 'package:stated_result/src/result/states/waiting_value_resut.dart';
+
 import 'contracts.dart';
 import 'states/waiting_result.dart';
 import 'states/completed_result.dart';
@@ -12,7 +14,7 @@ mixin StatedResult {
   bool get isNotStarted => this is PendingResult || this is InitialValueResult;
 
   /// Return true when query/action is being processed
-  bool get isWaiting => this is WaitingResult;
+  bool get isWaiting => this is WaitingResult || this is WaitingValueResult;
 
   /// Return true when query/action has been finished either with or without error
   bool get isFinished => isSucceeded || isFailed;
@@ -23,10 +25,12 @@ mixin StatedResult {
   /// Return ture when the query/action has finished with error
   bool get isFailed => this is FailedResult;
 
-  /// Return true when query resut has a value, either it is intial value or the result after running query
-  /// It also indicates whether state implemented the [ValueResult] contract, regardless the type of the value
+  /// Check if result holds a value. If returns true, it is can be converted into a [ValueResult].
   bool get hasValue => this is ValueResult;
 
-  FailedResult asFailed() => this as FailedResult;
-  ValueResult<T> asValueResult<T>() => this as ValueResult<T>;
+  /// Check if result holds a error, If reurns true, it is safe to call [asError].
+  bool get hasError => this is ErrorResult;
+
+  ErrorResult asError() => this as ErrorResult;
+  ValueResult<T> asValue<T>() => this as ValueResult<T>;
 }

@@ -69,5 +69,5 @@ class QueryResultBuilder<T>
 
   @override
   Widget buildData(BuildContext context) =>
-      builder(context, result.asValueResult<T>().value);
+      builder(context, result.asValue<T>().value);
 }

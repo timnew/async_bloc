@@ -24,7 +24,7 @@ void main() {
           final result = await fails().asActionResult();
           expect(result, isInstanceOf<ActionResult>());
           expect(result, isInstanceOf<FailedResult>());
-          expect(result.asFailed().error, error);
+          expect(result.asError().error, error);
         });
       });
 
@@ -39,7 +39,7 @@ void main() {
           final result = await Future.error(error).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
           expect(result, isInstanceOf<FailedResult>());
-          expect(result.asFailed().error, error);
+          expect(result.asError().error, error);
         });
       });
 
@@ -62,7 +62,7 @@ void main() {
           final result = await Future.error(error).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
           expect(result, isInstanceOf<FailedResult>());
-          expect(result.asFailed().error, error);
+          expect(result.asError().error, error);
         });
       });
 
@@ -101,7 +101,7 @@ void main() {
           final result = await Future.error(error).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
           expect(result, isInstanceOf<FailedResult>());
-          expect(result.asFailed().error, error);
+          expect(result.asError().error, error);
         });
       });
 
@@ -124,7 +124,7 @@ void main() {
           final result = await Future.error(error).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
           expect(result, isInstanceOf<FailedResult>());
-          expect(result.asFailed().error, error);
+          expect(result.asError().error, error);
         });
       });
 
@@ -171,7 +171,7 @@ void main() {
           final result = await Future.error(error).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
           expect(result, isInstanceOf<FailedResult>());
-          expect(result.asFailed().error, error);
+          expect(result.asError().error, error);
         });
       });
     });
@@ -187,7 +187,7 @@ void main() {
           final result = await Future<String>.error(error).asQueryResult();
           expect(result, isInstanceOf<QueryResult<String>>());
           expect(result, isInstanceOf<FailedResult>());
-          expect(result.asFailed().error, error);
+          expect(result.asError().error, error);
         });
       });
     });
