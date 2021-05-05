@@ -127,7 +127,7 @@ void main() {
 
         completer.complete(ActionResult.failed(error));
         await tester.pump(Duration.zero);
-        await expectLater(updatedValue, completion(HasError(equals(error))));
+        await expectLater(updatedValue, completion(WithError(equals(error))));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();

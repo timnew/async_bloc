@@ -8,7 +8,7 @@ class ActionCubit extends Cubit<AsyncActionResult> {
   /// Create new Cubit
   ///
   /// Optional [initialState] can be used to set the initial state of the Cubit.
-  /// [PendingResult] is used if not specified
+  /// [IdleState] is used if not specified
   ActionCubit([AsyncActionResult? initialState])
       : super(initialState ?? AsyncActionResult());
 

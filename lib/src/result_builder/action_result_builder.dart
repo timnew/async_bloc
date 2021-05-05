@@ -10,15 +10,15 @@ import 'widget_builders.dart';
 
 /// Widget that builds UI according to the state of [AsyncActionResult] or [ActionResult]
 class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
-  /// Builder to be used when [CompletedResult] is given.
+  /// Builder to be used when [DoneState] is given.
   final WidgetBuilder builder;
 
   /// Build UI with [AsyncActionResult]
   ///
-  /// * [pendingBuilder] - Builder to be used when [PendingResult] is given.
-  /// * [waitingBuilder] - Builder to be used when [WaitingResult] is given.
-  /// * [failedBuilder] - Builder to be used when [FailedResult] is given.
-  /// * [builder] - Builder to be used when [CompletedResult] is given.
+  /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
+  /// * [waitingBuilder] - Builder to be used when [WaitingState] is given.
+  /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
+  /// * [builder] - Builder to be used when [DoneState] is given.
   ///
   /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
   /// if not given default builder provided by [DefaultPendingResultBuilder],
@@ -44,10 +44,10 @@ class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
 
   /// Build UI with [ActionResult]
   ///
-  /// * [pendingBuilder] - Builder to be used when [PendingResult] is given.
-  /// * [waitingBuilder] - Builder to be used when [WaitingResult] is given.
-  /// * [failedBuilder] - Builder to be used when [FailedResult] is given.
-  /// * [builder] - Builder to be used when [CompletedResult] is given.
+  /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
+  /// * [waitingBuilder] - Builder to be used when [WaitingState] is given.
+  /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
+  /// * [builder] - Builder to be used when [DoneState] is given.
   ///
   /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
   /// if not given default builder provided by [DefaultPendingResultBuilder],

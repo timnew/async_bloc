@@ -9,7 +9,7 @@ void main() {
       final result = AsyncQueryResult<String>();
 
       test('should be a PendingResult', () {
-        expect(result, isInstanceOf<PendingResult>());
+        expect(result, isInstanceOf<IdleState>());
       });
 
       test('should be a AsyncQueryResult', () {
@@ -21,7 +21,7 @@ void main() {
       });
 
       test("should have correct states", () {
-        expect(result.isNotStarted, isTrue);
+        expect(result.isIdle, isTrue);
         expect(result.isWaiting, isFalse);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
@@ -34,18 +34,18 @@ void main() {
       final result = AsyncQueryResult<String>.initialValue(value);
 
       test('should be a CompletedResult', () {
-        expect(result, isInstanceOf<InitialValueResult<String>>());
+        expect(result, isInstanceOf<IdleValueState<String>>());
       });
       test('should be a AsyncQueryResult', () {
         expect(result, isInstanceOf<AsyncQueryResult<String>>());
       });
       test("should has value", () {
-        final succeeded = result as InitialValueResult<String>;
+        final succeeded = result as IdleValueState<String>;
         expect(value, succeeded.value);
       });
 
       test("should have correct states", () {
-        expect(result.isNotStarted, isTrue);
+        expect(result.isIdle, isTrue);
         expect(result.isWaiting, isFalse);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
@@ -58,7 +58,7 @@ void main() {
       final result = AsyncQueryResult<String>.waiting();
 
       test('should be a WaitingResult', () {
-        expect(result, isInstanceOf<WaitingResult>());
+        expect(result, isInstanceOf<WaitingState>());
       });
 
       test('should be a AsyncQueryResult', () {
@@ -70,7 +70,7 @@ void main() {
       });
 
       test("should have correct states", () {
-        expect(result.isNotStarted, isFalse);
+        expect(result.isIdle, isFalse);
         expect(result.isWaiting, isTrue);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
@@ -83,7 +83,7 @@ void main() {
       final result = AsyncQueryResult.succeeded(value);
 
       test('should be a CompletedResult', () {
-        expect(result, isInstanceOf<SucceededResult<String>>());
+        expect(result, isInstanceOf<DoneValueState<String>>());
       });
 
       test('should be a AsyncQueryResult', () {
@@ -91,12 +91,12 @@ void main() {
       });
 
       test("should has value", () {
-        final succeeded = result as SucceededResult<String>;
+        final succeeded = result as DoneValueState<String>;
         expect(value, succeeded.value);
       });
 
       test("should have correct states", () {
-        expect(result.isNotStarted, isFalse);
+        expect(result.isIdle, isFalse);
         expect(result.isWaiting, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isTrue);
@@ -112,7 +112,7 @@ void main() {
       final result = AsyncQueryResult<String>.failed(error, stackTrace);
 
       test('should be a FailedResult', () {
-        expect(result, isInstanceOf<FailedResult>());
+        expect(result, isInstanceOf<ErrorState>());
       });
 
       test('should be a AsyncQueryResult', () {
@@ -120,21 +120,21 @@ void main() {
       });
 
       test('should contain error and stack trace', () {
-        final failed = result as FailedResult;
+        final failed = result as ErrorState;
 
         expect(failed.error, same(error));
         expect(failed.stackTrace, same(stackTrace));
       });
 
       test('can create result without stacktrace', () {
-        final failed = AsyncQueryResult.failed(error) as FailedResult;
+        final failed = AsyncQueryResult.failed(error) as ErrorState;
 
         expect(failed.error, same(error));
         expect(failed.stackTrace, isNull);
       });
 
       test("should have correct states", () {
-        expect(result.isNotStarted, isFalse);
+        expect(result.isIdle, isFalse);
         expect(result.isWaiting, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isFalse);

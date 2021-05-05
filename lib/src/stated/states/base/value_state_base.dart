@@ -1,14 +1,15 @@
 import 'package:collection/collection.dart';
 
-import '../../stated_result.dart';
+import '../../stated.dart';
 
-abstract class ValueResultBase<T, SELF extends ValueResult<T>>
-    with StatedResult
-    implements ValueResult<T> {
-  /// The value of the result
+/// Base class for state implements [HasValue] contract
+abstract class ValueStateBase<T, SELF extends HasValue<T>>
+    with Stated
+    implements HasValue<T> {
+  /// Value of the state
   final T value;
 
-  const ValueResultBase(this.value);
+  const ValueStateBase(this.value);
 
   @override
   bool operator ==(dynamic other) =>

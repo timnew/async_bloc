@@ -43,7 +43,7 @@ class QueryResultFutureBuilder<T>
 
   @override
   Widget buildData(BuildContext context, QueryResult<T> data) => data.map(
-        succeeded: (result) => builder(context, result.value),
+        completed: (result) => builder(context, result.value),
         failed: (result) => DefaultFailedResultBuilder.ensureBuild(
             context, failedBuilder, result),
       );

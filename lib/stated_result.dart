@@ -1,6 +1,6 @@
 library stated_result;
 
-export 'states.dart';
+export 'stated.dart';
 
 export 'src/result/action_result.dart';
 export 'src/result/query_result.dart';

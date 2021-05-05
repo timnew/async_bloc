@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:stated_result/src/states/stated_result.dart';
+import 'package:stated_result/src/stated/stated.dart';
 
-import 'package:stated_result/src/states/util.dart';
+import 'package:stated_result/src/stated/util.dart';
 import 'package:stated_result/stated_result.dart';
 
 import 'default_waiting_result_builder.dart';
@@ -10,19 +10,19 @@ import 'default_pending_result_builder.dart';
 import 'widget_builders.dart';
 
 /// @nodoc
-abstract class StatedResultBuilderBase<TS extends StatedResult>
+abstract class StatedResultBuilderBase<TS extends Stated>
     extends StatelessWidget {
-  /// Builder to be used when [PendingResult] is given.
+  /// Builder to be used when [IdleState] is given.
   ///
   /// Default pending builder provided by [DefaultPendingResultBuilder] will be used if not explicitly given.
   final WidgetBuilder? pendingBuilder;
 
-  /// Builder to be used when [WaitingResult] is given.
+  /// Builder to be used when [WaitingState] is given.
   ///
   /// Default pending builder provided by [DefaultWaitingResultBuilder] will be used if not explicitly given.
   final WidgetBuilder? waitingBuilder;
 
-  /// Builder to be used when [FailedResult] is given.
+  /// Builder to be used when [ErrorState] is given.
   ///
   /// Default pending builder provided by [DefaultFailedResultBuilder] will be used if not explicitly given.
   final FailedResultBuilder? failedBuilder;
@@ -41,13 +41,13 @@ abstract class StatedResultBuilderBase<TS extends StatedResult>
 
   @override
   Widget build(BuildContext context) => result.unsafeMapOr(
-        pendingResult: () =>
+        idle: () =>
             DefaultPendingResultBuilder.ensureBuild(context, pendingBuilder),
-        waitingResult: () =>
+        waiting: () =>
             DefaultWaitingResultBuilder.ensureBuild(context, waitingBuilder),
-        errorResult: (result) => DefaultFailedResultBuilder.ensureBuild(
+        error: (result) => DefaultFailedResultBuilder.ensureBuild(
             context, failedBuilder, result),
-        completedResult: () => buildData(context),
+        done: () => buildData(context),
         hasValue: (_) => buildData(context),
       );
 

@@ -7,7 +7,7 @@ class ActionResultNotifier extends ValueNotifier<AsyncActionResult> {
   /// Create new ValueNotifier
   ///
   /// Optional [initialState] can be used to set the initial state of the notifier.
-  /// [PendingResult] is used if not specified
+  /// [IdleState] is used if not specified
   ActionResultNotifier([AsyncActionResult? initialState])
       : super(initialState ?? AsyncActionResult());
 

@@ -5,7 +5,7 @@ import 'package:stated_result/stated_result.dart';
 /// Widget to build progress indicator if result is WatinigResult
 class BusyIndicatorBuilder extends StatelessWidget {
   /// StatedResult used to build the progress indicator
-  final StatedResult result;
+  final Stated result;
 
   /// Optional child
   final Widget? child;
@@ -13,7 +13,7 @@ class BusyIndicatorBuilder extends StatelessWidget {
   /// The builder used to build indicator
   final ValueWidgetBuilder<bool> builder;
 
-  /// Invoke [builder] with boolean indicates whether [result] is [WaitingResult]
+  /// Invoke [builder] with boolean indicates whether [result] is [WaitingState]
   const BusyIndicatorBuilder({
     Key? key,
     required this.result,
@@ -21,11 +21,11 @@ class BusyIndicatorBuilder extends StatelessWidget {
     this.child,
   }) : super(key: key);
 
-  /// Render a [CircularProgressIndicator] if [result] is [WaitingResult]
+  /// Render a [CircularProgressIndicator] if [result] is [WaitingState]
   /// User [duration] to control fading
   factory BusyIndicatorBuilder.circular({
     Key? key,
-    required StatedResult result,
+    required Stated result,
     Duration duration = const Duration(microseconds: 100),
   }) =>
       BusyIndicatorBuilder(
@@ -35,11 +35,11 @@ class BusyIndicatorBuilder extends StatelessWidget {
         builder: _buildAnimationWidget(duration),
       );
 
-  /// Render a [LinearProgressIndicator] if [result] is [WaitingResult]
+  /// Render a [LinearProgressIndicator] if [result] is [WaitingState]
   /// User [duration] to control fading
   factory BusyIndicatorBuilder.linear({
     Key? key,
-    required StatedResult result,
+    required Stated result,
     Duration duration = const Duration(microseconds: 100),
   }) =>
       BusyIndicatorBuilder(

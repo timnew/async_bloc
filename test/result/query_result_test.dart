@@ -7,14 +7,14 @@ void main() {
       final result = const QueryResult("value");
 
       test('should be a CompletedResult', () {
-        expect(result, isInstanceOf<SucceededResult<String>>());
+        expect(result, isInstanceOf<DoneValueState<String>>());
       });
       test('gives the same instance', () {
         expect(const QueryResult("value"), same(result));
       });
 
       test("should have correct states", () {
-        expect(result.isNotStarted, isFalse);
+        expect(result.isIdle, isFalse);
         expect(result.isWaiting, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isTrue);
@@ -30,25 +30,25 @@ void main() {
       final result = QueryResult.failed(error, stackTrace);
 
       test('should be a FailedResult', () {
-        expect(result, isInstanceOf<FailedResult>());
+        expect(result, isInstanceOf<ErrorState>());
       });
 
       test('should contain error and stack trace', () {
-        final failed = result as FailedResult;
+        final failed = result as ErrorState;
 
         expect(failed.error, same(error));
         expect(failed.stackTrace, same(stackTrace));
       });
 
       test('can create result without stacktrace', () {
-        final failed = QueryResult.failed(error) as FailedResult;
+        final failed = QueryResult.failed(error) as ErrorState;
 
         expect(failed.error, same(error));
         expect(failed.stackTrace, isNull);
       });
 
       test("should have correct states", () {
-        expect(result.isNotStarted, isFalse);
+        expect(result.isIdle, isFalse);
         expect(result.isWaiting, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isFalse);

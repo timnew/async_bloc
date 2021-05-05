@@ -2,11 +2,21 @@
 
 ## [0.3.0]
 
-* Renamed `ErrorWithStack` to `ErrorResult`
-* Change `ErrorResult.error` type from `dynamic` to `Object` to avoid `null`
+* Moved results into `stated` library.
+* Renamed `ErrorWithStack` to `HasError`
+* Renamed `error` of `HasError` to `exception`, and changed type from `dynamic` to `Object`
+* Replaced `ValueResultMapper` `ErrorResultMapper` with `ValueMapper`
+* Renamed `ValueMapper` to `ValueTransformer`
+* Renamed `ResultMapper` to `StateTransformer`
 * Renamed `StatedResult.asFailed` to `StatedResult.asError`
-* Renamed `StatedResult.asValueResult` to `StatedResult.asValueResult`
-* Moved results into `stated_result_states` lib.
+* Renamed `StatedResult.asValueResult` to `StatedResult.asValue`, and returns value directly
+
+* `QueryResult.succeeded` and `AsyncQueryResult.succeeded` are renamed to `completed`.
+
+
+* Added `ErrorValueResult`
+* Added `stated_value` library with `StatedValue` and `StatedValueBloc`
+* `StatedResult.asValue()` returns value itself instead of `ValueResult`.
 
 ## [0.2.0] - 2021-05-04
 

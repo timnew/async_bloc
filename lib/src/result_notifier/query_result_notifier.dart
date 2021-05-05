@@ -7,12 +7,12 @@ class QueryResultNotifier<T> extends ValueNotifier<AsyncQueryResult<T>> {
   /// Create new ValueNotifier
   ///
   /// Optional [initialState] can be used to set the initial state of the notifier.
-  /// [PendingResult] is used if not specified
+  /// [IdleState] is used if not specified
   QueryResultNotifier([AsyncQueryResult<T>? initialState])
       : super(initialState ?? AsyncQueryResult<T>());
 
   /// Create new Notifier with given intial value of the query
-  /// [InitialValueResult] will be used
+  /// [IdleValueState] will be used
   QueryResultNotifier.initialValue(T initialValue)
       : super(AsyncQueryResult<T>.initialValue(initialValue));
 

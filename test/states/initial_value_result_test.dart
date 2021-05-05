@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stated_result/src/states/results/base/value_result_base.dart';
+import 'package:stated_result/src/stated/states/base/value_state_base.dart';
 import 'package:stated_result/stated_result.dart';
 
-class TestResult extends InitialValueResult<String> {
+class TestResult extends IdleValueState<String> {
   const TestResult(String value) : super(value);
 }
 
@@ -16,12 +16,12 @@ void main() {
     test("instance should be instance of ValueResultBase", () {
       expect(
         result,
-        isInstanceOf<ValueResultBase<String, InitialValueResult<String>>>(),
+        isInstanceOf<ValueStateBase<String, IdleValueState<String>>>(),
       );
     });
 
     test("has correct state", () {
-      expect(result.isNotStarted, isTrue);
+      expect(result.isIdle, isTrue);
       expect(result.isWaiting, isFalse);
       expect(result.isSucceeded, isFalse);
       expect(result.isFailed, isFalse);

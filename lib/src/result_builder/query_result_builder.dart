@@ -11,16 +11,16 @@ import 'widget_builders.dart';
 /// Widget that builds UI according to the state of [AsyncQueryResult] or [QueryResult]
 class QueryResultBuilder<T>
     extends StatedResultBuilderBase<AsyncQueryResult<T>> {
-  /// Builder to be used when [ValueResult] is given,
-  /// which could be either [SucceededResult] or [InitialValueResult].
+  /// Builder to be used when [HasValue] is given,
+  /// which could be either [DoneValueState] or [IdleValueState].
   final ValueResultBuilder<T> builder;
 
   /// Build UI with [AsyncQueryResult]
   ///
-  /// * [pendingBuilder] - Builder to be used when [PendingResult] is given.
-  /// * [waitingBuilder] - Builder to be used when [WaitingResult] is given.
-  /// * [failedBuilder] - Builder to be used when [FailedResult] is given.
-  /// * [builder] - Builder to be used when [SucceededResult] or [InitialValueResult] is given.
+  /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
+  /// * [waitingBuilder] - Builder to be used when [WaitingState] is given.
+  /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
+  /// * [builder] - Builder to be used when [DoneValueState] or [IdleValueState] is given.
   ///
   /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
   /// if not given default builder provided by [DefaultPendingResultBuilder],
@@ -46,10 +46,10 @@ class QueryResultBuilder<T>
 
   /// Build UI with [QueryResult]
   ///
-  /// * [pendingBuilder] - Builder to be used when [PendingResult] is given.
-  /// * [waitingBuilder] - Builder to be used when [WaitingResult] is given.
-  /// * [failedBuilder] - Builder to be used when [FailedResult] is given.
-  /// * [builder] - Builder to be used when [SucceededResult] or [InitialValueResult] is given.
+  /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
+  /// * [waitingBuilder] - Builder to be used when [WaitingState] is given.
+  /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
+  /// * [builder] - Builder to be used when [DoneValueState] or [IdleValueState] is given.
   ///
   /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
   /// if not given default builder provided by [DefaultPendingResultBuilder],

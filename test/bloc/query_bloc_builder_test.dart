@@ -183,7 +183,7 @@ void main() {
         await tester.pump(Duration.zero);
         await expectLater(
           capturedResult,
-          completion(HasError(equals(error))),
+          completion(WithError(equals(error))),
         );
 
         findPendingBeacon.shouldFindNothing();

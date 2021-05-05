@@ -136,7 +136,7 @@ void main() {
         await tester.pump(Duration.zero);
         await expectLater(
           updatedResult,
-          completion(HasError(equals(error))),
+          completion(WithError(equals(error))),
         );
 
         findPendingBeacon.shouldFindNothing();
@@ -202,7 +202,7 @@ void main() {
         await tester.pump(Duration.zero);
         await expectLater(
           capturedResult,
-          completion(HasError(equals(error))),
+          completion(WithError(equals(error))),
         );
 
         findPendingBeacon.shouldFindNothing();

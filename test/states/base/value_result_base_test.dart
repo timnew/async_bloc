@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stated_result/src/states/stated_result.dart';
-import 'package:stated_result/src/states/results/base/value_result_base.dart';
+import 'package:stated_result/src/stated/stated.dart';
+import 'package:stated_result/src/stated/states/base/value_state_base.dart';
 import 'package:stated_result/stated_result.dart';
 
-class TestValueResult extends ValueResultBase<String, TestValueResult> {
+class TestValueResult extends ValueStateBase<String, TestValueResult> {
   const TestValueResult(String value) : super(value);
 }
 
@@ -16,7 +16,7 @@ class AnotherTestResult extends TestValueResult {
 }
 
 class DifferentTestValueResult
-    extends ValueResultBase<String, DifferentTestValueResult> {
+    extends ValueStateBase<String, DifferentTestValueResult> {
   const DifferentTestValueResult(String value) : super(value);
 }
 
@@ -71,13 +71,13 @@ void main() {
     });
 
     test("instances should be instance of MultiStateResult", () {
-      expect(TestResult(value1), isInstanceOf<StatedResult>());
-      expect(AnotherTestResult(value2), isInstanceOf<StatedResult>());
+      expect(TestResult(value1), isInstanceOf<Stated>());
+      expect(AnotherTestResult(value2), isInstanceOf<Stated>());
     });
 
     test("instances should be instance of ValueResult", () {
-      expect(TestResult(value1), isInstanceOf<ValueResult<String>>());
-      expect(AnotherTestResult(value2), isInstanceOf<ValueResult<String>>());
+      expect(TestResult(value1), isInstanceOf<HasValue<String>>());
+      expect(AnotherTestResult(value2), isInstanceOf<HasValue<String>>());
     });
 
     test("toString() should contains State name and value", () {

@@ -30,20 +30,20 @@ void main() {
       test(".from(failed)", () {
         final result = ActionResult.from(failed);
         expect(result, isInstanceOf<ActionResult>());
-        expect(result, isInstanceOf<FailedResult>());
+        expect(result, isInstanceOf<ErrorState>());
         expect(result, ActionResult.failed(error, stackTrace));
       });
 
       test(".from(succeded)", () {
         final result = ActionResult.from(succeded);
         expect(result, isInstanceOf<ActionResult>());
-        expect(result, isInstanceOf<CompletedResult>());
+        expect(result, isInstanceOf<DoneState>());
       });
 
       test(".from(completed)", () {
         final result = ActionResult.from(completed);
         expect(result, isInstanceOf<ActionResult>());
-        expect(result, isInstanceOf<CompletedResult>());
+        expect(result, isInstanceOf<DoneState>());
       });
     });
 
@@ -55,7 +55,7 @@ void main() {
       test(".from(initialValue)", () {
         final result = QueryResult<String>.from(initialValue);
         expect(result, isInstanceOf<QueryResult<String>>());
-        expect(result, isInstanceOf<ValueResult<String>>());
+        expect(result, isInstanceOf<HasValue<String>>());
         expect(result, QueryResult<String>.succeeded(value));
       });
 
@@ -66,14 +66,14 @@ void main() {
       test(".from(failed)", () {
         final result = QueryResult<String>.from(failed);
         expect(result, isInstanceOf<QueryResult<String>>());
-        expect(result, isInstanceOf<FailedResult>());
+        expect(result, isInstanceOf<ErrorState>());
         expect(result, QueryResult.failed(error, stackTrace));
       });
 
       test(".from(succeded)", () {
         final result = QueryResult<String>.from(succeded);
         expect(result, isInstanceOf<QueryResult<String>>());
-        expect(result, isInstanceOf<SucceededResult>());
+        expect(result, isInstanceOf<DoneValueState>());
         expect(result, QueryResult<String>.succeeded(value));
       });
 
@@ -86,38 +86,38 @@ void main() {
       test(".from(pendingResult)", () {
         final result = AsyncActionResult.from(pending);
         expect(result, isInstanceOf<AsyncActionResult>());
-        expect(result, isInstanceOf<PendingResult>());
+        expect(result, isInstanceOf<IdleState>());
       });
 
       test(".from(initialValue)", () {
         final result = AsyncActionResult.from(initialValue);
         expect(result, isInstanceOf<AsyncActionResult>());
-        expect(result, isInstanceOf<PendingResult>());
+        expect(result, isInstanceOf<IdleState>());
       });
 
       test(".from(waiting)", () {
         final result = AsyncActionResult.from(waiting);
         expect(result, isInstanceOf<AsyncActionResult>());
-        expect(result, isInstanceOf<WaitingResult>());
+        expect(result, isInstanceOf<WaitingState>());
       });
 
       test(".from(failed)", () {
         final result = AsyncActionResult.from(failed);
         expect(result, isInstanceOf<AsyncActionResult>());
-        expect(result, isInstanceOf<FailedResult>());
+        expect(result, isInstanceOf<ErrorState>());
         expect(result, AsyncActionResult.failed(error, stackTrace));
       });
 
       test(".from(succeded)", () {
         final result = AsyncActionResult.from(succeded);
         expect(result, isInstanceOf<AsyncActionResult>());
-        expect(result, isInstanceOf<CompletedResult>());
+        expect(result, isInstanceOf<DoneState>());
       });
 
       test(".from(completed)", () {
         final result = AsyncActionResult.from(completed);
         expect(result, isInstanceOf<AsyncActionResult>());
-        expect(result, isInstanceOf<CompletedResult>());
+        expect(result, isInstanceOf<DoneState>());
       });
     });
 
@@ -125,33 +125,33 @@ void main() {
       test(".from(pendingResult)", () {
         final result = AsyncQueryResult<String>.from(pending);
         expect(result, isInstanceOf<AsyncQueryResult<String>>());
-        expect(result, isInstanceOf<PendingResult>());
+        expect(result, isInstanceOf<IdleState>());
       });
 
       test(".from(initialValue)", () {
         final result = AsyncQueryResult<String>.from(initialValue);
         expect(result, isInstanceOf<AsyncQueryResult<String>>());
-        expect(result, isInstanceOf<InitialValueResult<String>>());
+        expect(result, isInstanceOf<IdleValueState<String>>());
         expect(result, AsyncQueryResult.initialValue(value));
       });
 
       test(".from(waiting)", () {
         final result = AsyncQueryResult<String>.from(waiting);
         expect(result, isInstanceOf<AsyncQueryResult<String>>());
-        expect(result, isInstanceOf<WaitingResult>());
+        expect(result, isInstanceOf<WaitingState>());
       });
 
       test(".from(failed)", () {
         final result = AsyncQueryResult<String>.from(failed);
         expect(result, isInstanceOf<AsyncQueryResult<String>>());
-        expect(result, isInstanceOf<FailedResult>());
+        expect(result, isInstanceOf<ErrorState>());
         expect(result, AsyncQueryResult.failed(error, stackTrace));
       });
 
       test(".from(succeded)", () {
         final result = AsyncQueryResult<String>.from(succeded);
         expect(result, isInstanceOf<AsyncQueryResult<String>>());
-        expect(result, isInstanceOf<SucceededResult<String>>());
+        expect(result, isInstanceOf<DoneValueState<String>>());
         expect(result, AsyncQueryResult<String>.succeeded(value));
       });
 

@@ -13,7 +13,7 @@ void main() {
 
           final result = await runs().asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<CompletedResult>());
+          expect(result, isInstanceOf<DoneState>());
         });
 
         test("yields error", () async {
@@ -23,7 +23,7 @@ void main() {
 
           final result = await fails().asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<FailedResult>());
+          expect(result, isInstanceOf<ErrorState>());
           expect(result.asError().error, error);
         });
       });
@@ -32,13 +32,13 @@ void main() {
         test("yields value", () async {
           final result = await Future.value(value).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<CompletedResult>());
+          expect(result, isInstanceOf<DoneState>());
         });
 
         test("yields error", () async {
           final result = await Future.error(error).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<FailedResult>());
+          expect(result, isInstanceOf<ErrorState>());
           expect(result.asError().error, error);
         });
       });
@@ -48,20 +48,20 @@ void main() {
           final result =
               await Future.value(ActionResult.completed()).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<CompletedResult>());
+          expect(result, isInstanceOf<DoneState>());
         });
 
         test("yields failed", () async {
           final result =
               await Future.value(ActionResult.failed(error)).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<FailedResult>());
+          expect(result, isInstanceOf<ErrorState>());
         });
 
         test("yields error", () async {
           final result = await Future.error(error).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<FailedResult>());
+          expect(result, isInstanceOf<ErrorState>());
           expect(result.asError().error, error);
         });
       });
@@ -87,20 +87,20 @@ void main() {
           final result = await Future.value(AsyncActionResult.completed())
               .asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<CompletedResult>());
+          expect(result, isInstanceOf<DoneState>());
         });
 
         test("yields failed", () async {
           final result = await Future.value(AsyncActionResult.failed(error))
               .asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<FailedResult>());
+          expect(result, isInstanceOf<ErrorState>());
         });
 
         test("yields error", () async {
           final result = await Future.error(error).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<FailedResult>());
+          expect(result, isInstanceOf<ErrorState>());
           expect(result.asError().error, error);
         });
       });
@@ -110,20 +110,20 @@ void main() {
           final result =
               await Future.value(QueryResult.succeeded(value)).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<CompletedResult>());
+          expect(result, isInstanceOf<DoneState>());
         });
 
         test("yields failed", () async {
           final result =
               await Future.value(QueryResult.failed(error)).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<FailedResult>());
+          expect(result, isInstanceOf<ErrorState>());
         });
 
         test("yields error", () async {
           final result = await Future.error(error).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<FailedResult>());
+          expect(result, isInstanceOf<ErrorState>());
           expect(result.asError().error, error);
         });
       });
@@ -157,20 +157,20 @@ void main() {
           final result = await Future.value(AsyncQueryResult.succeeded(value))
               .asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<CompletedResult>());
+          expect(result, isInstanceOf<DoneState>());
         });
 
         test("yields failed", () async {
           final result = await Future.value(AsyncQueryResult.failed(error))
               .asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<FailedResult>());
+          expect(result, isInstanceOf<ErrorState>());
         });
 
         test("yields error", () async {
           final result = await Future.error(error).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<FailedResult>());
+          expect(result, isInstanceOf<ErrorState>());
           expect(result.asError().error, error);
         });
       });
@@ -186,7 +186,7 @@ void main() {
         test("yields error", () async {
           final result = await Future<String>.error(error).asQueryResult();
           expect(result, isInstanceOf<QueryResult<String>>());
-          expect(result, isInstanceOf<FailedResult>());
+          expect(result, isInstanceOf<ErrorState>());
           expect(result.asError().error, error);
         });
       });

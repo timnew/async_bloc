@@ -9,7 +9,7 @@ void main() {
       final result = AsyncActionResult();
 
       test('should be a PendingResult', () {
-        expect(result, isInstanceOf<PendingResult>());
+        expect(result, isInstanceOf<IdleState>());
       });
 
       test('gives the same instance', () {
@@ -17,7 +17,7 @@ void main() {
       });
 
       test("should have correct states", () {
-        expect(result.isNotStarted, isTrue);
+        expect(result.isIdle, isTrue);
         expect(result.isWaiting, isFalse);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
@@ -30,7 +30,7 @@ void main() {
       final result = AsyncActionResult.waiting();
 
       test('should be a WaitingResult', () {
-        expect(result, isInstanceOf<WaitingResult>());
+        expect(result, isInstanceOf<WaitingState>());
       });
 
       test('gives the same instance', () {
@@ -38,7 +38,7 @@ void main() {
       });
 
       test("should have correct states", () {
-        expect(result.isNotStarted, isFalse);
+        expect(result.isIdle, isFalse);
         expect(result.isWaiting, isTrue);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
@@ -51,7 +51,7 @@ void main() {
       final result = AsyncActionResult.completed();
 
       test('should be a CompletedResult', () {
-        expect(result, isInstanceOf<CompletedResult>());
+        expect(result, isInstanceOf<DoneState>());
       });
 
       test('gives the same instance', () {
@@ -59,7 +59,7 @@ void main() {
       });
 
       test("should have correct states", () {
-        expect(result.isNotStarted, isFalse);
+        expect(result.isIdle, isFalse);
         expect(result.isWaiting, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isTrue);
@@ -75,25 +75,25 @@ void main() {
       final result = AsyncActionResult.failed(error, stackTrace);
 
       test('should be a FailedResult', () {
-        expect(result, isInstanceOf<FailedResult>());
+        expect(result, isInstanceOf<ErrorState>());
       });
 
       test('should contain error and stack trace', () {
-        final failed = result as FailedResult;
+        final failed = result as ErrorState;
 
         expect(failed.error, same(error));
         expect(failed.stackTrace, same(stackTrace));
       });
 
       test('can create result without stacktrace', () {
-        final failed = AsyncActionResult.failed(error) as FailedResult;
+        final failed = AsyncActionResult.failed(error) as ErrorState;
 
         expect(failed.error, same(error));
         expect(failed.stackTrace, isNull);
       });
 
       test("should have correct states", () {
-        expect(result.isNotStarted, isFalse);
+        expect(result.isIdle, isFalse);
         expect(result.isWaiting, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isFalse);
