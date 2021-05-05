@@ -8,11 +8,25 @@ class TestResult extends SucceededResult<String> {
 
 void main() {
   group('SucceededResult', () {
+    final value = "value";
+    final result = TestResult(value);
+
     test("instance should be instance of ValueResultBase", () {
       expect(
         TestResult("value"),
         isInstanceOf<ValueResultBase<String, SucceededResult<String>>>(),
       );
+    });
+
+    test("has correct state", () {
+      expect(result.isNotStarted, isFalse);
+      expect(result.isWaiting, isFalse);
+      expect(result.isSucceeded, isTrue);
+      expect(result.isFailed, isFalse);
+      expect(result.isFinished, isTrue);
+      expect(result.hasValue, isTrue);
+      expect(result.asValue(), value);
+      expect(result.hasError, isFalse);
     });
   });
 }

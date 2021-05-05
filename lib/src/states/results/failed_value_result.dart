@@ -2,9 +2,7 @@ import 'package:collection/collection.dart';
 
 import '../stated_result.dart';
 
-class FailedValueResult<T>
-    with StatedResult
-    implements ValueResult<T>, ErrorResult {
+class FailedValueResult<T> with StatedResult implements ErrorValueResult<T> {
   final T value;
   final Object error;
   final StackTrace? stackTrace;

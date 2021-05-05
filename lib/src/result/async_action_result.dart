@@ -1,4 +1,4 @@
-import 'package:stated_result/stated_result_states.dart';
+import 'package:stated_result/states.dart';
 import 'package:stated_result/internal.dart';
 
 import 'action_result.dart';
@@ -48,7 +48,7 @@ abstract class AsyncActionResult implements StatedResult {
       result.unsafeMapOr<dynamic, AsyncActionResult>(
         isNotStarted: () => AsyncActionResult.pending(),
         waitingResult: () => AsyncActionResult.waiting(),
-        failedResult: (result) =>
+        errorResult: (result) =>
             AsyncActionResult.failed(result.error, result.stackTrace),
         isSucceeded: () => AsyncActionResult.completed(),
         orElse: () => throw UnsupportedError(
@@ -65,13 +65,13 @@ abstract class AsyncActionResult implements StatedResult {
     required ResultMapper<TR> pending,
     required ResultMapper<TR> waiting,
     required ResultMapper<TR> completed,
-    required FailedResultMapper<TR> failed,
+    required ErrorResultMapper<TR> failed,
   }) =>
       unsafeMapOr(
         pendingResult: pending,
         waitingResult: waiting,
         completedResult: completed,
-        failedResult: failed,
+        errorResult: failed,
       );
 
   /// Pattern match the result with else branch
@@ -88,7 +88,7 @@ abstract class AsyncActionResult implements StatedResult {
     ResultMapper<TR>? pending,
     ResultMapper<TR>? waiting,
     ResultMapper<TR>? completed,
-    FailedResultMapper<TR>? failed,
+    ErrorResultMapper<TR>? failed,
     ResultMapper<TR>? finished,
     required ResultMapper<TR> orElse,
   }) =>
@@ -96,7 +96,7 @@ abstract class AsyncActionResult implements StatedResult {
         pendingResult: pending,
         waitingResult: waiting,
         completedResult: completed,
-        failedResult: failed,
+        errorResult: failed,
         isFinished: finished,
         orElse: orElse,
       );

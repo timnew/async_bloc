@@ -45,7 +45,7 @@ abstract class StatedResultBuilderBase<TS extends StatedResult>
             DefaultPendingResultBuilder.ensureBuild(context, pendingBuilder),
         waitingResult: () =>
             DefaultWaitingResultBuilder.ensureBuild(context, waitingBuilder),
-        failedResult: (result) => DefaultFailedResultBuilder.ensureBuild(
+        errorResult: (result) => DefaultFailedResultBuilder.ensureBuild(
             context, failedBuilder, result),
         completedResult: () => buildData(context),
         hasValue: (_) => buildData(context),

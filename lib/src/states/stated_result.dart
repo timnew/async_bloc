@@ -1,4 +1,5 @@
 import 'package:stated_result/src/states/results/waiting_value_result.dart';
+import 'package:stated_result/stated_result.dart';
 
 import 'results/waiting_result.dart';
 import 'results/completed_result.dart';
@@ -31,7 +32,7 @@ mixin StatedResult {
   bool get hasError => this is ErrorResult;
 
   ErrorResult asError() => this as ErrorResult;
-  ValueResult<T> asValue<T>() => this as ValueResult<T>;
+  T asValue<T>() => (this as ValueResult<T>).value;
 }
 
 /// Contract for any state result with a value
@@ -53,6 +54,8 @@ mixin ErrorResult implements StatedResult {
   StackTrace? get stackTrace;
 }
 
+mixin ErrorValueResult<T> implements ValueResult<T>, ErrorResult {}
+
 /// Mapper function for general result state
 typedef TR ResultMapper<TR>();
 
@@ -60,6 +63,9 @@ typedef TR ResultMapper<TR>();
 typedef TR ValueResultMapper<T, TR>(ValueResult<T> result);
 
 /// Mapper fucntion for result state has error
-typedef TR FailedResultMapper<TR>(FailedResult result);
+typedef TR ErrorResultMapper<TR>(ErrorResult result);
 
+/// Mapper fuction to update vlaue
 typedef TR ValueMapper<T, TR>(T value);
+
+typedef TR ErrorValueResultMapper<T, TR>(ErrorValueResult<T> result);

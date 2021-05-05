@@ -1,8 +1,9 @@
+import 'package:stated_result/stated_result.dart';
+
 import 'stated_result.dart';
 import 'results/waiting_result.dart';
 import 'results/completed_result.dart';
 import 'results/initial_value_result.dart';
-import 'results/failed_result.dart';
 import 'results/pending_result.dart';
 import 'results/succeeded_result.dart';
 
@@ -11,24 +12,32 @@ extension MultiStateResultExtension on StatedResult {
   /// Internal used unsafe mapping function
   TR unsafeMapOr<T, TR>({
     ResultMapper<TR>? pendingResult,
-    ResultMapper<TR>? waitingResult,
     ValueResultMapper<T, TR>? initialValueResult,
+    ResultMapper<TR>? waitingResult,
+    ValueResultMapper<T, TR>? waitingValueResult,
     ResultMapper<TR>? completedResult,
     ValueResultMapper<T, TR>? succeededResult,
-    FailedResultMapper<TR>? failedResult,
+    ErrorResultMapper<TR>? errorResult,
+    ErrorValueResultMapper<T, TR>? errorValueResult,
     ValueResultMapper<T, TR>? hasValue,
+    ErrorResultMapper<TR>? hasError,
     ResultMapper<TR>? isNotStarted,
+    ResultMapper<TR>? isWaiting,
     ResultMapper<TR>? isSucceeded,
     ResultMapper<TR>? isFinished,
     ResultMapper<TR>? orElse,
   }) {
     if (this is PendingResult) {
       if (pendingResult != null) return pendingResult();
-    } else if (this is WaitingResult) {
-      if (waitingResult != null) return waitingResult();
     } else if (this is InitialValueResult<T>) {
       if (initialValueResult != null) {
         return initialValueResult(this as InitialValueResult<T>);
+      }
+    } else if (this is WaitingResult) {
+      if (waitingResult != null) return waitingResult();
+    } else if (this is WaitingValueResult<T>) {
+      if (waitingValueResult != null) {
+        return waitingValueResult(this as WaitingValueResult<T>);
       }
     } else if (this is CompletedResult) {
       if (completedResult != null) return completedResult();
@@ -36,14 +45,24 @@ extension MultiStateResultExtension on StatedResult {
       if (succeededResult != null) {
         return succeededResult(this as SucceededResult<T>);
       }
-    } else if (this is FailedResult) {
-      if (failedResult != null) {
-        return failedResult(this as FailedResult);
+    } else if (this is ErrorResult) {
+      if (errorResult != null) {
+        return errorResult(this as ErrorResult);
+      }
+    } else if (this is ErrorValueResult<T>) {
+      if (errorValueResult != null) {
+        return errorValueResult(this as ErrorValueResult<T>);
       }
     }
 
+    if (this is ErrorResult) {
+      if (hasError != null) return hasError(this as ErrorResult);
+    }
     if (this is ValueResult<T>) {
       if (hasValue != null) return hasValue(this as ValueResult<T>);
+    }
+    if (this.isWaiting) {
+      if (isWaiting != null) return isWaiting();
     }
     if (this.isNotStarted) {
       if (isNotStarted != null) return isNotStarted();

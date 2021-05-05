@@ -1,4 +1,4 @@
-import 'package:stated_result/stated_result_states.dart';
+import 'package:stated_result/states.dart';
 import 'package:stated_result/internal.dart';
 
 import 'action_result.dart';
@@ -63,7 +63,7 @@ abstract class AsyncQueryResult<T> implements StatedResult {
         initialValueResult: (result) =>
             AsyncQueryResult.initialValue(result.value),
         waitingResult: () => AsyncQueryResult.waiting(),
-        failedResult: (result) =>
+        errorResult: (result) =>
             AsyncQueryResult.failed(result.error, result.stackTrace),
         succeededResult: (result) => AsyncQueryResult.succeeded(result.value),
         orElse: () => throw UnsupportedError(
@@ -82,14 +82,14 @@ abstract class AsyncQueryResult<T> implements StatedResult {
     ValueResultMapper<T, TR>? initialValue,
     required ResultMapper<TR> waiting,
     required ValueResultMapper<T, TR> succeeded,
-    required FailedResultMapper<TR> failed,
+    required ErrorResultMapper<TR> failed,
   }) =>
       unsafeMapOr(
         pendingResult: pending,
         initialValueResult: initialValue,
         waitingResult: waiting,
         succeededResult: succeeded,
-        failedResult: failed,
+        errorResult: failed,
       );
 
   /// Pattern match the result with else branch
@@ -110,7 +110,7 @@ abstract class AsyncQueryResult<T> implements StatedResult {
     ValueResultMapper<T, TR>? initialValue,
     ResultMapper<TR>? waiting,
     ValueResultMapper<T, TR>? succeeded,
-    FailedResultMapper<TR>? failed,
+    ErrorResultMapper<TR>? failed,
     ResultMapper<TR>? notStarted,
     ResultMapper<TR>? finished,
     ValueResultMapper<T, TR>? hasValue,
@@ -121,7 +121,7 @@ abstract class AsyncQueryResult<T> implements StatedResult {
         waitingResult: waiting,
         initialValueResult: initialValue,
         succeededResult: succeeded,
-        failedResult: failed,
+        errorResult: failed,
         isNotStarted: notStarted,
         isFinished: finished,
         hasValue: hasValue,

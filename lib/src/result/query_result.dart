@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:stated_result/stated_result_states.dart';
+import 'package:stated_result/states.dart';
 import 'package:stated_result/internal.dart';
 
 import 'action_result.dart';
@@ -42,7 +42,7 @@ abstract class QueryResult<T> implements StatedResult {
   ///  Otherwise [UnsupportedError] is thrown
   factory QueryResult.from(StatedResult result) =>
       result.unsafeMapOr<T, QueryResult<T>>(
-        failedResult: (result) =>
+        errorResult: (result) =>
             QueryResult.failed(result.error, result.stackTrace),
         hasValue: (result) => QueryResult.succeeded(result.value),
         orElse: () =>
@@ -55,11 +55,11 @@ abstract class QueryResult<T> implements StatedResult {
   /// [failed] is called with error and stackTrace if result is failed
   TR map<TR>({
     required ValueResultMapper<T, TR> succeeded,
-    required FailedResultMapper<TR> failed,
+    required ErrorResultMapper<TR> failed,
   }) =>
       unsafeMapOr<T, TR>(
         succeededResult: succeeded,
-        failedResult: failed,
+        errorResult: failed,
       );
 
   /// map the value of query.

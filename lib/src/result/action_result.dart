@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:stated_result/stated_result_states.dart';
+import 'package:stated_result/states.dart';
 import 'package:stated_result/internal.dart';
 
 import 'query_result.dart';
@@ -43,7 +43,7 @@ abstract class ActionResult implements StatedResult {
   ///  Otherwise [UnsupportedError] is thrown
   factory ActionResult.from(StatedResult result) =>
       result.unsafeMapOr<dynamic, ActionResult>(
-        failedResult: (result) =>
+        errorResult: (result) =>
             ActionResult.failed(result.error, result.stackTrace),
         isSucceeded: () => ActionResult.completed(),
         orElse: () =>
@@ -56,11 +56,11 @@ abstract class ActionResult implements StatedResult {
   /// [failed] is called with error and stackTrace if result is failed
   TR map<TR>({
     required ResultMapper<TR> completed,
-    required FailedResultMapper<TR> failed,
+    required ErrorResultMapper<TR> failed,
   }) =>
       unsafeMapOr<Never, TR>(
         completedResult: completed,
-        failedResult: failed,
+        errorResult: failed,
       );
 }
 
