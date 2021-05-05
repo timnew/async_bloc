@@ -48,7 +48,7 @@ class BestGuessValue<T> extends IdleValueState<T> with StatedValue<T> {
   BestGuessValue<T> setValue(T newValue) => BestGuessValue(newValue);
 }
 
-class WaitingValue<T> extends WaitingValueState<T> with StatedValue<T> {
+class WaitingValue<T> extends WorkingValueState<T> with StatedValue<T> {
   const WaitingValue(T value) : super(value);
 
   @override

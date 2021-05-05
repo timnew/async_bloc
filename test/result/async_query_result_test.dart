@@ -22,7 +22,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isIdle, isTrue);
-        expect(result.isWaiting, isFalse);
+        expect(result.isWorking, isFalse);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
@@ -31,7 +31,7 @@ void main() {
     });
 
     group(".initialValue", () {
-      final result = AsyncQueryResult<String>.initialValue(value);
+      final result = AsyncQueryResult<String>.preset(value);
 
       test('should be a CompletedResult', () {
         expect(result, isInstanceOf<IdleValueState<String>>());
@@ -46,7 +46,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isIdle, isTrue);
-        expect(result.isWaiting, isFalse);
+        expect(result.isWorking, isFalse);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
@@ -55,10 +55,10 @@ void main() {
     });
 
     group(".waiting", () {
-      final result = AsyncQueryResult<String>.waiting();
+      final result = AsyncQueryResult<String>.working();
 
       test('should be a WaitingResult', () {
-        expect(result, isInstanceOf<WaitingState>());
+        expect(result, isInstanceOf<WorkingState>());
       });
 
       test('should be a AsyncQueryResult', () {
@@ -66,12 +66,12 @@ void main() {
       });
 
       test('gives the same instance', () {
-        expect(AsyncQueryResult.waiting(), same(result));
+        expect(AsyncQueryResult.working(), same(result));
       });
 
       test("should have correct states", () {
         expect(result.isIdle, isFalse);
-        expect(result.isWaiting, isTrue);
+        expect(result.isWorking, isTrue);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
@@ -80,7 +80,7 @@ void main() {
     });
 
     group(".succeeded", () {
-      final result = AsyncQueryResult.succeeded(value);
+      final result = AsyncQueryResult.completed(value);
 
       test('should be a CompletedResult', () {
         expect(result, isInstanceOf<DoneValueState<String>>());
@@ -97,7 +97,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isIdle, isFalse);
-        expect(result.isWaiting, isFalse);
+        expect(result.isWorking, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isTrue);
         expect(result.isFailed, isFalse);
@@ -135,7 +135,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isIdle, isFalse);
-        expect(result.isWaiting, isFalse);
+        expect(result.isWorking, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isTrue);
@@ -146,18 +146,18 @@ void main() {
     group(".fromValue", () {
       test("value is SucceededResult", () {
         final result = AsyncQueryResult.fromValue(value);
-        expect(result, AsyncQueryResult.succeeded(value));
+        expect(result, AsyncQueryResult.completed(value));
       });
 
       test("null is PendingResult", () {
         final result = AsyncQueryResult.fromValue(null);
-        expect(result, AsyncQueryResult.pending());
+        expect(result, AsyncQueryResult.idle());
       });
     });
 
     group(".updateWith", () {
       test("should update value with succeeded", () async {
-        final initial = AsyncQueryResult<String>.pending();
+        final initial = AsyncQueryResult<String>.idle();
 
         final future = Future.value(QueryResult.succeeded(value));
         final states = initial.updateWith(future);
@@ -165,8 +165,8 @@ void main() {
         expect(
           states,
           emitsInOrder([
-            AsyncQueryResult<String>.waiting(),
-            AsyncQueryResult<String>.succeeded(value),
+            AsyncQueryResult<String>.working(),
+            AsyncQueryResult<String>.completed(value),
           ]),
         );
       });
@@ -179,14 +179,14 @@ void main() {
         expect(
           states,
           emitsInOrder([
-            AsyncQueryResult<String>.waiting(),
+            AsyncQueryResult<String>.working(),
             AsyncQueryResult<String>.failed(error),
           ]),
         );
       });
 
       test("should complain when call on waiting", () async {
-        final initial = AsyncQueryResult<String>.waiting();
+        final initial = AsyncQueryResult<String>.working();
 
         final future = Future.value(QueryResult.succeeded(value));
 
@@ -198,35 +198,35 @@ void main() {
 
     group(".mapValue", () {
       test("should map pending", () {
-        final result = AsyncQueryResult<int>.pending();
+        final result = AsyncQueryResult<int>.idle();
 
         expect(
           result.mapValue((value) => value.toString()),
-          AsyncQueryResult<String>.pending(),
+          AsyncQueryResult<String>.idle(),
         );
       });
 
       test("should map initialValue", () {
-        final result = AsyncQueryResult<int>.initialValue(100);
+        final result = AsyncQueryResult<int>.preset(100);
         expect(
           result.mapValue((value) => value.toString()),
-          AsyncQueryResult<String>.initialValue("100"),
+          AsyncQueryResult<String>.preset("100"),
         );
       });
 
       test("should map waiting", () {
-        final result = AsyncQueryResult<int>.waiting();
+        final result = AsyncQueryResult<int>.working();
 
         expect(
           result.mapValue((value) => value.toString()),
-          AsyncQueryResult<String>.waiting(),
+          AsyncQueryResult<String>.working(),
         );
       });
       test("should map success", () {
-        final result = AsyncQueryResult<int>.succeeded(100);
+        final result = AsyncQueryResult<int>.completed(100);
         expect(
           result.mapValue((value) => value.toString()),
-          AsyncQueryResult.succeeded("100"),
+          AsyncQueryResult.completed("100"),
         );
       });
 

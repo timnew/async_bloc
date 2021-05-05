@@ -16,7 +16,7 @@ class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
   /// Build UI with [AsyncActionResult]
   ///
   /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
-  /// * [waitingBuilder] - Builder to be used when [WaitingState] is given.
+  /// * [waitingBuilder] - Builder to be used when [WorkingState] is given.
   /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
   /// * [builder] - Builder to be used when [DoneState] is given.
   ///
@@ -45,7 +45,7 @@ class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
   /// Build UI with [ActionResult]
   ///
   /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
-  /// * [waitingBuilder] - Builder to be used when [WaitingState] is given.
+  /// * [waitingBuilder] - Builder to be used when [WorkingState] is given.
   /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
   /// * [builder] - Builder to be used when [DoneState] is given.
   ///

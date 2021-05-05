@@ -13,7 +13,7 @@ class BusyIndicatorBuilder extends StatelessWidget {
   /// The builder used to build indicator
   final ValueWidgetBuilder<bool> builder;
 
-  /// Invoke [builder] with boolean indicates whether [result] is [WaitingState]
+  /// Invoke [builder] with boolean indicates whether [result] is [WorkingState]
   const BusyIndicatorBuilder({
     Key? key,
     required this.result,
@@ -21,7 +21,7 @@ class BusyIndicatorBuilder extends StatelessWidget {
     this.child,
   }) : super(key: key);
 
-  /// Render a [CircularProgressIndicator] if [result] is [WaitingState]
+  /// Render a [CircularProgressIndicator] if [result] is [WorkingState]
   /// User [duration] to control fading
   factory BusyIndicatorBuilder.circular({
     Key? key,
@@ -35,7 +35,7 @@ class BusyIndicatorBuilder extends StatelessWidget {
         builder: _buildAnimationWidget(duration),
       );
 
-  /// Render a [LinearProgressIndicator] if [result] is [WaitingState]
+  /// Render a [LinearProgressIndicator] if [result] is [WorkingState]
   /// User [duration] to control fading
   factory BusyIndicatorBuilder.linear({
     Key? key,
@@ -51,7 +51,7 @@ class BusyIndicatorBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      builder(context, result.isWaiting, child);
+      builder(context, result.isWorking, child);
 
   static ValueWidgetBuilder<bool> _buildAnimationWidget(Duration duration) =>
       (_, value, child) => AnimatedOpacity(

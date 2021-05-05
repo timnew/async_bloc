@@ -24,7 +24,7 @@ void main() {
         });
 
         testWidgets(".waiting()", (WidgetTester tester) async {
-          await buildAsyncResult(tester, AsyncActionResult.waiting());
+          await buildAsyncResult(tester, AsyncActionResult.working());
 
           findPendingBeacon.shouldFindNothing();
           findWaitingBeacon.shouldFindOne();

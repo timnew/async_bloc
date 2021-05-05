@@ -20,7 +20,7 @@ void main() {
     void runTestSet(BuildWidget buildWidget) {
       group("building AsyncQueryResult", () {
         testWidgets(".pending", (WidgetTester tester) async {
-          final cubit = QueryCubit<String>(AsyncQueryResult<String>.pending());
+          final cubit = QueryCubit<String>(AsyncQueryResult<String>.idle());
 
           await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
@@ -31,7 +31,7 @@ void main() {
         });
 
         testWidgets(".waiting", (WidgetTester tester) async {
-          final cubit = QueryCubit<String>(AsyncQueryResult<String>.waiting());
+          final cubit = QueryCubit<String>(AsyncQueryResult<String>.working());
 
           await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
@@ -55,7 +55,7 @@ void main() {
 
         testWidgets(".succeeded", (WidgetTester tester) async {
           final cubit =
-              QueryCubit<String>(AsyncQueryResult<String>.succeeded(value));
+              QueryCubit<String>(AsyncQueryResult<String>.completed(value));
 
           await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
@@ -150,7 +150,7 @@ void main() {
         await tester.pump(Duration.zero);
         await expectLater(
           capturedResult,
-          completion(AsyncQueryResult.succeeded(value)),
+          completion(AsyncQueryResult.completed(value)),
         );
 
         findPendingBeacon.shouldFindNothing();

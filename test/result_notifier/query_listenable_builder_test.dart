@@ -32,7 +32,7 @@ void main() {
 
         testWidgets(".pending", (WidgetTester tester) async {
           final notifier =
-              QueryResultNotifier<String>(AsyncQueryResult<String>.pending());
+              QueryResultNotifier<String>(AsyncQueryResult<String>.idle());
 
           await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
@@ -44,7 +44,7 @@ void main() {
 
         testWidgets(".waiting", (WidgetTester tester) async {
           final notifier =
-              QueryResultNotifier<String>(AsyncQueryResult<String>.waiting());
+              QueryResultNotifier<String>(AsyncQueryResult<String>.working());
 
           await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 
@@ -68,7 +68,7 @@ void main() {
 
         testWidgets(".succeeded", (WidgetTester tester) async {
           final notifier = QueryResultNotifier<String>(
-              AsyncQueryResult<String>.succeeded(value));
+              AsyncQueryResult<String>.completed(value));
 
           await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 

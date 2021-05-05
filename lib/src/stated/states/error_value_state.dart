@@ -2,20 +2,10 @@ import 'package:collection/collection.dart';
 
 import '../stated.dart';
 
-/// State indicates the action is failed with error but also value, typically when a optmistic updates failed.
+/// State indicates the action is failed with error, and a value
 ///
 /// * [error] : exception or error object
 /// * [stackTrace] : optional stack trace associated with error
-///
-/// All states:
-/// * [IdleState]
-/// * [IdleValueState]
-/// * [WaitingResult]
-/// * [WaitingValueResult]
-/// * [DoneState]
-/// * [DoneValueState]
-/// * [ErrorState]
-/// * [ErrorValueState]
 class ErrorValueState<T> with Stated implements HasValueAndError<T> {
   /// Value holds of the state
   final T value;

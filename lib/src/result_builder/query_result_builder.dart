@@ -18,7 +18,7 @@ class QueryResultBuilder<T>
   /// Build UI with [AsyncQueryResult]
   ///
   /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
-  /// * [waitingBuilder] - Builder to be used when [WaitingState] is given.
+  /// * [waitingBuilder] - Builder to be used when [WorkingState] is given.
   /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
   /// * [builder] - Builder to be used when [DoneValueState] or [IdleValueState] is given.
   ///
@@ -47,7 +47,7 @@ class QueryResultBuilder<T>
   /// Build UI with [QueryResult]
   ///
   /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
-  /// * [waitingBuilder] - Builder to be used when [WaitingState] is given.
+  /// * [waitingBuilder] - Builder to be used when [WorkingState] is given.
   /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
   /// * [builder] - Builder to be used when [DoneValueState] or [IdleValueState] is given.
   ///

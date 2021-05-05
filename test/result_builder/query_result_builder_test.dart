@@ -17,7 +17,7 @@ void main() {
     }) {
       testWidgets("it should build AsyncResultAction.pending()",
           (WidgetTester tester) async {
-        await buildAsyncResult(tester, AsyncQueryResult.pending());
+        await buildAsyncResult(tester, AsyncQueryResult.idle());
 
         findPendingBeacon.shouldFindOne();
         findWaitingBeacon.shouldFindNothing();
@@ -27,7 +27,7 @@ void main() {
 
       testWidgets("it should build AsyncResultAction.wating()",
           (WidgetTester tester) async {
-        await buildAsyncResult(tester, AsyncQueryResult.waiting());
+        await buildAsyncResult(tester, AsyncQueryResult.working());
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindOne();
@@ -47,7 +47,7 @@ void main() {
 
       testWidgets("it should build AsyncResultAction.failed()",
           (WidgetTester tester) async {
-        await buildAsyncResult(tester, AsyncQueryResult.succeeded(value));
+        await buildAsyncResult(tester, AsyncQueryResult.completed(value));
 
         findPendingBeacon.shouldFindNothing();
         findWaitingBeacon.shouldFindNothing();

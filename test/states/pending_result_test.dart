@@ -16,7 +16,7 @@ void main() {
 
     test("has correct state", () {
       expect(result.isIdle, isTrue);
-      expect(result.isWaiting, isFalse);
+      expect(result.isWorking, isFalse);
       expect(result.isSucceeded, isFalse);
       expect(result.isFailed, isFalse);
       expect(result.isFinished, isFalse);

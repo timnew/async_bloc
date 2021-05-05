@@ -18,7 +18,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isIdle, isTrue);
-        expect(result.isWaiting, isFalse);
+        expect(result.isWorking, isFalse);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
@@ -27,19 +27,19 @@ void main() {
     });
 
     group(".waiting", () {
-      final result = AsyncActionResult.waiting();
+      final result = AsyncActionResult.working();
 
       test('should be a WaitingResult', () {
-        expect(result, isInstanceOf<WaitingState>());
+        expect(result, isInstanceOf<WorkingState>());
       });
 
       test('gives the same instance', () {
-        expect(AsyncActionResult.waiting(), same(result));
+        expect(AsyncActionResult.working(), same(result));
       });
 
       test("should have correct states", () {
         expect(result.isIdle, isFalse);
-        expect(result.isWaiting, isTrue);
+        expect(result.isWorking, isTrue);
         expect(result.isFinished, isFalse);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isFalse);
@@ -60,7 +60,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isIdle, isFalse);
-        expect(result.isWaiting, isFalse);
+        expect(result.isWorking, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isTrue);
         expect(result.isFailed, isFalse);
@@ -94,7 +94,7 @@ void main() {
 
       test("should have correct states", () {
         expect(result.isIdle, isFalse);
-        expect(result.isWaiting, isFalse);
+        expect(result.isWorking, isFalse);
         expect(result.isFinished, isTrue);
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isTrue);
@@ -112,7 +112,7 @@ void main() {
         expect(
           states,
           emitsInOrder([
-            AsyncActionResult.waiting(),
+            AsyncActionResult.working(),
             AsyncActionResult.completed(),
           ]),
         );
@@ -126,14 +126,14 @@ void main() {
         expect(
           states,
           emitsInOrder([
-            AsyncActionResult.waiting(),
+            AsyncActionResult.working(),
             AsyncActionResult.failed(error),
           ]),
         );
       });
 
       test("should complains when call on waiting", () async {
-        final initial = AsyncActionResult.waiting();
+        final initial = AsyncActionResult.working();
 
         final future = Future.value(ActionResult.completed());
 

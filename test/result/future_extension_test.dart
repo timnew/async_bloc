@@ -77,7 +77,7 @@ void main() {
 
         test("yields waiting", () async {
           expect(
-            () async => await Future.value(AsyncActionResult.waiting())
+            () async => await Future.value(AsyncActionResult.working())
                 .asActionResult(),
             throwsUnsupportedError,
           );
@@ -132,14 +132,14 @@ void main() {
         test("yields pending", () async {
           expect(
             () async =>
-                await Future.value(AsyncQueryResult.pending()).asActionResult(),
+                await Future.value(AsyncQueryResult.idle()).asActionResult(),
             throwsUnsupportedError,
           );
         });
 
         test("yields initialValue", () async {
           expect(
-            () async => await Future.value(AsyncQueryResult.initialValue(value))
+            () async => await Future.value(AsyncQueryResult.preset(value))
                 .asActionResult(),
             throwsUnsupportedError,
           );
@@ -148,13 +148,13 @@ void main() {
         test("yields waiting", () async {
           expect(
             () async =>
-                await Future.value(AsyncQueryResult.waiting()).asActionResult(),
+                await Future.value(AsyncQueryResult.working()).asActionResult(),
             throwsUnsupportedError,
           );
         });
 
         test("yields succeeded", () async {
-          final result = await Future.value(AsyncQueryResult.succeeded(value))
+          final result = await Future.value(AsyncQueryResult.completed(value))
               .asActionResult();
           expect(result, isInstanceOf<ActionResult>());
           expect(result, isInstanceOf<DoneState>());

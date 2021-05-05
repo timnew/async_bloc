@@ -1,7 +1,7 @@
-import 'package:stated_result/src/stated/states/waiting_value_state.dart';
+import 'package:stated_result/src/stated/states/working_value_state.dart';
 import 'package:stated_result/stated_result.dart';
 
-import 'states/waiting_state.dart';
+import 'states/working_state.dart';
 import 'states/done_state.dart';
 import 'states/idle_value_state.dart';
 import 'states/error_state.dart';
@@ -14,7 +14,7 @@ mixin Stated {
   bool get isIdle => this is IdleState || this is IdleValueState;
 
   /// Return true if it is in progress
-  bool get isWaiting => this is WaitingState || this is WaitingValueState;
+  bool get isWorking => this is WorkingState || this is WorkingValueState;
 
   /// Return true if it is finished, either succeeded or failed
   bool get isFinished => isSucceeded || isFailed;

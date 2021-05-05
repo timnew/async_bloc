@@ -15,7 +15,7 @@ class QueryCubit<T> extends Cubit<AsyncQueryResult<T>> {
   /// Create new Cubit with given intial value of the query
   /// [IdleValueState] will be set
   QueryCubit.initialValue(T intialValue)
-      : super(AsyncQueryResult.initialValue(intialValue));
+      : super(AsyncQueryResult.preset(intialValue));
 
   /// Capture the result of a generic aync query
   Future<QueryResult<T>> captureResult(Future<T> future) =>

@@ -1,7 +1,7 @@
 import 'package:stated_result/stated_result.dart';
 
 import 'stated.dart';
-import 'states/waiting_state.dart';
+import 'states/working_state.dart';
 import 'states/done_state.dart';
 import 'states/idle_value_state.dart';
 import 'states/idle_state.dart';
@@ -34,11 +34,11 @@ extension StatedInternalHelper on Stated {
       if (idleValue != null) {
         return idleValue(this as IdleValueState<T>);
       }
-    } else if (this is WaitingState) {
+    } else if (this is WorkingState) {
       if (waiting != null) return waiting();
-    } else if (this is WaitingValueState<T>) {
+    } else if (this is WorkingValueState<T>) {
       if (waitingValue != null) {
-        return waitingValue(this as WaitingValueState<T>);
+        return waitingValue(this as WorkingValueState<T>);
       }
     } else if (this is DoneState) {
       if (done != null) return done();
@@ -67,7 +67,7 @@ extension StatedInternalHelper on Stated {
     if (this.hasValue) {
       if (hasValue != null) return hasValue(this as HasValue<T>);
     }
-    if (this.isWaiting) {
+    if (this.isWorking) {
       if (isWaiting != null) return isWaiting();
     }
     if (this.isIdle) {
@@ -86,10 +86,10 @@ extension StatedInternalHelper on Stated {
   }
 
   /// Ensure no trigger parallel running
-  /// Throw [StateError] if [isWaiting] returns true
+  /// Throw [StateError] if [isWorking] returns true
   ///
   /// Can be used as state check before kicking off new action/query to avoid parallel run
   void ensureNoParallelRun() {
-    if (this.isWaiting) throw StateError("Parallel run");
+    if (this.isWorking) throw StateError("Parallel run");
   }
 }

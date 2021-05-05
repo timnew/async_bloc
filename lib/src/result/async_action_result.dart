@@ -1,133 +1,91 @@
-import 'package:stated_result/states.dart';
-import 'package:stated_result/internal.dart';
+import 'package:stated_result/stated.dart';
 
 import 'action_result.dart';
 import 'query_result.dart';
 import 'async_query_result.dart';
 
-/// A 4-state result represents asychronised action with no return value
-/// It could be either pending, waiting, succeeded, or failed
+/// A type represents the result of a async action.
 ///
-/// Typically used with `Bloc` or `ValueNotifier`
-///
-/// [AsyncActionResult.pending] creates the [PendingResult], indicates the action hasn't started
-/// [AsyncActionResult.waiting] creates the [WaitingResult], indicates the action is in progress
-/// [AsyncActionResult.completed] creates the [CompletedResult], indicates the action is completed
-/// [AsyncActionResult.failed] creates the [FailedResult], indicates the action is failed
+/// [AsyncActionResult.idle] creates the [IdleState], indicates the action hasn't started
+/// [AsyncActionResult.working] creates the [WorkingState], indicates the action is in progress
+/// [AsyncActionResult.completed] creates the [DoneState], indicates the action is completed
+/// [AsyncActionResult.failed] creates the [ErrorState], indicates the action is failed
 ///
 /// See also
 /// * [ActionResult]
 /// * [QueryResult]
 /// * [AsyncQueryResult]
+abstract class AsyncActionResult implements Stated {
+  /// Alias to [AsyncActionResult.idle]
+  factory AsyncActionResult() = AsyncActionResult.idle;
 
-abstract class AsyncActionResult implements StatedResult {
-  /// Alias to [AsyncActionResult.pending]
-  factory AsyncActionResult() = AsyncActionResult.pending;
+  /// Creates a [AsyncActionResult] in [IdleState]
+  /// This factory always returns a const result
+  factory AsyncActionResult.idle() => const _Idle();
 
-  /// Creates the [PendingResult], indicates the action hasn't started
-  factory AsyncActionResult.pending() => const _Pending();
+  /// Creates a [AsyncActionResult] in [WorkingState]
+  /// This factory always returns a const result
+  factory AsyncActionResult.working() => const _Working();
 
-  /// Creates the [WaitingResult], indicates the action is in progress
-  factory AsyncActionResult.waiting() => const _Waiting();
-
-  /// Creates the [CompletedResult], indicates the action is completed
+  /// Creates a [AsyncActionResult] in [DoneState]
+  /// This factory always returns a const result
   factory AsyncActionResult.completed() => const _Completed();
 
-  /// Creates the [FailedResult], indicates the action is failed
-  const factory AsyncActionResult.failed(Object error,
-      [StackTrace? stackTrace]) = _Failed;
+  /// creates a [AsyncActionResult] in [ErrorState] with [error] and optional [stackTrace]
+  const factory AsyncActionResult.failed(
+    Object error, [
+    StackTrace? stackTrace,
+  ]) = _Failed;
 
-  /// Create [AsyncActionResult] from any other result
-  ///
-  /// [PendingResult], [InitialValueResult] converts to [AsyncActionResult.pending]
-  /// [WaitingResult] converts to [AsyncActionResult.waiting]
-  /// [FailedResult] converts to [AsyncActionResult.failed]
-  /// [CompletedResult], [SucceededResult] converts to [AsyncActionResult.completed]
+  /// creates an [AsyncActionResult] in [ErrorState] from [errorInfo]
+  factory AsyncActionResult.fromError(HasError errorInfo) = _Failed.fromError;
+
+  /// Create [AsyncActionResult] from other [Stated] types
+  /// * [IdleState] or [IdleValueState] converts to [AsyncActionResult.idle]
+  /// * [WorkingState] or [WorkingValueState] converts to [AsyncActionResult.working]
+  /// * [DoneValueState] or [DoneState] converts to [AsyncActionResult.completed]
+  /// * [ErrorState] or [ErrorValueState] converts to [AsyncActionResult.failed]
   ///  Otherwise [UnsupportedError] is thrown
-  factory AsyncActionResult.from(StatedResult result) =>
-      result.unsafeMapOr<dynamic, AsyncActionResult>(
-        isNotStarted: () => AsyncActionResult.pending(),
-        waitingResult: () => AsyncActionResult.waiting(),
-        errorResult: (result) =>
-            AsyncActionResult.failed(result.error, result.stackTrace),
-        isSucceeded: () => AsyncActionResult.completed(),
-        orElse: () => throw UnsupportedError(
-            "Cannot convert $result to AsyncActionResult"),
-      );
+  factory AsyncActionResult.from(Stated other) {
+    if (other.isIdle) return AsyncActionResult.idle();
+    if (other.isWorking) return AsyncActionResult.working();
+    if (other.isSucceeded) return AsyncActionResult.completed();
+    if (other.isFailed) return AsyncActionResult.fromError(other.asError());
+    throw UnsupportedError(
+      "$other in the state not supported by AsyncActionResult",
+    );
+  }
 
   /// Pattern match the result on all branches
-  ///
-  /// [pending] is called with action hasn't started
-  /// [waiting] is called when action is in progress
-  /// [completed] is called if result is completed
-  /// [failed] is called with error and stackTrace if result is failed
   TR map<TR>({
-    required ResultMapper<TR> pending,
-    required ResultMapper<TR> waiting,
-    required ResultMapper<TR> completed,
-    required ErrorResultMapper<TR> failed,
-  }) =>
-      unsafeMapOr(
-        pendingResult: pending,
-        waitingResult: waiting,
-        completedResult: completed,
-        errorResult: failed,
-      );
-
-  /// Pattern match the result with else branch
-  ///
-  /// [pending] is called with action hasn't started
-  /// [waiting] is called when action is in progress
-  /// [completed] is called if result is completed
-  /// [failed] is called with error and stackTrace if result is failed
-  ///
-  /// [finished] is either completed or failed. Not called if [failed] or [completed] is given.
-  ///
-  /// [orElse] is called if no specific state mapper is given
-  TR mapOr<TR>({
-    ResultMapper<TR>? pending,
-    ResultMapper<TR>? waiting,
-    ResultMapper<TR>? completed,
-    ErrorResultMapper<TR>? failed,
-    ResultMapper<TR>? finished,
-    required ResultMapper<TR> orElse,
-  }) =>
-      unsafeMapOr(
-        pendingResult: pending,
-        waitingResult: waiting,
-        completedResult: completed,
-        errorResult: failed,
-        isFinished: finished,
-        orElse: orElse,
-      );
-
-  /// Update self with future [ActionResult]
-  Stream<AsyncActionResult> updateWith(Future<ActionResult> future) async* {
-    ensureNoParallelRun();
-
-    yield AsyncActionResult.waiting();
-
-    try {
-      yield AsyncActionResult.from(await future);
-    } catch (error, stackTrace) {
-      yield AsyncActionResult.failed(error, stackTrace);
-    }
+    required StateTransformer<TR> idle,
+    required StateTransformer<TR> working,
+    required StateTransformer<TR> completed,
+    required ValueTransformer<HasError, TR> failed,
+  }) {
+    if (this is _Idle) return idle();
+    if (this is _Working) return working();
+    if (this is _Completed) return completed();
+    return failed(this.asError());
   }
 }
 
-class _Pending extends PendingResult with AsyncActionResult {
-  const _Pending();
+class _Idle extends IdleState with AsyncActionResult {
+  const _Idle();
 }
 
-class _Waiting extends WaitingResult with AsyncActionResult {
-  const _Waiting();
+class _Working extends WorkingState with AsyncActionResult {
+  const _Working();
 }
 
-class _Completed extends CompletedResult with AsyncActionResult {
+class _Completed extends DoneState with AsyncActionResult {
   const _Completed();
 }
 
-class _Failed extends FailedResult with AsyncActionResult {
+class _Failed extends ErrorState with AsyncActionResult {
   const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
+
+  _Failed.fromError(HasError errorInfo)
+      : this(errorInfo.error, errorInfo.stackTrace);
 }

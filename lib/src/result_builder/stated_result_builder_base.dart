@@ -17,7 +17,7 @@ abstract class StatedResultBuilderBase<TS extends Stated>
   /// Default pending builder provided by [DefaultPendingResultBuilder] will be used if not explicitly given.
   final WidgetBuilder? pendingBuilder;
 
-  /// Builder to be used when [WaitingState] is given.
+  /// Builder to be used when [WorkingState] is given.
   ///
   /// Default pending builder provided by [DefaultWaitingResultBuilder] will be used if not explicitly given.
   final WidgetBuilder? waitingBuilder;

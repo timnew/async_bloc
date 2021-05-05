@@ -41,7 +41,7 @@ void main() {
         });
 
         testWidgets(".waiting", (WidgetTester tester) async {
-          final notifier = ActionResultNotifier(AsyncActionResult.waiting());
+          final notifier = ActionResultNotifier(AsyncActionResult.working());
 
           await tester.pumpWidgetOnScaffold(buildWidget(notifier));
 

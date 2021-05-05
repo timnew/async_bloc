@@ -30,7 +30,7 @@ void main() {
         });
 
         testWidgets(".waiting", (WidgetTester tester) async {
-          final cubit = ActionCubit(AsyncActionResult.waiting());
+          final cubit = ActionCubit(AsyncActionResult.working());
 
           await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 

@@ -1,98 +1,83 @@
 import 'dart:async';
 
-import 'package:stated_result/states.dart';
-import 'package:stated_result/internal.dart';
+import 'package:stated_result/stated.dart';
 
 import 'action_result.dart';
 import 'async_action_result.dart';
 import 'async_query_result.dart';
 
-/// A 2-state result represents synchronised query with single return value
-/// It could be either succeeded or failed
+/// A type represents the result of an query.
 ///
-/// Typically wrapped in a future as the return value of an action execution.
-/// ```dart
-/// Future<QueryResult<User>> findUser(String userId);
-/// ```
-///
-/// [QueryResult.succeeded] creates the [SucceededResult], indicates the query is succeded with a value
-/// [QueryResult.failed] creates the [FailedResult], indicates the query is failed
+/// [QueryResult.completed] creates the [DoneValueState], indicates the action is completed
+/// [QueryResult.failed] creates the [ErrorState], indicates the action is failed
 ///
 /// See also
 /// * [ActionResult]
 /// * [AsyncActionResult]
 /// * [AsyncQueryResult]
-abstract class QueryResult<T> implements StatedResult {
-  /// Alias to [QueryResult.succeeded]
-  const factory QueryResult(T value) = QueryResult.succeeded;
+abstract class QueryResult<T> implements Stated {
+  /// Alias to [QueryResult.completed]
+  const factory QueryResult(T value) = QueryResult.completed;
 
-  /// Creates the [SucceededResult] with [value]
-  const factory QueryResult.succeeded(T value) = _Succeeded;
+  /// creates an [QueryResult] in [DoneValueState] holds [value]
+  const factory QueryResult.completed(T value) = _Completed;
 
-  /// creates the [FailedResult]
-  /// [error] is the [Error]/[Exception] fails the action
-  /// [stackTrace] indicates where the [error] was thrown, it is optional
+  /// creates an [QueryResult] in [ErrorState] with [error] and optional [stackTrace]
   const factory QueryResult.failed(Object error, [StackTrace? stackTrace]) =
       _Failed;
 
-  /// Create [QueryResult] from any other result
-  ///
-  /// [FailedResult] converts to [QueryResult.failed]
-  /// [SucceededResult]. [InitialValueResult] with type [T] converts to [QueryResult.succeeded]
+  /// creates an [QueryResult] in [ErrorState] from [errorInfo]
+  factory QueryResult.fromError(HasError errorInfo) = _Failed.fromError;
+
+  /// Create [QueryResult] from other [Stated] types
+  /// * [DoneValueState] converts to [QueryResult.completed]
+  /// * [ErrorState] or [ErrorValueState] converts to [QueryResult.failed]
   ///  Otherwise [UnsupportedError] is thrown
-  factory QueryResult.from(StatedResult result) =>
-      result.unsafeMapOr<T, QueryResult<T>>(
-        errorResult: (result) =>
-            QueryResult.failed(result.error, result.stackTrace),
-        hasValue: (result) => QueryResult.succeeded(result.value),
-        orElse: () =>
-            throw UnsupportedError("Cannot convert $result to QueryResult<$T>"),
-      );
+  factory QueryResult.from(Stated other) {
+    if (other is DoneValueState<T>) return QueryResult.completed(other.value);
+    if (other is HasError) return QueryResult.fromError(other.asError());
+    throw UnsupportedError("$other in the state not supported by QueryResult");
+  }
 
   /// Pattern match the result
   ///
-  /// [succeeded] is called with value if result is succeeded
+  /// [completed] is called with value if result is succeeded
   /// [failed] is called with error and stackTrace if result is failed
   TR map<TR>({
-    required ValueResultMapper<T, TR> succeeded,
-    required ErrorResultMapper<TR> failed,
-  }) =>
-      unsafeMapOr<T, TR>(
-        succeededResult: succeeded,
-        errorResult: failed,
-      );
-
-  /// map the value of query.
-  /// If it is a [SucceededResult], map its value with [mapper].
-  /// Otherwise, keep the result.
-  QueryResult<TR> mapValue<TR>(ValueMapper<T, TR> mapper) =>
-      map<QueryResult<TR>>(
-        succeeded: (r) => QueryResult(mapper(r.value)),
-        failed: (r) => QueryResult<TR>.failed(r.error, r.stackTrace),
-      );
+    required ValueTransformer<T, TR> completed,
+    required ValueTransformer<HasError, TR> failed,
+  }) {
+    if (this is _Completed) return completed(this.asValue());
+    return failed(this.asError());
+  }
 }
 
-class _Succeeded<T> extends SucceededResult<T> with QueryResult<T> {
-  const _Succeeded(T value) : super(value);
+class _Completed<T> extends DoneValueState<T> with QueryResult<T> {
+  const _Completed(T value) : super(value);
 }
 
-class _Failed<T> extends FailedResult with QueryResult<T> {
+class _Failed<T> extends ErrorState with QueryResult<T> {
   const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
+
+  _Failed.fromError(HasError errorInfo)
+      : this(errorInfo.error, errorInfo.stackTrace);
 }
 
 /// Provides extension methods on `Future<T>` for [QueryResult]
 extension QueryResultFutureExtension<T> on Future<T> {
-  /// Materialize `Future<T>` into `Future<QueryResult<T>>`
+  /// Materialize `Future<T>` into `Future<QueryResut<T>>`]
   ///
-  /// Materialised future always succeed
-  /// Returns [SucceededResult] if future resovled succesfully
-  /// Returns [FailedResult] if future throws
+  /// Materialised future always succeed unless future throws error
+  /// Returns [QueryResult.completed] if future resovled succesfully
+  /// Returns [QueryResult.failed] if future throws exception
   Future<QueryResult<T>> asQueryResult() async {
     try {
-      return QueryResult.succeeded(await this);
-    } catch (error, stackTrace) {
-      return QueryResult<T>.failed(error, stackTrace);
+      return QueryResult.completed(await this);
+    } on Error {
+      rethrow;
+    } catch (exception, stackTrace) {
+      return QueryResult.failed(exception, stackTrace);
     }
   }
 }

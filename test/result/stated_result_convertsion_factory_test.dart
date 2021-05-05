@@ -7,11 +7,11 @@ void main() {
     final error = "error";
     final stackTrace = StackTrace.empty;
 
-    final pending = AsyncQueryResult.pending();
-    final initialValue = AsyncQueryResult.initialValue(value);
-    final waiting = AsyncQueryResult.waiting();
+    final pending = AsyncQueryResult.idle();
+    final initialValue = AsyncQueryResult.preset(value);
+    final waiting = AsyncQueryResult.working();
     final failed = AsyncQueryResult.failed(error, stackTrace);
-    final succeded = AsyncQueryResult.succeeded(value);
+    final succeded = AsyncQueryResult.completed(value);
     final completed = AsyncActionResult.completed();
 
     group("ActionResult", () {
@@ -98,7 +98,7 @@ void main() {
       test(".from(waiting)", () {
         final result = AsyncActionResult.from(waiting);
         expect(result, isInstanceOf<AsyncActionResult>());
-        expect(result, isInstanceOf<WaitingState>());
+        expect(result, isInstanceOf<WorkingState>());
       });
 
       test(".from(failed)", () {
@@ -132,13 +132,13 @@ void main() {
         final result = AsyncQueryResult<String>.from(initialValue);
         expect(result, isInstanceOf<AsyncQueryResult<String>>());
         expect(result, isInstanceOf<IdleValueState<String>>());
-        expect(result, AsyncQueryResult.initialValue(value));
+        expect(result, AsyncQueryResult.preset(value));
       });
 
       test(".from(waiting)", () {
         final result = AsyncQueryResult<String>.from(waiting);
         expect(result, isInstanceOf<AsyncQueryResult<String>>());
-        expect(result, isInstanceOf<WaitingState>());
+        expect(result, isInstanceOf<WorkingState>());
       });
 
       test(".from(failed)", () {
@@ -152,7 +152,7 @@ void main() {
         final result = AsyncQueryResult<String>.from(succeded);
         expect(result, isInstanceOf<AsyncQueryResult<String>>());
         expect(result, isInstanceOf<DoneValueState<String>>());
-        expect(result, AsyncQueryResult<String>.succeeded(value));
+        expect(result, AsyncQueryResult<String>.completed(value));
       });
 
       test(".from(completed)", () {
