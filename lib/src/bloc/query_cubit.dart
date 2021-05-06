@@ -18,13 +18,12 @@ class QueryCubit<T> extends Cubit<AsyncQueryResult<T>> {
       : super(AsyncQueryResult.preset(intialValue));
 
   /// Capture the result of a generic aync query
-  Future<QueryResult<T>> captureResult(Future<T> future) =>
-      updateWith(future.asQueryResult());
+  Future<T> captureResult(Future<T> future) {
+    updateWith(future);
+    return future;
+  }
 
   /// Update self with future [QueryResult]
-  Future<QueryResult<T>> updateWith(Future<QueryResult<T>> future) async {
-    await state.updateWith(future).forEach(emit);
-
-    return QueryResult<T>.from(this.state);
-  }
+  Future<void> updateWith(Future<T> future) async =>
+      await state.updateWith(future).forEach(emit);
 }

@@ -68,6 +68,16 @@ abstract class AsyncActionResult implements Stated {
     if (this is _Completed) return completed();
     return failed(this.asError());
   }
+
+  Stream<AsyncActionResult> updateWith(Future future) async* {
+    if (isWorking) throw StateError("Parallel update with future");
+
+    yield AsyncActionResult.working();
+
+    final result = await future.asActionResult();
+
+    yield AsyncActionResult.from(result);
+  }
 }
 
 class _Idle extends IdleState with AsyncActionResult {

@@ -10,7 +10,7 @@ class ActionCubit extends Cubit<AsyncActionResult> {
   /// Optional [initialState] can be used to set the initial state of the Cubit.
   /// [IdleState] is used if not specified
   ActionCubit([AsyncActionResult? initialState])
-      : super(initialState ?? AsyncActionResult());
+      : super(initialState ?? AsyncActionResult.idle());
 
   /// Capture the result of a generic aync action
   Future<T> captureResult<T>(Future<T> future) {
@@ -19,9 +19,6 @@ class ActionCubit extends Cubit<AsyncActionResult> {
   }
 
   /// Update self with future [ActionResult]
-  Future<ActionResult> updateWith(Future<ActionResult> future) async {
-    await this.state.updateWith(future).forEach(emit);
-
-    return ActionResult.from(this.state);
-  }
+  Future<void> updateWith(Future<ActionResult> future) async =>
+      await this.state.updateWith(future).forEach(emit);
 }

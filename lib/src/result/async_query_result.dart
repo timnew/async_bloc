@@ -97,6 +97,16 @@ abstract class AsyncQueryResult<T> implements Stated {
     if (this is _Completed) return completed(this.asValue());
     return failed(this.asError());
   }
+
+  Stream<AsyncQueryResult<T>> updateWith(Future<T> future) async* {
+    if (isWorking) throw StateError("Parallel update with future");
+
+    yield AsyncQueryResult.working();
+
+    final result = await future.asQueryResult();
+
+    yield AsyncQueryResult.from(result);
+  }
 }
 
 class _Idle<T> extends IdleState with AsyncQueryResult<T> {
