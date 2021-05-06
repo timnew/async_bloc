@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stated_result/stated_result.dart';
-import 'package:stated_result/internal.dart';
 
 import 'stated_value.dart';
 
@@ -18,8 +17,12 @@ class StatedValueCubit<T> extends Cubit<StatedValue<T>> {
     return value;
   }
 
+  void _ensureNotWorking() {
+    if (state.isWorking) throw StateError("Racing async set value");
+  }
+
   Future<T> setValueAsync(Future<T> asyncResult) async {
-    state.ensureNoParallelRun();
+    _ensureNotWorking();
 
     emit(state.toWaiting());
     try {
@@ -33,9 +36,9 @@ class StatedValueCubit<T> extends Cubit<StatedValue<T>> {
   }
 
   Future<T> setValueWithGuess(T bestGuess, Future<T> asyncResult) async {
-    state.ensureNoParallelRun();
-    final oldValue = state.value;
+    _ensureNotWorking();
 
+    final oldValue = state.value;
     emit(StatedValue.bestGuess(bestGuess));
     try {
       final value = await asyncResult;

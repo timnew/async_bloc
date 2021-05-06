@@ -1,73 +1,53 @@
 import 'package:flutter/widgets.dart';
-
+import 'package:stated_result/stated_builder.dart';
 import 'package:stated_result/stated_result.dart';
 
-import 'stated_result_builder_base.dart';
-import 'default_waiting_result_builder.dart';
-import 'default_failed_result_builder.dart';
-import 'default_pending_result_builder.dart';
-import 'widget_builders.dart';
-
-/// Widget that builds UI according to the state of [AsyncQueryResult] or [QueryResult]
-class QueryResultBuilder<T>
-    extends StatedResultBuilderBase<AsyncQueryResult<T>> {
-  /// Builder to be used when [HasValue] is given,
-  /// which could be either [DoneValueState] or [IdleValueState].
-  final ValueResultBuilder<T> builder;
-
-  /// Build UI with [AsyncQueryResult]
+/// Widget that builds itself based on the value of [QueryResult] or [AsyncQueryResult]
+class QueryResultBuilder<T> extends StatedBuilder<T> {
+  /// Consume [AsyncQueryResult]
   ///
-  /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
-  /// * [waitingBuilder] - Builder to be used when [WorkingState] is given.
-  /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
-  /// * [builder] - Builder to be used when [DoneValueState] or [IdleValueState] is given.
+  /// * [idleBuilder] - Builder to be used when [AsyncQueryResult.idle] is given.
+  /// * [presetBuilder] - Optional builder to be used [AsyncQueryResult.preset] is given.
+  /// * [workingBuilder] - Builder to be used when [AsyncQueryResult.working] is given.
+  /// * [failedBuilder] - Builder to be used when [AsyncQueryResult.failed] is given.
+  /// * [completedBuilder] - Builder to be used when [AsyncQueryResult.completed] is given.
   ///
-  /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
-  /// if not given default builder provided by [DefaultPendingResultBuilder],
-  /// [DefaultWaitingResultBuilder], [DefaultFailedResultBuilder] or global default
-  /// builders will be used.
-  ///
-  /// To consume [QueryResult],
-  /// use [QueryResultBuilder.sync] instead.
+  /// To consume [ActionResult], use [ActionResultBuilder.sync].
   QueryResultBuilder({
     Key? key,
-    WidgetBuilder? pendingBuilder,
-    WidgetBuilder? waitingBuilder,
-    FailedResultBuilder? failedBuilder,
-    required this.builder,
-    required AsyncQueryResult<T> result,
+    required AsyncActionResult result,
+    Widget? child,
+    required TransitionBuilder idleBuilder,
+    ValueWidgetBuilder<T>? presetBuilder,
+    required TransitionBuilder workingBuilder,
+    required ValueWidgetBuilder<HasError> failedBuilder,
+    required ValueWidgetBuilder<T> completedBuilder,
   }) : super(
           key: key,
-          pendingBuilder: pendingBuilder,
-          waitingBuilder: waitingBuilder,
-          failedBuilder: failedBuilder,
-          result: result,
+          stated: result,
+          child: child,
+          idleBuilder: idleBuilder,
+          idleValueBuilder: presetBuilder,
+          workingBuilder: workingBuilder,
+          errorBuilder: failedBuilder,
+          doneValueBuilder: completedBuilder,
         );
 
-  /// Build UI with [QueryResult]
+  /// Consume [ActionResult]
   ///
-  /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
-  /// * [waitingBuilder] - Builder to be used when [WorkingState] is given.
-  /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
-  /// * [builder] - Builder to be used when [DoneValueState] or [IdleValueState] is given.
-  ///
-  /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
-  /// if not given default builder provided by [DefaultPendingResultBuilder],
-  /// [DefaultWaitingResultBuilder], [DefaultFailedResultBuilder] or global default
-  /// builders will be used.
+  /// * [failedBuilder] - Builder to be used when [ActionResult.failed] is given.
+  /// * [doneBuilder] - Builder to be used when [ActionResult.completed] is given.
   QueryResultBuilder.sync({
     Key? key,
-    FailedResultBuilder? failedBuilder,
-    required ValueResultBuilder<T> builder,
-    required QueryResult<T> result,
-  }) : this(
+    required ActionResult result,
+    Widget? child,
+    required ValueWidgetBuilder<HasError> failedBuilder,
+    required ValueWidgetBuilder<T> completedBuilder,
+  }) : super(
           key: key,
-          failedBuilder: failedBuilder,
-          builder: builder,
-          result: AsyncQueryResult<T>.from(result),
+          stated: result,
+          child: child,
+          errorBuilder: failedBuilder,
+          doneValueBuilder: completedBuilder,
         );
-
-  @override
-  Widget buildData(BuildContext context) =>
-      builder(context, result.asValue<T>());
 }

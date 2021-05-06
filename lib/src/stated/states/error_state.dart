@@ -6,14 +6,16 @@ import '../stated.dart';
 ///
 /// * [error] : exception or error object
 /// * [stackTrace] : optional stack trace associated with error
-abstract class ErrorState with Stated implements HasError {
+class ErrorState with Stated implements HasError {
   /// Error or exception
   final Object error;
 
   /// Stack trace of the error
   final StackTrace? stackTrace;
 
-  const ErrorState(this.error, this.stackTrace);
+  const ErrorState(this.error, [this.stackTrace]);
+  ErrorState.fromError(HasError errorInfo)
+      : this(errorInfo.error, errorInfo.stackTrace);
 
   @override
   bool operator ==(dynamic other) =>

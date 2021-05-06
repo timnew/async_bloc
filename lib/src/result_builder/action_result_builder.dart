@@ -1,70 +1,50 @@
 import 'package:flutter/widgets.dart';
-
+import 'package:stated_result/stated_builder.dart';
 import 'package:stated_result/stated_result.dart';
 
-import 'stated_result_builder_base.dart';
-import 'default_waiting_result_builder.dart';
-import 'default_failed_result_builder.dart';
-import 'default_pending_result_builder.dart';
-import 'widget_builders.dart';
-
-/// Widget that builds UI according to the state of [AsyncActionResult] or [ActionResult]
-class ActionResultBuilder extends StatedResultBuilderBase<AsyncActionResult> {
-  /// Builder to be used when [DoneState] is given.
-  final WidgetBuilder builder;
-
-  /// Build UI with [AsyncActionResult]
+/// Widget that builds itself based on the value of [ActionResult] or [AsyncActionResult]
+class ActionResultBuilder extends StatedBuilder<Never> {
+  /// Consume [AsyncActionResult]
   ///
-  /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
-  /// * [waitingBuilder] - Builder to be used when [WorkingState] is given.
-  /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
-  /// * [builder] - Builder to be used when [DoneState] is given.
+  /// * [idleBuilder] - Builder to be used when [AsyncActionResult.idle] is given.
+  /// * [workingBuilder] - Builder to be used when [AsyncActionResult.working] is given.
+  /// * [failedBuilder] - Builder to be used when [AsyncActionResult.failed] is given.
+  /// * [completedBuilder] - Builder to be used when [AsyncActionResult.completed] is given.
   ///
-  /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
-  /// if not given default builder provided by [DefaultPendingResultBuilder],
-  /// [DefaultWaitingResultBuilder], [DefaultFailedResultBuilder] or global default
-  /// builders will be used.
-  ///
-  /// To consume [ActionResult] instead of [AsyncActionResult],
-  /// use [ActionResultBuilder.sync] instead.
+  /// To consume [ActionResult], use [ActionResultBuilder.sync].
   ActionResultBuilder({
     Key? key,
-    WidgetBuilder? pendingBuilder,
-    WidgetBuilder? waitingBuilder,
-    FailedResultBuilder? failedBuilder,
-    required this.builder,
     required AsyncActionResult result,
+    Widget? child,
+    required TransitionBuilder idleBuilder,
+    required TransitionBuilder workingBuilder,
+    required ValueWidgetBuilder<HasError> failedBuilder,
+    required TransitionBuilder completedBuilder,
   }) : super(
           key: key,
-          pendingBuilder: pendingBuilder,
-          waitingBuilder: waitingBuilder,
-          failedBuilder: failedBuilder,
-          result: result,
+          stated: result,
+          child: child,
+          idleBuilder: idleBuilder,
+          workingBuilder: workingBuilder,
+          errorBuilder: failedBuilder,
+          doneBuilder: completedBuilder,
         );
 
-  /// Build UI with [ActionResult]
+  /// Consume [ActionResult]
   ///
-  /// * [pendingBuilder] - Builder to be used when [IdleState] is given.
-  /// * [waitingBuilder] - Builder to be used when [WorkingState] is given.
-  /// * [failedBuilder] - Builder to be used when [ErrorState] is given.
-  /// * [builder] - Builder to be used when [DoneState] is given.
-  ///
-  /// [pendingBuilder], [waitingBuilder], [failedBuilder] are optional,
-  /// if not given default builder provided by [DefaultPendingResultBuilder],
-  /// [DefaultWaitingResultBuilder], [DefaultFailedResultBuilder] or global default
-  /// builders will be used.
+  /// * [failedBuilder] - Builder to be used when [ActionResult.failed] is given.
+  /// * [completedBuilder] - Builder to be used when [ActionResult.completed] is given.
   ActionResultBuilder.sync({
     Key? key,
-    FailedResultBuilder? failedBuilder,
-    required WidgetBuilder builder,
     required ActionResult result,
-  }) : this(
+    Widget? child,
+    required ValueWidgetBuilder<HasError> failedBuilder,
+    required TransitionBuilder completedBuilder,
+  }) : super(
           key: key,
-          failedBuilder: failedBuilder,
-          builder: builder,
-          result: AsyncActionResult.from(result),
+          stated: result,
+          child: child,
+          errorBuilder: failedBuilder,
+          doneBuilder: completedBuilder,
         );
-
-  @override
-  Widget buildData(BuildContext context) => builder(context);
 }

@@ -1,5 +1,4 @@
 import 'package:stated_result/stated.dart';
-import 'package:stated_result/internal.dart';
 
 import 'action_result.dart';
 import 'query_result.dart';

@@ -77,8 +77,8 @@ void main() {
           WidgetTester tester, AsyncActionResult result) async {
         await tester.pumpWidgetOnScaffold(
           ActionResultBuilder(
-            pendingBuilder: (_) => PendingBeacon(),
-            waitingBuilder: (_) => WaitingBeacon(),
+            idleBuilder: (_) => PendingBeacon(),
+            workingBuilder: (_) => WaitingBeacon(),
             failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
             builder: (_) => ContentBeacon(null),
             result: result,

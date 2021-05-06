@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.3.0]
+## [1.0.0-preview.1]
 
 * Moved results into `stated` library.
 * Renamed `ErrorWithStack` to `HasError`
@@ -12,7 +12,6 @@
 * Renamed `StatedResult.asValueResult` to `StatedResult.asValue`, and returns value directly
 
 * `QueryResult.succeeded` and `AsyncQueryResult.succeeded` are renamed to `completed`.
-
 
 * Added `ErrorValueResult`
 * Added `stated_value` library with `StatedValue` and `StatedValueBloc`

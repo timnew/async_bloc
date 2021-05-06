@@ -21,8 +21,8 @@ class ActionBlocConsumer<B extends BlocBase<AsyncActionResult>>
           bloc: bloc,
           builder: (context, result) => ActionResultBuilder(
             result: result,
-            pendingBuilder: pendingBuilder,
-            waitingBuilder: waitingBuilder,
+            idleBuilder: pendingBuilder,
+            workingBuilder: waitingBuilder,
             failedBuilder: failedBuilder,
             builder: builder,
           ),
