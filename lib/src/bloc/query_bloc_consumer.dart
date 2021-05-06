@@ -1,30 +1,32 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../stated_result.dart';
-import '../../stated_result_builder.dart';
+import 'package:stated_result/stated_result_builder.dart';
 
 class QueryBlocConsumer<B extends BlocBase<AsyncQueryResult<T>>, T>
     extends BlocConsumer<B, AsyncQueryResult<T>> {
   QueryBlocConsumer({
     Key? key,
-    WidgetBuilder? pendingBuilder,
-    WidgetBuilder? waitingBuilder,
-    FailedResultBuilder? failedBuilder,
-    required final ValueResultBuilder<T> builder,
-    required BlocWidgetListener<AsyncQueryResult<T>> listener,
     B? bloc,
+    Widget? child,
+    required TransitionBuilder? idleBuilder,
+    ValueWidgetBuilder<T>? presetBuilder,
+    required TransitionBuilder workingBuilder,
+    required ValueWidgetBuilder<HasError> failedBuilder,
+    required ValueWidgetBuilder<T> completedBuilder,
     BlocBuilderCondition<AsyncQueryResult<T>>? buildWhen,
+    required BlocWidgetListener<AsyncQueryResult<T>> listener,
     BlocBuilderCondition<AsyncQueryResult<T>>? listenWhen,
   }) : super(
           key: key,
           bloc: bloc,
-          builder: (context, result) => QueryResultBuilder(
+          builder: (context, result) => QueryResultBuilder<T>(
             result: result,
-            pendingBuilder: pendingBuilder,
-            waitingBuilder: waitingBuilder,
+            child: child,
+            idleBuilder: idleBuilder ?? workingBuilder,
+            presetBuilder: presetBuilder ?? completedBuilder,
+            workingBuilder: workingBuilder,
             failedBuilder: failedBuilder,
-            builder: builder,
+            completedBuilder: completedBuilder,
           ),
           buildWhen: buildWhen,
           listener: listener,

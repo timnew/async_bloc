@@ -15,7 +15,7 @@ class QueryResultBuilder<T> extends StatedBuilder<T> {
   /// To consume [ActionResult], use [ActionResultBuilder.sync].
   QueryResultBuilder({
     Key? key,
-    required AsyncActionResult result,
+    required AsyncQueryResult<T> result,
     Widget? child,
     required TransitionBuilder idleBuilder,
     ValueWidgetBuilder<T>? presetBuilder,
@@ -39,7 +39,7 @@ class QueryResultBuilder<T> extends StatedBuilder<T> {
   /// * [doneBuilder] - Builder to be used when [ActionResult.completed] is given.
   QueryResultBuilder.sync({
     Key? key,
-    required ActionResult result,
+    required QueryResult<T> result,
     Widget? child,
     required ValueWidgetBuilder<HasError> failedBuilder,
     required ValueWidgetBuilder<T> completedBuilder,

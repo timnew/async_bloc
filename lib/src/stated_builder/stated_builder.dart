@@ -4,6 +4,7 @@ import 'package:stated_result/stated.dart';
 class StatedBuilder<T> extends StatelessWidget {
   final Stated stated;
   final Widget? child;
+  final ValueWidgetBuilder<T>? valueBuilder;
   final ValueWidgetBuilder<T>? idleValueBuilder;
   final TransitionBuilder? idleBuilder;
   final ValueWidgetBuilder<T>? workingValueBuilder;
@@ -17,6 +18,7 @@ class StatedBuilder<T> extends StatelessWidget {
     Key? key,
     required this.stated,
     this.child,
+    this.valueBuilder,
     this.idleValueBuilder,
     this.idleBuilder,
     this.workingValueBuilder,
@@ -29,34 +31,59 @@ class StatedBuilder<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final prebuiltChild = _prebuild(context);
+
     if (stated is IdleValueState && idleValueBuilder != null) {
-      return idleValueBuilder!(context, stated.asValue(), child);
+      return idleValueBuilder!(context, stated.asValue(), prebuiltChild);
     }
     if (stated.isIdle) {
-      return _ensure(idleBuilder)(context, child);
+      return ensureBuilder(idleBuilder)(context, prebuiltChild);
     }
     if (stated is WorkingValueState && workingValueBuilder != null) {
-      return workingValueBuilder!(context, stated.asValue(), child);
+      return workingValueBuilder!(context, stated.asValue(), prebuiltChild);
     }
     if (stated.isWorking) {
-      return _ensure(workingBuilder)(context, child);
+      return ensureBuilder(workingBuilder)(context, prebuiltChild);
     }
     if (stated is DoneValueState && doneValueBuilder != null) {
-      return doneValueBuilder!(context, stated.asValue(), child);
+      return doneValueBuilder!(context, stated.asValue(), prebuiltChild);
     }
     if (stated.isSucceeded) {
-      return _ensure(doneBuilder)(context, child);
+      return ensureBuilder(doneBuilder)(context, prebuiltChild);
     }
     if (stated is ErrorValueState && errorValueBuilder != null) {
-      return errorValueBuilder!(context, stated as ErrorValueState<T>, child);
+      return errorValueBuilder!(
+        context,
+        stated as ErrorValueState<T>,
+        prebuiltChild,
+      );
     }
     if (stated.isFailed) {
-      return _ensure(errorBuilder)(context, stated.asError(), child);
+      return ensureBuilder(errorBuilder)(
+        context,
+        stated.asError(),
+        prebuiltChild,
+      );
     }
-    throwNoBuilderError();
+
+    return onBuilderNotFound(context, stated, prebuiltChild);
   }
 
-  TB _ensure<TB>(TB? builder) => builder ?? throwNoBuilderError();
+  Widget? _prebuild(BuildContext context) => stated.hasValue
+      ? valueBuilder?.call(context, stated.asValue(), child) ?? child
+      : child;
 
-  Never throwNoBuilderError() => throw StateError("No builder for $stated");
+  @protected
+  TB ensureBuilder<TB>(TB? builder) => builder ?? cannotBuild();
+
+  @protected
+  Never cannotBuild() => throw StateError("No builder for $stated");
+
+  @protected
+  Widget onBuilderNotFound(
+    BuildContext context,
+    Stated stated,
+    Widget? prebuiltChild,
+  ) =>
+      cannotBuild();
 }
