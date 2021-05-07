@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 /// Fuction returns `true` if `value` is empty
-typedef bool EmptyChekcer<T>(T value);
+typedef bool EmptyChecker<T>(T value);
 
 /// A builder widget invoke different builder based on whether value is empty or not.
 ///
@@ -14,8 +14,8 @@ class EmptySafeBuilder<T> extends StatelessWidget {
   /// Prebuild child widget
   final Widget? child;
 
-  /// Function used to determine whether [content] is empty or not
-  final EmptyChekcer<T> emptyChecker;
+  /// Function returns `true` when [content] is empty
+  final EmptyChecker<T> emptyChecker;
 
   /// Builder to be used when [content] is empty
   final TransitionBuilder emptyBuilder;
@@ -36,7 +36,7 @@ class EmptySafeBuilder<T> extends StatelessWidget {
   EmptySafeBuilder({
     Key? key,
     required this.content,
-    EmptyChekcer<T>? emptyChecker,
+    EmptyChecker<T>? emptyChecker,
     this.child,
     TransitionBuilder? emptyBuilder,
     required this.builder,
@@ -54,7 +54,7 @@ class EmptySafeBuilder<T> extends StatelessWidget {
 
   /// Default empty checker.
   /// It supports [Iterable],[Map] or [String].
-  /// Otherwise, [UnsupportedError] is thrown.
+  /// Otherwise, anything not null is considere as not empty
   static bool defaultEmptyChecker(dynamic content) {
     if (content is Iterable) {
       return content.isEmpty;
