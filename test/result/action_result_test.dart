@@ -2,13 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_result.dart';
 
 import '../custom_matchers.dart';
+import '../states.dart';
 
 void main() {
   group("ActionResult", () {
-    final value = "value";
-    final error = "error";
-    final stackTrace = StackTrace.empty;
-
     group(".completed", () {
       final result = ActionResult.completed();
 
@@ -61,15 +58,6 @@ void main() {
     });
 
     group(".from", () {
-      final idle = IdleState();
-      final idleValue = IdleValueState(value);
-      final working = WorkingState();
-      final workingValue = WorkingValueState(value);
-      final failed = ErrorState(error, stackTrace);
-      final failedValue = ErrorValueState(value, error, stackTrace);
-      final done = DoneState();
-      final doneValue = DoneValueState(value);
-
       test("idle", () {
         expect(() => ActionResult.from(idle), throwsUnsupportedError);
       });
@@ -86,19 +74,19 @@ void main() {
         expect(() => ActionResult.from(workingValue), throwsUnsupportedError);
       });
 
-      test("failed", () {
-        final result = ActionResult.from(failed);
+      test("error", () {
+        final result = ActionResult.from(error);
         expect(result, isInstanceOf<ActionResult>());
         expect(result, isInstanceOf<ErrorState>());
-        expect(result, ActionResult.failed(error, stackTrace));
+        expect(result, ActionResult.failed(exception, stackTrace));
       });
 
-      test("failedValue", () {
-        final result = ActionResult.from(failedValue);
+      test("errorValue", () {
+        final result = ActionResult.from(errorValue);
 
         expect(result, isInstanceOf<ActionResult>());
         expect(result, isInstanceOf<ErrorState>());
-        expect(result, ActionResult.failed(error, stackTrace));
+        expect(result, ActionResult.failed(exception, stackTrace));
       });
 
       test("done", () {
@@ -116,9 +104,6 @@ void main() {
   });
 
   group("ActionResultFutureExtension", () {
-    final value = "value";
-    final error = "error";
-
     group(".asActionResult()", () {
       group("Future<T>", () {
         test("runs", () async {
@@ -128,10 +113,10 @@ void main() {
         });
 
         test("yields error", () async {
-          final result = await Future.error(error).asActionResult();
+          final result = await Future.error(exception).asActionResult();
           expect(result, isInstanceOf<ActionResult>());
           expect(result, isInstanceOf<ErrorState>());
-          expect(result.asError().error, error);
+          expect(result.asError().error, exception);
         });
       });
 
@@ -201,7 +186,7 @@ void main() {
         });
 
         test("yields ErrorState", () async {
-          final future = Future.value(ErrorState(error));
+          final future = Future.value(ErrorState(exception));
 
           await expectLater(
             future.asActionResult(),
@@ -215,12 +200,12 @@ void main() {
 
           await expectLater(
             future.asActionResult(),
-            completion(WithError(error)),
+            completion(WithError(exception)),
           );
         });
 
         test("yields ErrorValueState", () async {
-          final future = Future.value(ErrorValueState(value, error));
+          final future = Future.value(ErrorValueState(value, exception));
 
           await expectLater(
             future.asActionResult(),
@@ -234,7 +219,7 @@ void main() {
 
           await expectLater(
             future.asActionResult(),
-            completion(WithError(error)),
+            completion(WithError(exception)),
           );
         });
       });

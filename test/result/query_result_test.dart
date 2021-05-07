@@ -2,13 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_result.dart';
 
 import '../custom_matchers.dart';
+import '../states.dart';
 
 void main() {
   group("QueryResult", () {
-    const value = "value";
-    final error = "error";
-    final stackTrace = StackTrace.empty;
-
     group("default constructor", () {
       final result = const QueryResult(value);
 
@@ -51,7 +48,7 @@ void main() {
     });
 
     group(".failed", () {
-      final result = QueryResult<String>.failed(error, stackTrace);
+      final result = QueryResult<String>.failed(exception, stackTrace);
 
       test('should be a QueryResult<String>', () {
         expect(result, isInstanceOf<QueryResult<String>>());
@@ -69,32 +66,19 @@ void main() {
         expect(result.isFailed, isTrue);
         expect(result.hasValue, isFalse);
         expect(result.hasError, isTrue);
-        expect(result.asError(), WithError(error));
+        expect(result.asError(), WithError(exception));
         expect(result.asError(), WithStackTrace(stackTrace));
       });
 
       test('can create result without stacktrace', () {
-        final result = QueryResult.failed(error);
+        final result = QueryResult.failed(exception);
 
-        expect(result, WithError(error));
+        expect(result, WithError(exception));
         expect(result, WithStackTrace(isNull));
       });
     });
 
     group(".from", () {
-      final value = "value";
-      final error = "error";
-      final stackTrace = StackTrace.empty;
-
-      final idle = IdleState();
-      final idleValue = IdleValueState(value);
-      final working = WorkingState();
-      final workingValue = WorkingValueState(value);
-      final failed = ErrorState(error, stackTrace);
-      final failedValue = ErrorValueState(value, error, stackTrace);
-      final done = DoneState();
-      final doneValue = DoneValueState(value);
-
       test("idle", () {
         expect(() => QueryResult<String>.from(idle), throwsUnsupportedError);
       });
@@ -118,17 +102,17 @@ void main() {
       });
 
       test("error", () {
-        final result = QueryResult<String>.from(failed);
+        final result = QueryResult<String>.from(error);
         expect(result, isInstanceOf<QueryResult<String>>());
         expect(result, isInstanceOf<ErrorState>());
-        expect(result, QueryResult.failed(error, stackTrace));
+        expect(result, QueryResult.failed(exception, stackTrace));
       });
 
       test("errorValue", () {
-        final result = QueryResult<String>.from(failedValue);
+        final result = QueryResult<String>.from(errorValue);
         expect(result, isInstanceOf<QueryResult<String>>());
         expect(result, isInstanceOf<ErrorState>());
-        expect(result, QueryResult.failed(error, stackTrace));
+        expect(result, QueryResult.failed(exception, stackTrace));
       });
 
       test("done", () {
