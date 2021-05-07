@@ -5,8 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_result_bloc.dart';
 import 'package:test_beacon/test_beacon.dart';
 
-import '../custom_matchers.dart';
-
 typedef Widget BuildWidget(QueryCubit<String> bloc);
 
 void main() {
