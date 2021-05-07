@@ -20,7 +20,7 @@ class QueryResultBuilder<T> extends StatedBuilder<T> {
     required TransitionBuilder idleBuilder,
     ValueWidgetBuilder<T>? presetBuilder,
     required TransitionBuilder workingBuilder,
-    required ValueWidgetBuilder<HasError> failedBuilder,
+    required ValueWidgetBuilder<ErrorInfo> failedBuilder,
     required ValueWidgetBuilder<T> completedBuilder,
   }) : super(
           key: key,
@@ -41,7 +41,7 @@ class QueryResultBuilder<T> extends StatedBuilder<T> {
     Key? key,
     required QueryResult<T> result,
     Widget? child,
-    required ValueWidgetBuilder<HasError> failedBuilder,
+    required ValueWidgetBuilder<ErrorInfo> failedBuilder,
     required ValueWidgetBuilder<T> completedBuilder,
   }) : super(
           key: key,

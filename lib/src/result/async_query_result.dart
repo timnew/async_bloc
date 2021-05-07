@@ -47,7 +47,7 @@ abstract class AsyncQueryResult<T> implements Stated {
   ]) = _Failed;
 
   /// creates an [AsyncQueryResult] in [ErrorState] from [errorInfo]
-  factory AsyncQueryResult.fromError(HasError errorInfo) = _Failed.fromError;
+  factory AsyncQueryResult.fromError(ErrorInfo errorInfo) = _Failed.fromError;
 
   /// creates an [AsyncQueryResult] from [value].
   /// If `value` is `null`, [IdleState] is created
@@ -85,7 +85,7 @@ abstract class AsyncQueryResult<T> implements Stated {
     ValueTransformer<HasValue<T>, TR>? preset,
     required StateTransformer<TR> working,
     required ValueTransformer<HasValue<T>, TR> completed,
-    required ValueTransformer<HasError, TR> failed,
+    required ValueTransformer<ErrorInfo, TR> failed,
   }) {
     if (this is _Idle) return idle();
     if (this is _Preset) {
@@ -128,6 +128,6 @@ class _Failed<T> extends ErrorState with AsyncQueryResult<T> {
   const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
 
-  _Failed.fromError(HasError errorInfo)
+  _Failed.fromError(ErrorInfo errorInfo)
       : this(errorInfo.error, errorInfo.stackTrace);
 }

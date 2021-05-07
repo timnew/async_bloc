@@ -18,7 +18,7 @@ class ActionResultBuilder extends StatedBuilder<Never> {
     Widget? child,
     required TransitionBuilder idleBuilder,
     required TransitionBuilder workingBuilder,
-    required ValueWidgetBuilder<HasError> failedBuilder,
+    required ValueWidgetBuilder<ErrorInfo> failedBuilder,
     required TransitionBuilder completedBuilder,
   }) : super(
           key: key,
@@ -38,7 +38,7 @@ class ActionResultBuilder extends StatedBuilder<Never> {
     Key? key,
     required ActionResult result,
     Widget? child,
-    required ValueWidgetBuilder<HasError> failedBuilder,
+    required ValueWidgetBuilder<ErrorInfo> failedBuilder,
     required TransitionBuilder completedBuilder,
   }) : super(
           key: key,

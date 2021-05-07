@@ -11,7 +11,7 @@ class QueryBlocBuilder<B extends BlocBase<AsyncQueryResult<T>>, T>
     required TransitionBuilder? idleBuilder,
     ValueWidgetBuilder<T>? presetBuilder,
     required TransitionBuilder workingBuilder,
-    required ValueWidgetBuilder<HasError> failedBuilder,
+    required ValueWidgetBuilder<ErrorInfo> failedBuilder,
     required ValueWidgetBuilder<T> completedBuilder,
     BlocBuilderCondition<AsyncQueryResult<T>>? buildWhen,
   }) : super(

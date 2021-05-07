@@ -1,7 +1,7 @@
-import '../../stated.dart';
+import '../stated.dart';
 
 /// Base class for state without any field
-abstract class UnitStateBase<SELF extends Stated> with Stated {
+abstract class UnitStateBase<SELF> with Stated {
   const UnitStateBase();
 
   @override

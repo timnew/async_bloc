@@ -6,7 +6,7 @@ class WithError extends CustomMatcher {
       : super("HasError with error that is", "error", matcher);
 
   @override
-  Object? featureValueOf(actual) => (actual as HasError).error;
+  Object? featureValueOf(actual) => (actual as ErrorInfo).error;
 }
 
 class WithStackTrace extends CustomMatcher {
@@ -14,5 +14,5 @@ class WithStackTrace extends CustomMatcher {
       : super("HasError with stackTrace that is", "stackTrace", matcher);
 
   @override
-  Object? featureValueOf(actual) => (actual as HasError).stackTrace;
+  Object? featureValueOf(actual) => (actual as ErrorInfo).stackTrace;
 }

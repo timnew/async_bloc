@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stated_result/src/stated/states/base/unit_state_base.dart';
+import 'package:stated_result/src/stated/base/unit_state_base.dart';
 import 'package:stated_result/stated_result.dart';
 
 class TestResult extends DoneState {

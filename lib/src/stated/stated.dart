@@ -1,12 +1,12 @@
-import 'package:stated_result/src/stated/states/working_value_state.dart';
+import 'package:stated_result/src/stated/working_value_state.dart';
 import 'package:stated_result/stated_result.dart';
 
-import 'states/working_state.dart';
-import 'states/done_state.dart';
-import 'states/idle_value_state.dart';
-import 'states/error_state.dart';
-import 'states/idle_state.dart';
-import 'states/done_value_state.dart';
+import 'working_state.dart';
+import 'done_state.dart';
+import 'idle_value_state.dart';
+import 'error_state.dart';
+import 'idle_state.dart';
+import 'done_value_state.dart';
 
 /// Beaviour to find out the type's state
 mixin Stated {
@@ -32,10 +32,10 @@ mixin Stated {
   T asValue<T>() => (this as HasValue<T>).value;
 
   /// Return true if it has error info
-  bool get hasError => this is HasError;
+  bool get hasError => this is ErrorInfo;
 
   /// Extract error info
-  HasError asError() => this as HasError;
+  ErrorInfo asError() => this as ErrorInfo;
 }
 
 /// Contract for state holds value
@@ -45,7 +45,7 @@ mixin HasValue<T> {
 }
 
 /// Contract for state holds error information
-mixin HasError {
+mixin ErrorInfo {
   /// the exception or error
   Object get error;
 
@@ -53,8 +53,8 @@ mixin HasError {
   StackTrace? get stackTrace;
 }
 
-/// Behaviours supported on type implemented contract [HasError]
-extension HasErrorExtension on HasError {
+/// Behaviours supported on type implemented contract [ErrorInfo]
+extension HasErrorExtension on ErrorInfo {
   /// Check whether [error] is an exception
   bool get isException => error is Exception;
 
@@ -68,8 +68,8 @@ extension HasErrorExtension on HasError {
   E asError<E extends Error>() => error as E;
 }
 
-/// Contract for state implements both [HasValue] and [HasError] contracts.
-mixin HasValueAndError<T> implements HasValue<T>, HasError {}
+/// Contract for state implements both [HasValue] and [ErrorInfo] contracts.
+mixin HasValueAndError<T> implements HasValue<T>, ErrorInfo {}
 
 // Transformer for state without value
 typedef TR StateTransformer<TR>();

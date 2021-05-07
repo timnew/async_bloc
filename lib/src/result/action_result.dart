@@ -28,7 +28,7 @@ abstract class ActionResult implements Stated {
       _Failed;
 
   /// creates an [ActionResult] in [ErrorState] from [errorInfo]
-  factory ActionResult.fromError(HasError errorInfo) = _Failed.fromError;
+  factory ActionResult.fromError(ErrorInfo errorInfo) = _Failed.fromError;
 
   /// Create [ActionResult] from other [Stated] types
   /// * [DoneValueState] or [DoneState] converts to [ActionResult.completed]
@@ -46,7 +46,7 @@ abstract class ActionResult implements Stated {
   /// [failed] is called with error and stackTrace if result is failed
   TR map<TR>({
     required StateTransformer<TR> completed,
-    required ValueTransformer<HasError, TR> failed,
+    required ValueTransformer<ErrorInfo, TR> failed,
   }) {
     if (this is _Completed) return completed();
     return failed(this.asError());
@@ -61,7 +61,7 @@ class _Failed extends ErrorState with ActionResult {
   const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
 
-  _Failed.fromError(HasError errorInfo)
+  _Failed.fromError(ErrorInfo errorInfo)
       : this(errorInfo.error, errorInfo.stackTrace);
 }
 

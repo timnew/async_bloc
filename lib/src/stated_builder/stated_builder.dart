@@ -12,7 +12,7 @@ class StatedBuilder<T> extends StatelessWidget {
   final ValueWidgetBuilder<T>? doneValueBuilder;
   final TransitionBuilder? doneBuilder;
   final ValueWidgetBuilder<HasValueAndError<T>>? errorValueBuilder;
-  final ValueWidgetBuilder<HasError>? errorBuilder;
+  final ValueWidgetBuilder<ErrorInfo>? errorBuilder;
 
   const StatedBuilder({
     Key? key,

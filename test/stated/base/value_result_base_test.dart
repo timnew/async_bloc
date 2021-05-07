@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/src/stated/stated.dart';
-import 'package:stated_result/src/stated/states/base/value_state_base.dart';
+import 'package:stated_result/src/stated/base/value_state_base.dart';
 import 'package:stated_result/stated_result.dart';
 
 class TestValueResult extends ValueStateBase<String, TestValueResult> {
@@ -81,10 +81,10 @@ void main() {
     });
 
     test("toString() should contains State name and value", () {
-      expect(TestResult(value1).toString(), "TestValueResult: value1");
-      expect(TestResult(value1).toString(), "TestValueResult: value1");
+      expect(TestResult(value1).toString(), "TestValueResult(value1)");
+      expect(TestResult(value1).toString(), "TestValueResult(value1)");
       expect(DifferentResult(value1).toString(),
-          "DifferentTestValueResult: value1");
+          "DifferentTestValueResult(value1)");
     });
   });
 }

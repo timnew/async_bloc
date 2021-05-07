@@ -1,12 +1,7 @@
 import 'package:collection/collection.dart';
+import 'package:stated_result/stated_value.dart';
 
-import '../stated.dart';
-
-/// State indicates the action is failed with error, and a value
-///
-/// * [error] : exception or error object
-/// * [stackTrace] : optional stack trace associated with error
-class ErrorValueState<T> with Stated implements HasValueAndError<T> {
+class ValueErrorStateBase<T, SELF extends HasValueAndError<T>> {
   /// Value holds of the state
   final T value;
 
@@ -16,24 +11,24 @@ class ErrorValueState<T> with Stated implements HasValueAndError<T> {
   /// Stack trace of the error
   final StackTrace? stackTrace;
 
-  const ErrorValueState(this.value, this.error, [this.stackTrace]);
+  const ValueErrorStateBase(this.value, this.error, [this.stackTrace]);
 
   @override
   bool operator ==(dynamic other) =>
       const IdentityEquality().equals(this, other) ||
-      (other is ErrorValueState<T> &&
+      (other is SELF &&
           const DeepCollectionEquality().equals(other.value, value) &&
           const IdentityEquality().equals(other.error, error) &&
           const IdentityEquality().equals(other.stackTrace, stackTrace));
 
   @override
   int get hashCode =>
-      (ErrorValueState).hashCode ^
+      (SELF).hashCode ^
       (T).hashCode ^
       const IdentityEquality().hash(error) ^
       const IdentityEquality().hash(stackTrace) ^
       const DeepCollectionEquality().hash(value);
 
   @override
-  String toString() => "FailedValueResult: $value\n$error";
+  String toString() => "$SELF($value)\n($error)";
 }

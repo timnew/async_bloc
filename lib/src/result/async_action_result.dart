@@ -38,7 +38,7 @@ abstract class AsyncActionResult implements Stated {
   ]) = _Failed;
 
   /// creates an [AsyncActionResult] in [ErrorState] from [errorInfo]
-  factory AsyncActionResult.fromError(HasError errorInfo) = _Failed.fromError;
+  factory AsyncActionResult.fromError(ErrorInfo errorInfo) = _Failed.fromError;
 
   /// Create [AsyncActionResult] from other [Stated] types
   /// * [IdleState] or [IdleValueState] converts to [AsyncActionResult.idle]
@@ -61,7 +61,7 @@ abstract class AsyncActionResult implements Stated {
     required StateTransformer<TR> idle,
     required StateTransformer<TR> working,
     required StateTransformer<TR> completed,
-    required ValueTransformer<HasError, TR> failed,
+    required ValueTransformer<ErrorInfo, TR> failed,
   }) {
     if (this is _Idle) return idle();
     if (this is _Working) return working();
@@ -96,6 +96,6 @@ class _Failed extends ErrorState with AsyncActionResult {
   const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
 
-  _Failed.fromError(HasError errorInfo)
+  _Failed.fromError(ErrorInfo errorInfo)
       : this(errorInfo.error, errorInfo.stackTrace);
 }

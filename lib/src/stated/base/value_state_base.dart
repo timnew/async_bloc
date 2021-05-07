@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 
-import '../../stated.dart';
+import '../stated.dart';
 
 /// Base class for state implements [HasValue] contract
 abstract class ValueStateBase<T, SELF extends HasValue<T>>
@@ -24,5 +24,5 @@ abstract class ValueStateBase<T, SELF extends HasValue<T>>
       const DeepCollectionEquality().hash(value);
 
   @override
-  String toString() => "$SELF: $value";
+  String toString() => "$SELF($value)";
 }

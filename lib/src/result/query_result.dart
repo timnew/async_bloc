@@ -27,7 +27,7 @@ abstract class QueryResult<T> implements Stated {
       _Failed;
 
   /// creates an [QueryResult] in [ErrorState] from [errorInfo]
-  factory QueryResult.fromError(HasError errorInfo) = _Failed.fromError;
+  factory QueryResult.fromError(ErrorInfo errorInfo) = _Failed.fromError;
 
   /// Create [QueryResult] from other [Stated] types
   /// * [DoneValueState] converts to [QueryResult.completed]
@@ -35,7 +35,7 @@ abstract class QueryResult<T> implements Stated {
   ///  Otherwise [UnsupportedError] is thrown
   factory QueryResult.from(Stated other) {
     if (other is DoneValueState<T>) return QueryResult.completed(other.value);
-    if (other is HasError) return QueryResult.fromError(other.asError());
+    if (other is ErrorInfo) return QueryResult.fromError(other.asError());
     throw UnsupportedError("$other in the state not supported by QueryResult");
   }
 
@@ -45,7 +45,7 @@ abstract class QueryResult<T> implements Stated {
   /// [failed] is called with error and stackTrace if result is failed
   TR map<TR>({
     required ValueTransformer<T, TR> completed,
-    required ValueTransformer<HasError, TR> failed,
+    required ValueTransformer<ErrorInfo, TR> failed,
   }) {
     if (this is _Completed) return completed(this.asValue());
     return failed(this.asError());
@@ -60,7 +60,7 @@ class _Failed<T> extends ErrorState with QueryResult<T> {
   const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
 
-  _Failed.fromError(HasError errorInfo)
+  _Failed.fromError(ErrorInfo errorInfo)
       : this(errorInfo.error, errorInfo.stackTrace);
 }
 

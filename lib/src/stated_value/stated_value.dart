@@ -36,7 +36,7 @@ abstract class StatedValue<T> implements Stated, HasValue<T> {
 
   TR consume<TR>({
     required ValueTransformer<T, TR> onValue,
-    required ValueTransformer<HasError, TR> onError,
+    required ValueTransformer<ErrorInfo, TR> onError,
   }) =>
       this.hasError ? onError(this.asError()) : onValue(this.value);
 }
