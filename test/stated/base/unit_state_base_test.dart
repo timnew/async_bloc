@@ -6,50 +6,64 @@ class StateA extends UnitStateBase<StateA> {
   const StateA();
 }
 
+class StateB extends UnitStateBase<StateB> {}
+
 mixin UnionX {}
 
 class UnionXStateA extends StateA with UnionX {
   UnionXStateA();
 }
 
+class UnionXStateB extends StateB with UnionX {
+  UnionXStateB();
+}
+
 mixin UnionY {}
 
-class UnionBState extends StateA with UnionY {
-  const UnionBState();
+class UnionYStateA extends StateA with UnionY {
+  const UnionYStateA();
 }
 
 void main() {
   group('UnitStateBase', () {
-    final stateA1 = UnionXStateA();
-    final stateA2 = UnionXStateA();
-    final stataB = const UnionBState();
+    final stateXA = UnionXStateA();
+    final stateYA = const UnionYStateA();
+    final stateXB = UnionXStateB();
 
     test("instances of same UnionState should equal to each other", () {
-      expect(stateA1, isNot(same(stateA2)));
+      final stateA_ = UnionXStateA();
 
-      expect(stateA1, stateA2);
-      expect(stateA1.hashCode, stateA2.hashCode);
+      expect(stateXA, isNot(same(stateA_)));
+
+      expect(stateXA, stateA_);
+      expect(stateXA.hashCode, stateA_.hashCode);
     });
 
     test(
         "instance of the same state should equal to each other even if they are from different union",
         () {
-      expect(stateA1, stataB);
-      expect(stateA1.hashCode, stataB.hashCode);
+      expect(stateXA, stateYA);
+      expect(stateXA.hashCode, stateYA.hashCode);
+    });
+
+    test("instance of the different state should not equal", () {
+      expect(stateXA, isNot(stateXB));
+      expect(stateXA.hashCode, isNot(stateXB.hashCode));
     });
 
     test("union state type can have const constructor", () {
-      expect(stataB, same(const UnionBState()));
+      expect(stateYA, same(const UnionYStateA()));
     });
 
     test("instance should be Stated", () {
-      expect(stateA1, isInstanceOf<Stated>());
-      expect(stataB, isInstanceOf<Stated>());
+      expect(stateXA, isInstanceOf<Stated>());
+      expect(stateYA, isInstanceOf<Stated>());
     });
 
     test("toString() should get State name", () {
-      expect(stateA1.toString(), "TestState");
-      expect(stataB.toString(), "TestState");
+      expect(stateXA.toString(), "StateA");
+      expect(stateYA.toString(), "StateA");
+      expect(stateXB.toString(), "StateB");
     });
   });
 }

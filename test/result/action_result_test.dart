@@ -34,15 +34,15 @@ void main() {
       });
 
       test('should contain error and stack trace', () {
-        expect(result, HasError(error));
-        expect(result, HasStackTrace(stackTrace));
+        expect(result, WithError(error));
+        expect(result, WithStackTrace(stackTrace));
       });
 
       test('can create result without stacktrace', () {
         final result = ActionResult.failed(error);
 
-        expect(result, HasError(error));
-        expect(result, HasStackTrace(isNull));
+        expect(result, WithError(error));
+        expect(result, WithStackTrace(isNull));
       });
 
       test("should have correct states", () {
@@ -52,8 +52,8 @@ void main() {
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isTrue);
         expect(result.hasValue, isFalse);
-        expect(result.asError(), HasError(error));
-        expect(result.asError(), HasStackTrace(stackTrace));
+        expect(result.asError(), WithError(error));
+        expect(result.asError(), WithStackTrace(stackTrace));
       });
     });
 
@@ -200,7 +200,7 @@ void main() {
 
           await expectLater(
             future.asActionResult(),
-            completion(HasError(exception)),
+            completion(WithError(exception)),
           );
         });
 
@@ -219,7 +219,7 @@ void main() {
 
           await expectLater(
             future.asActionResult(),
-            completion(HasError(exception)),
+            completion(WithError(exception)),
           );
         });
       });

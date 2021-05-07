@@ -66,15 +66,15 @@ void main() {
         expect(result.isFailed, isTrue);
         expect(result.hasValue, isFalse);
         expect(result.hasError, isTrue);
-        expect(result.asError(), HasError(exception));
-        expect(result.asError(), HasStackTrace(stackTrace));
+        expect(result.asError(), WithError(exception));
+        expect(result.asError(), WithStackTrace(stackTrace));
       });
 
       test('can create result without stacktrace', () {
         final result = QueryResult.failed(exception);
 
-        expect(result, HasError(exception));
-        expect(result, HasStackTrace(isNull));
+        expect(result, WithError(exception));
+        expect(result, WithStackTrace(isNull));
       });
     });
 
@@ -146,7 +146,7 @@ void main() {
           completion(isInstanceOf<QueryResult<String>>()),
         );
         await expectLater(result, completion(isInstanceOf<ErrorState>()));
-        await expectLater(result, completion(HasError(error)));
+        await expectLater(result, completion(WithError(error)));
       });
 
       test("throws error", () async {
