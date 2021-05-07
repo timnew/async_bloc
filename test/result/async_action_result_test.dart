@@ -81,15 +81,15 @@ void main() {
         });
 
         test('should contain error and stack trace', () {
-          expect(result, WithError(exception));
-          expect(result, WithStackTrace(stackTrace));
+          expect(result, HasError(exception));
+          expect(result, HasStackTrace(stackTrace));
         });
 
         test('can create result without stacktrace', () {
           final result = AsyncActionResult.failed(exception);
 
-          expect(result, WithError(exception));
-          expect(result, WithStackTrace(isNull));
+          expect(result, HasError(exception));
+          expect(result, HasStackTrace(isNull));
         });
 
         test("should have correct states", () {
@@ -100,8 +100,8 @@ void main() {
           expect(result.isFailed, isTrue);
           expect(result.hasValue, isFalse);
           expect(result.hasError, isTrue);
-          expect(result.asError(), WithError(exception));
-          expect(result.asError(), WithStackTrace(stackTrace));
+          expect(result.asError(), HasError(exception));
+          expect(result.asError(), HasStackTrace(stackTrace));
         });
       });
 

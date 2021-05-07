@@ -53,21 +53,6 @@ mixin ErrorInfo {
   StackTrace? get stackTrace;
 }
 
-/// Behaviours supported on type implemented contract [ErrorInfo]
-extension HasErrorExtension on ErrorInfo {
-  /// Check whether [error] is an exception
-  bool get isException => error is Exception;
-
-  /// Convert [error] to a certain type of `Exception`
-  E asException<E extends Exception>() => error as E;
-
-  /// Check whether [error] is an error
-  bool get isError => error is Error;
-
-  /// Convert [error] to a certain type of `Error`
-  E asError<E extends Error>() => error as E;
-}
-
 /// Contract for state implements both [HasValue] and [ErrorInfo] contracts.
 mixin HasValueAndError<T> implements HasValue<T>, ErrorInfo {}
 
