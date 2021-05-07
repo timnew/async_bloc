@@ -14,7 +14,7 @@ class WorkingIndicatorBuilder extends StatelessWidget {
   final ValueWidgetBuilder<bool> builder;
 
   /// Invoke [builder] with boolean indicates whether [stated] is working or not
-  const WorkingIndicatorBuilder({
+  const WorkingIndicatorBuilder.custom({
     Key? key,
     required this.stated,
     required this.builder,
@@ -29,7 +29,7 @@ class WorkingIndicatorBuilder extends StatelessWidget {
     Duration duration = const Duration(microseconds: 100),
     Curve curve = Curves.easeInOut,
   }) =>
-      WorkingIndicatorBuilder(
+      WorkingIndicatorBuilder.custom(
         key: key,
         stated: stated,
         child: const CircularProgressIndicator(),
@@ -44,7 +44,7 @@ class WorkingIndicatorBuilder extends StatelessWidget {
     Duration duration = const Duration(microseconds: 100),
     Curve curve = Curves.easeInOut,
   }) =>
-      WorkingIndicatorBuilder(
+      WorkingIndicatorBuilder.custom(
         key: key,
         stated: stated,
         child: const LinearProgressIndicator(),
