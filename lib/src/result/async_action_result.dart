@@ -96,6 +96,5 @@ class _Failed extends ErrorState with AsyncActionResult {
   const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
 
-  _Failed.fromError(ErrorInfo errorInfo)
-      : this(errorInfo.error, errorInfo.stackTrace);
+  _Failed.fromError(ErrorInfo errorInfo) : super.fromError(errorInfo);
 }

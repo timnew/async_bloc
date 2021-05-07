@@ -60,8 +60,7 @@ class _Failed<T> extends ErrorState with QueryResult<T> {
   const _Failed(Object error, [StackTrace? stackTrace])
       : super(error, stackTrace);
 
-  _Failed.fromError(ErrorInfo errorInfo)
-      : this(errorInfo.error, errorInfo.stackTrace);
+  _Failed.fromError(ErrorInfo errorInfo) : super.fromError(errorInfo);
 }
 
 /// Provides extension methods on `Future<T>` for [QueryResult]
