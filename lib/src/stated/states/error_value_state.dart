@@ -16,7 +16,7 @@ class ErrorValueState<T> with Stated implements HasValueAndError<T> {
   /// Stack trace of the error
   final StackTrace? stackTrace;
 
-  const ErrorValueState(this.value, this.error, this.stackTrace);
+  const ErrorValueState(this.value, this.error, [this.stackTrace]);
 
   @override
   bool operator ==(dynamic other) =>
@@ -35,5 +35,5 @@ class ErrorValueState<T> with Stated implements HasValueAndError<T> {
       const DeepCollectionEquality().hash(value);
 
   @override
-  String toString() => "FailedValueResult: $value\n$error\n$stackTrace";
+  String toString() => "FailedValueResult: $value\n$error";
 }

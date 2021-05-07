@@ -1,115 +1,182 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_result.dart';
 
+import '../custom_matchers.dart';
+
 void main() {
   group("AsyncActionResult", () {
+    final value = "value";
     final error = "error";
+    final stackTrace = StackTrace.empty;
 
-    group("default constructor", () {
-      final result = AsyncActionResult();
+    group("factories", () {
+      group("default constructor", () {
+        final result = AsyncActionResult();
 
-      test('should be a PendingResult', () {
-        expect(result, isInstanceOf<IdleState>());
+        test('should be an IdleState', () {
+          expect(result, isInstanceOf<IdleState>());
+        });
+
+        test('should be constant', () {
+          expect(AsyncActionResult(), same(result));
+        });
+
+        test("should have correct states", () {
+          expect(result.isIdle, isTrue);
+          expect(result.isWorking, isFalse);
+          expect(result.isFinished, isFalse);
+          expect(result.isSucceeded, isFalse);
+          expect(result.isFailed, isFalse);
+          expect(result.hasValue, isFalse);
+          expect(result.hasError, isFalse);
+        });
       });
 
-      test('gives the same instance', () {
-        expect(AsyncActionResult(), same(result));
+      group(".working", () {
+        final result = AsyncActionResult.working();
+
+        test('should be a WorkingState', () {
+          expect(result, isInstanceOf<WorkingState>());
+        });
+
+        test('should be constant', () {
+          expect(AsyncActionResult.working(), same(result));
+        });
+
+        test("should have correct states", () {
+          expect(result.isIdle, isFalse);
+          expect(result.isWorking, isTrue);
+          expect(result.isFinished, isFalse);
+          expect(result.isSucceeded, isFalse);
+          expect(result.isFailed, isFalse);
+          expect(result.hasValue, isFalse);
+          expect(result.hasError, isFalse);
+        });
       });
 
-      test("should have correct states", () {
-        expect(result.isIdle, isTrue);
-        expect(result.isWorking, isFalse);
-        expect(result.isFinished, isFalse);
-        expect(result.isSucceeded, isFalse);
-        expect(result.isFailed, isFalse);
-        expect(result.hasValue, isFalse);
-      });
-    });
+      group(".completed", () {
+        final result = AsyncActionResult.completed();
 
-    group(".waiting", () {
-      final result = AsyncActionResult.working();
+        test('should be a CompletedResult', () {
+          expect(result, isInstanceOf<DoneState>());
+        });
 
-      test('should be a WaitingResult', () {
-        expect(result, isInstanceOf<WorkingState>());
-      });
+        test('should be constant', () {
+          expect(AsyncActionResult.completed(), same(result));
+        });
 
-      test('gives the same instance', () {
-        expect(AsyncActionResult.working(), same(result));
-      });
-
-      test("should have correct states", () {
-        expect(result.isIdle, isFalse);
-        expect(result.isWorking, isTrue);
-        expect(result.isFinished, isFalse);
-        expect(result.isSucceeded, isFalse);
-        expect(result.isFailed, isFalse);
-        expect(result.hasValue, isFalse);
-      });
-    });
-
-    group(".completed", () {
-      final result = AsyncActionResult.completed();
-
-      test('should be a CompletedResult', () {
-        expect(result, isInstanceOf<DoneState>());
+        test("should have correct states", () {
+          expect(result.isIdle, isFalse);
+          expect(result.isWorking, isFalse);
+          expect(result.isFinished, isTrue);
+          expect(result.isSucceeded, isTrue);
+          expect(result.isFailed, isFalse);
+          expect(result.hasValue, isFalse);
+          expect(result.hasError, isFalse);
+        });
       });
 
-      test('gives the same instance', () {
-        expect(AsyncActionResult.completed(), same(result));
+      group(".failed", () {
+        final result = AsyncActionResult.failed(error, stackTrace);
+
+        test('should be a FailedResult', () {
+          expect(result, isInstanceOf<ErrorState>());
+        });
+
+        test('should contain error and stack trace', () {
+          expect(result, WithError(error));
+          expect(result, WithStackTrace(stackTrace));
+        });
+
+        test('can create result without stacktrace', () {
+          final result = AsyncActionResult.failed(error);
+
+          expect(result, WithError(error));
+          expect(result, WithStackTrace(isNull));
+        });
+
+        test("should have correct states", () {
+          expect(result.isIdle, isFalse);
+          expect(result.isWorking, isFalse);
+          expect(result.isFinished, isTrue);
+          expect(result.isSucceeded, isFalse);
+          expect(result.isFailed, isTrue);
+          expect(result.hasValue, isFalse);
+          expect(result.hasError, isTrue);
+          expect(result.asError(), WithError(error));
+          expect(result.asError(), WithStackTrace(stackTrace));
+        });
       });
 
-      test("should have correct states", () {
-        expect(result.isIdle, isFalse);
-        expect(result.isWorking, isFalse);
-        expect(result.isFinished, isTrue);
-        expect(result.isSucceeded, isTrue);
-        expect(result.isFailed, isFalse);
-        expect(result.hasValue, isFalse);
-      });
-    });
+      group(".from", () {
+        final idle = IdleState();
+        final idleValue = IdleValueState(value);
+        final working = WorkingState();
+        final workingValue = WorkingValueState(value);
+        final failed = ErrorState(error, stackTrace);
+        final failedValue = ErrorValueState(value, error, stackTrace);
+        final done = DoneState();
+        final doneValue = DoneValueState(value);
 
-    group(".failed", () {
-      final error = Exception("test error");
-      final stackTrace = StackTrace.empty;
+        test("idle", () {
+          final result = AsyncActionResult.from(idle);
+          expect(result, isInstanceOf<AsyncActionResult>());
+          expect(result, isInstanceOf<IdleState>());
+        });
 
-      final result = AsyncActionResult.failed(error, stackTrace);
+        test("idleValue", () {
+          final result = AsyncActionResult.from(idleValue);
+          expect(result, isInstanceOf<AsyncActionResult>());
+          expect(result, isInstanceOf<IdleState>());
+        });
 
-      test('should be a FailedResult', () {
-        expect(result, isInstanceOf<ErrorState>());
-      });
+        test("working", () {
+          final result = AsyncActionResult.from(working);
+          expect(result, isInstanceOf<AsyncActionResult>());
+          expect(result, isInstanceOf<WorkingState>());
+        });
 
-      test('should contain error and stack trace', () {
-        final failed = result as ErrorState;
+        test("working", () {
+          final result = AsyncActionResult.from(workingValue);
+          expect(result, isInstanceOf<AsyncActionResult>());
+          expect(result, isInstanceOf<WorkingState>());
+        });
 
-        expect(failed.error, same(error));
-        expect(failed.stackTrace, same(stackTrace));
-      });
+        test("failed", () {
+          final result = AsyncActionResult.from(failed);
+          expect(result, isInstanceOf<AsyncActionResult>());
+          expect(result, isInstanceOf<ErrorState>());
+          expect(result, AsyncActionResult.failed(error, stackTrace));
+        });
 
-      test('can create result without stacktrace', () {
-        final failed = AsyncActionResult.failed(error) as ErrorState;
+        test("failedValue", () {
+          final result = AsyncActionResult.from(failedValue);
+          expect(result, isInstanceOf<AsyncActionResult>());
+          expect(result, isInstanceOf<ErrorState>());
+          expect(result, AsyncActionResult.failed(error, stackTrace));
+        });
 
-        expect(failed.error, same(error));
-        expect(failed.stackTrace, isNull);
-      });
-
-      test("should have correct states", () {
-        expect(result.isIdle, isFalse);
-        expect(result.isWorking, isFalse);
-        expect(result.isFinished, isTrue);
-        expect(result.isSucceeded, isFalse);
-        expect(result.isFailed, isTrue);
-        expect(result.hasValue, isFalse);
+        test("done", () {
+          final result = AsyncActionResult.from(done);
+          expect(result, isInstanceOf<AsyncActionResult>());
+          expect(result, isInstanceOf<DoneState>());
+        });
+        test("doneValue", () {
+          final result = AsyncActionResult.from(doneValue);
+          expect(result, isInstanceOf<AsyncActionResult>());
+          expect(result, isInstanceOf<DoneState>());
+        });
       });
     });
 
     group(".updateWith", () {
       test("should update value with completed", () async {
-        final initial = AsyncActionResult.pending();
+        final initial = AsyncActionResult.idle();
 
-        final future = Future.value(ActionResult.completed());
+        final future = Future<void>.value();
         final states = initial.updateWith(future);
 
-        expect(
+        await expectLater(
           states,
           emitsInOrder([
             AsyncActionResult.working(),
@@ -117,13 +184,77 @@ void main() {
           ]),
         );
       });
-      test("should update value with failed", () async {
-        final initial = AsyncActionResult.pending();
 
-        final future = Future.value(ActionResult.failed(error));
+      test("should update value with failed", () async {
+        final initial = AsyncActionResult.idle();
+
+        final future = Future<void>.error(error);
         final states = initial.updateWith(future);
 
-        expect(
+        await expectLater(
+          states,
+          emitsInOrder([
+            AsyncActionResult.working(),
+            predicate<AsyncActionResult>(
+              (s) => s.isFailed && s.asError().error == error,
+              "is error",
+            ),
+          ]),
+        );
+      });
+
+      test("should update value with DoneState", () async {
+        final initial = AsyncActionResult.idle();
+
+        final future = Future.value(DoneState());
+        final states = initial.updateWith(future);
+
+        await expectLater(
+          states,
+          emitsInOrder([
+            AsyncActionResult.working(),
+            AsyncActionResult.completed(),
+          ]),
+        );
+      });
+
+      test("should update value with DoneValueState", () async {
+        final initial = AsyncActionResult.idle();
+
+        final future = Future.value(DoneValueState("value"));
+        final states = initial.updateWith(future);
+
+        await expectLater(
+          states,
+          emitsInOrder([
+            AsyncActionResult.working(),
+            AsyncActionResult.completed(),
+          ]),
+        );
+      });
+
+      test("should update value with ErrorState", () async {
+        final initial = AsyncActionResult.idle();
+
+        final future = Future.value(ErrorState(error));
+        final states = initial.updateWith(future);
+
+        await expectLater(
+          states,
+          emitsInOrder([
+            AsyncActionResult.working(),
+            AsyncActionResult.failed(error),
+          ]),
+        );
+      });
+
+      test("should update value with ErrroValueState", () async {
+        final initial = AsyncActionResult.idle();
+
+        final future = Future.value(ErrorValueState("value", error, null));
+        final states = initial.updateWith(future);
+
+        await expectLater(
           states,
           emitsInOrder([
             AsyncActionResult.working(),

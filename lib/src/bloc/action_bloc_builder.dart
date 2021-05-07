@@ -8,7 +8,7 @@ class ActionBlocBuilder<B extends BlocBase<AsyncActionResult>>
     Key? key,
     B? bloc,
     Widget? child,
-    required TransitionBuilder? idelBuilder,
+    required TransitionBuilder? idleBuilder,
     required TransitionBuilder workingBuilder,
     required ValueWidgetBuilder<HasError> failedBuilder,
     required TransitionBuilder completedBuilder,
@@ -19,7 +19,7 @@ class ActionBlocBuilder<B extends BlocBase<AsyncActionResult>>
           builder: (context, result) => ActionResultBuilder(
             result: result,
             child: child,
-            idleBuilder: idelBuilder ?? workingBuilder,
+            idleBuilder: idleBuilder ?? workingBuilder,
             workingBuilder: workingBuilder,
             failedBuilder: failedBuilder,
             completedBuilder: completedBuilder,

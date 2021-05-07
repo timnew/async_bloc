@@ -31,5 +31,5 @@ class ErrorState with Stated implements HasError {
       const IdentityEquality().hash(stackTrace);
 
   @override
-  String toString() => "FailedResult: $error\n$stackTrace";
+  String toString() => "FailedResult: $error";
 }

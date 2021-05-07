@@ -2,42 +2,49 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stated_result/stated_result.dart';
 import 'package:stated_result/stated_result_bloc.dart';
-import 'package:stated_result/stated_result_builder.dart';
 import 'package:test_beacon/test_beacon.dart';
-
-import '../widget_tester/custom_matchers.dart';
-import '../widget_tester/widget_tester.dart';
-
-typedef Widget BuildWidget(ActionCubit bloc);
 
 void main() {
   group("ActionBlocBuilder", () {
     final error = "error";
+    final childBeacon = Beacon<String>();
 
-    void runTestSet(BuildWidget buildWidget) {
+    group("explicit builders", () {
+      Widget buildWidget(ActionCubit bloc) => ActionBlocBuilder(
+            bloc: bloc,
+            child: childBeacon,
+            idleBuilder: (_, child) => Beacon<IdleState>(child: child),
+            workingBuilder: (_, child) => Beacon<WorkingState>(child: child),
+            failedBuilder: (_, errorInfo, child) =>
+                ErrorBeacon(error: errorInfo.error, child: child),
+            completedBuilder: (BuildContext context, child) =>
+                ContentBeacon(child: child),
+          );
+
       group("building AsyncActionResult", () {
-        testWidgets(".pending", (WidgetTester tester) async {
-          final cubit = ActionCubit(AsyncActionResult.pending());
+        testWidgets(".idle", (WidgetTester tester) async {
+          final cubit = ActionCubit(AsyncActionResult.idle());
 
           await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
-          findPendingBeacon.shouldFindOne();
-          findWaitingBeacon.shouldFindNothing();
-          findErrorBeacon().shouldFindNothing();
-          findContentBeacon().shouldFindNothing();
+          find.beacon<IdleState>().shouldFindOne();
+          find.beacon<WorkingState>().shouldFindNothing();
+          find.errorBeacon().shouldFindNothing();
+          find.contentBeacon().shouldFindNothing();
+          find.beacon<String>().shouldFindOne();
         });
 
-        testWidgets(".waiting", (WidgetTester tester) async {
+        testWidgets(".working", (WidgetTester tester) async {
           final cubit = ActionCubit(AsyncActionResult.working());
 
           await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
-          findPendingBeacon.shouldFindNothing();
-          findWaitingBeacon.shouldFindOne();
-          findErrorBeacon().shouldFindNothing();
-          findContentBeacon().shouldFindNothing();
+          find.beacon<IdleState>().shouldFindNothing();
+          find.beacon<WorkingState>().shouldFindOne();
+          find.errorBeacon().shouldFindNothing();
+          find.contentBeacon().shouldFindNothing();
+          find.beacon<String>().shouldFindOne();
         });
 
         testWidgets(".failed", (WidgetTester tester) async {
@@ -45,10 +52,11 @@ void main() {
 
           await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
-          findPendingBeacon.shouldFindNothing();
-          findWaitingBeacon.shouldFindNothing();
-          findErrorBeacon(error).shouldFindOne();
-          findContentBeacon().shouldFindNothing();
+          find.beacon<IdleState>().shouldFindNothing();
+          find.beacon<WorkingState>().shouldFindNothing();
+          find.errorBeacon(error).shouldFindOne();
+          find.contentBeacon().shouldFindNothing();
+          find.beacon<String>().shouldFindOne();
         });
 
         testWidgets(".completed", (WidgetTester tester) async {
@@ -56,182 +64,108 @@ void main() {
 
           await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
-          findPendingBeacon.shouldFindNothing();
-          findWaitingBeacon.shouldFindNothing();
-          findErrorBeacon().shouldFindNothing();
-          findContentBeacon().shouldFindOne();
+          find.beacon<IdleState>().shouldFindNothing();
+          find.beacon<WorkingState>().shouldFindNothing();
+          find.errorBeacon().shouldFindNothing();
+          find.contentBeacon().shouldFindOne();
+          find.beacon<String>().shouldFindOne();
         });
       });
 
-      testWidgets("can be updated with succeeded", (WidgetTester tester) async {
-        final cubit = ActionCubit();
+      group("fallback builder", () {
+        testWidgets(
+            "idle builder should fallback to workingBuilder if not given",
+            (WidgetTester tester) async {
+          await tester.pumpWidgetOnScaffold(
+            ActionBlocBuilder<ActionCubit>(
+              bloc: ActionCubit(AsyncActionResult.idle()),
+              child: childBeacon,
+              idleBuilder: null,
+              workingBuilder: (_, child) => Beacon<WorkingState>(child: child),
+              failedBuilder: (_, errorInfo, child) =>
+                  ErrorBeacon(error: errorInfo.error, child: child),
+              completedBuilder: (BuildContext context, child) =>
+                  ContentBeacon(child: child),
+            ),
+          );
 
-        await tester.pumpWidgetOnScaffold(buildWidget(cubit));
-
-        findPendingBeacon.shouldFindOne();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindNothing();
-
-        final completer = Completer<ActionResult>();
-
-        final updatedResult = cubit.updateWith(completer.future);
-        await tester.pump();
-
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindOne();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindNothing();
-
-        completer.complete(ActionResult.completed());
-        await tester.pump(Duration.zero);
-        await expectLater(updatedResult, completion(ActionResult.completed()));
-
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindOne();
+          find.beacon<IdleState>().shouldFindNothing();
+          find.beacon<IdleValueState>().shouldFindNothing();
+          find.beacon<WorkingState>().shouldFindOne();
+          find.errorBeacon().shouldFindNothing();
+          find.contentBeacon().shouldFindNothing();
+          find.beacon<String>().shouldFindOne();
+        });
       });
+      group(".captureResult", () {
+        testWidgets("can capture future", (WidgetTester tester) async {
+          final cubit = ActionCubit();
 
-      testWidgets("can be updated with failed", (WidgetTester tester) async {
-        final cubit = ActionCubit();
+          await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
-        await tester.pumpWidgetOnScaffold(buildWidget(cubit));
+          find.beacon<IdleState>().shouldFindOne();
+          find.beacon<WorkingState>().shouldFindNothing();
+          find.errorBeacon().shouldFindNothing();
+          find.contentBeacon().shouldFindNothing();
+          find.beacon<String>().shouldFindOne();
 
-        findPendingBeacon.shouldFindOne();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindNothing();
+          final completer = Completer<String>();
 
-        final completer = Completer<ActionResult>();
+          final capturedResult = cubit.captureResult(completer.future);
+          await tester.pump();
 
-        final updatedResult = cubit.updateWith(completer.future);
-        await tester.pump();
+          find.beacon<IdleState>().shouldFindNothing();
+          find.beacon<WorkingState>().shouldFindOne();
+          find.errorBeacon().shouldFindNothing();
+          find.contentBeacon().shouldFindNothing();
+          find.beacon<String>().shouldFindOne();
 
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindOne();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindNothing();
+          final value = "value";
+          completer.complete(value);
+          await tester.pump(Duration.zero);
+          await expectLater(capturedResult, completes);
 
-        completer.complete(ActionResult.failed(error));
-        await tester.pump(Duration.zero);
-        await expectLater(updatedResult, completion(WithError(equals(error))));
+          find.beacon<IdleState>().shouldFindNothing();
+          find.beacon<WorkingState>().shouldFindNothing();
+          find.errorBeacon().shouldFindNothing();
+          find.contentBeacon().shouldFindOne();
+          find.beacon<String>().shouldFindOne();
+        });
 
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon(error).shouldFindOne();
-        findContentBeacon().shouldFindNothing();
+        testWidgets("can capture future with error",
+            (WidgetTester tester) async {
+          final cubit = ActionCubit();
+
+          await tester.pumpWidgetOnScaffold(buildWidget(cubit));
+
+          find.beacon<IdleState>().shouldFindOne();
+          find.beacon<WorkingState>().shouldFindNothing();
+          find.errorBeacon().shouldFindNothing();
+          find.contentBeacon().shouldFindNothing();
+          find.beacon<String>().shouldFindOne();
+
+          final completer = Completer();
+
+          final capturedResult = cubit.captureResult(completer.future);
+          await tester.pump();
+
+          find.beacon<IdleState>().shouldFindNothing();
+          find.beacon<WorkingState>().shouldFindOne();
+          find.errorBeacon().shouldFindNothing();
+          find.contentBeacon().shouldFindNothing();
+          find.beacon<String>().shouldFindOne();
+
+          completer.completeError(error);
+          await tester.pump(Duration.zero);
+          await expectLater(capturedResult, completes);
+
+          find.beacon<IdleState>().shouldFindNothing();
+          find.beacon<WorkingState>().shouldFindNothing();
+          find.errorBeacon(error).shouldFindOne();
+          find.contentBeacon().shouldFindNothing();
+          find.beacon<String>().shouldFindOne();
+        });
       });
-
-      testWidgets("can capture future", (WidgetTester tester) async {
-        final cubit = ActionCubit();
-
-        await tester.pumpWidgetOnScaffold(buildWidget(cubit));
-
-        findPendingBeacon.shouldFindOne();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindNothing();
-
-        final completer = Completer<String>();
-
-        final capturedResult = cubit.captureResult(completer.future);
-        await tester.pump();
-
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindOne();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindNothing();
-
-        final value = "value";
-        completer.complete(value);
-        await tester.pump(Duration.zero);
-        await expectLater(capturedResult, completion(value));
-
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindOne();
-      });
-
-      testWidgets("can capture future with error", (WidgetTester tester) async {
-        final cubit = ActionCubit();
-
-        await tester.pumpWidgetOnScaffold(buildWidget(cubit));
-
-        findPendingBeacon.shouldFindOne();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindNothing();
-
-        final completer = Completer();
-
-        final capturedResult = cubit.captureResult(completer.future);
-        await tester.pump();
-
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindOne();
-        findErrorBeacon().shouldFindNothing();
-        findContentBeacon().shouldFindNothing();
-
-        completer.completeError(error);
-        await tester.pump(Duration.zero);
-        await expectLater(capturedResult, throwsA(equals(error)));
-
-        findPendingBeacon.shouldFindNothing();
-        findWaitingBeacon.shouldFindNothing();
-        findErrorBeacon(error).shouldFindOne();
-        findContentBeacon().shouldFindNothing();
-      });
-    }
-
-    group("explicit builders", () {
-      runTestSet(
-        (ActionCubit bloc) => ActionBlocBuilder(
-          bloc: bloc,
-          pendingBuilder: (_) => PendingBeacon(),
-          waitingBuilder: (_) => WaitingBeacon(),
-          failedBuilder: (_, result) => ErrorBeacon(result.error),
-          builder: (BuildContext context) => ContentBeacon(null),
-        ),
-      );
-    });
-
-    group("default builders", () {
-      runTestSet(
-        (ActionCubit bloc) => DefaultResultBuilder(
-          pendingBuilder: (_) => PendingBeacon(),
-          waitingBuilder: (_) => WaitingBeacon(),
-          failedBuilder: (_, result) => ErrorBeacon(result.error),
-          child: ActionBlocBuilder(
-            bloc: bloc,
-            builder: (BuildContext context) => ContentBeacon(null),
-          ),
-        ),
-      );
-    });
-
-    group("global default builders", () {
-      setUp(() {
-        DefaultResultBuilder.setGlobalBuilder(
-          pendingBuilder: (_) => PendingBeacon(),
-          waitingBuilder: (_) => WaitingBeacon(),
-          failedBuilder: (_, errorInfo) => ErrorBeacon(errorInfo.error),
-        );
-      });
-
-      tearDown(() {
-        DefaultPendingResultBuilder.setGlobalBuilder(null);
-        DefaultWaitingResultBuilder.setGlobalBuilder(null);
-        DefaultFailedResultBuilder.setGlobalBuilder(null);
-      });
-
-      runTestSet(
-        (ActionCubit bloc) => ActionBlocBuilder(
-          bloc: bloc,
-          builder: (BuildContext context) => ContentBeacon(null),
-        ),
-      );
     });
   });
 }

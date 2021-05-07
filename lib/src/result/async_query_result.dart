@@ -97,14 +97,14 @@ abstract class AsyncQueryResult<T> implements Stated {
     return failed(this.asError());
   }
 
-  Stream<AsyncQueryResult<T>> updateWith(Future<T> future) async* {
+  Stream<AsyncQueryResult<U>> updateWith<U>(Future<U> future) async* {
     if (isWorking) throw StateError("Parallel update with future");
 
     yield AsyncQueryResult.working();
 
     final result = await future.asQueryResult();
 
-    yield AsyncQueryResult.from(result);
+    yield AsyncQueryResult<U>.from(result);
   }
 }
 
