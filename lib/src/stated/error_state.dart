@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:stated_result/src/stated/base/error_state_base.dart';
 
 import 'stated.dart';

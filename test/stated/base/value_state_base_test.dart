@@ -108,10 +108,11 @@ void main() {
     });
 
     test("toString() should contains State name and value", () {
-      expect(stateXA1.toString(), "StateA(value1)");
-      expect(stateXA2.toString(), "StateA(value2)");
-      expect(stateXB1.toString(), "StateB(value1)");
-      expect(stateYA1.toString(), "StateA(value1)");
+      expect(stateXA1.toString(), "StateA<String>(value1)");
+      expect(stateXA2.toString(), "StateA<String>(value2)");
+      expect(stateXB1.toString(), "StateB<String>(value1)");
+      expect(stateYA1.toString(), "StateA<String>(value1)");
+      expect(stateXAInt.toString(), "StateA<int>(1)");
     });
   });
 }
