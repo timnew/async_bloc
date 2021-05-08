@@ -1,12 +1,11 @@
-import 'package:stated_result/src/stated/working_value_state.dart';
-import 'package:stated_result/stated_result.dart';
-
+import 'error_value_state.dart';
 import 'working_state.dart';
 import 'done_state.dart';
 import 'idle_value_state.dart';
 import 'error_state.dart';
 import 'idle_state.dart';
 import 'done_value_state.dart';
+import 'working_value_state.dart';
 
 /// Beaviour to find out the type's state
 mixin Stated {

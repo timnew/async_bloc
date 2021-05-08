@@ -1,5 +1,4 @@
-import 'package:stated_result/src/stated/base/error_state_base.dart';
-
+import 'base/error_state_base.dart';
 import 'stated.dart';
 
 /// State indicates the action is failed with error

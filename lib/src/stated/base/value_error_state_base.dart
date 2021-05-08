@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
-import 'package:stated_result/stated_value.dart';
+
+import '../stated.dart';
 
 class ValueErrorStateBase<T, SELF extends HasValueAndError<T>>
     with Stated
