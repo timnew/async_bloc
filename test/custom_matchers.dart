@@ -19,7 +19,7 @@ class WithStackTrace extends CustomMatcher {
 
 class WithValue extends CustomMatcher {
   WithValue(dynamic matcher)
-      : super("HasError with stackTrace that is", "stackTrace", matcher);
+      : super("HasError with value that is", "value", matcher);
 
   @override
   Object? featureValueOf(actual) => (actual as HasValue).value;

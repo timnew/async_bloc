@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:stated_result/stated_value.dart';
 
-class ValueErrorStateBase<T, SELF extends HasValueAndError<T>> {
+class ValueErrorStateBase<T, SELF extends HasValueAndError<T>>
+    with Stated
+    implements HasValueAndError<T> {
   /// Value holds of the state
   final T value;
 
@@ -30,5 +32,5 @@ class ValueErrorStateBase<T, SELF extends HasValueAndError<T>> {
       const DeepCollectionEquality().hash(value);
 
   @override
-  String toString() => "$SELF($value)\n($error)";
+  String toString() => "$SELF($value, $error)";
 }
