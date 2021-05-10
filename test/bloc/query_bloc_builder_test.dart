@@ -215,6 +215,6 @@ void main() {
         find.contentBeacon(value).shouldFindNothing();
         find.beacon<String>().shouldFindOne();
       });
-    }, skip: "can't make it work");
+    });
   });
 }

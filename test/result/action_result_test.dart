@@ -113,10 +113,10 @@ void main() {
         });
 
         test("yields error", () async {
-          final result = await Future.error(exception).asActionResult();
-          expect(result, isInstanceOf<ActionResult>());
-          expect(result, isInstanceOf<ErrorState>());
-          expect(result.asError().error, exception);
+          final result = Future.error(exception).asActionResult();
+          await expectLater(result, completion(isInstanceOf<ActionResult>()));
+          await expectLater(result, completion(isInstanceOf<ErrorState>()));
+          await expectLater(result, completion(WithError(exception)));
         });
       });
 

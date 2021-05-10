@@ -19,7 +19,7 @@ void main() {
         });
 
         test("returns a constant", () {
-          expect(AsyncQueryResult(), same(result));
+          expect(AsyncQueryResult<String>(), same(result));
         });
 
         test("should have correct states", () {
@@ -217,15 +217,21 @@ void main() {
     });
 
     group(".updateWith", () {
+      late List<AsyncQueryResult<String>> captured;
+
+      setUp(() {
+        captured = <AsyncQueryResult<String>>[];
+      });
+
       test("should update value with succeeded", () async {
         final initial = AsyncQueryResult<String>.idle();
-
         final future = Future.value(value);
-        final states = initial.updateWith(future);
+
+        await initial.updateWith(future, captured.add);
 
         expect(
-          states,
-          emitsInOrder([
+          captured,
+          containsAllInOrder([
             AsyncQueryResult<String>.working(),
             AsyncQueryResult<String>.completed(value),
           ]),
@@ -234,13 +240,13 @@ void main() {
 
       test("should update value with failed", () async {
         final initial = AsyncQueryResult<String>();
-
         final future = Future<String>.error(exception);
-        final states = initial.updateWith(future);
+
+        await initial.updateWith(future, captured.add);
 
         expect(
-          states,
-          emitsInOrder([
+          captured,
+          containsAllInOrder([
             AsyncQueryResult<String>.working(),
             predicate<AsyncQueryResult<String>>(
               (s) => s.isFailed && s.asError().error == exception,
@@ -248,16 +254,16 @@ void main() {
             ),
           ]),
         );
-      }, skip: "can't make it work");
+      });
 
       test("should complain when call on waiting", () async {
         final initial = AsyncQueryResult<String>.working();
-
         final future = Future<String>.value(value);
 
-        final states = initial.updateWith(future);
-
-        await expectLater(states, emitsError(isInstanceOf<StateError>()));
+        await expectLater(
+          initial.updateWith(future, captured.add),
+          throwsStateError,
+        );
       });
     });
   });

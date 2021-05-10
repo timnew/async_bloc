@@ -69,14 +69,26 @@ abstract class AsyncActionResult implements Stated {
     return failed(this.asError());
   }
 
-  Stream<AsyncActionResult> updateWith(Future future) async* {
+  /// emit [AsyncActionResult.working] and then the other [AsyncActionResult] based on the [future]'s result.
+  ///
+  /// If [future] doesn't return [Stated], if [future] is completed with error, [AsyncActionResult.failed] withe error is returned,
+  /// otherwise, [AsyncActionResult.completed] is returned.
+  ///
+  /// If [future] returns [Stated], which can be converted into `AsyncActionResult`, the state would be respected
+  /// [emit] used to receive the the update
+  ///
+  /// `async generator` can't be used here, due to a issue in language: https://github.com/dart-lang/language/issues/1625
+  Future<void> updateWith(
+    Future future,
+    void emit(AsyncActionResult value),
+  ) async {
     if (isWorking) throw StateError("Parallel update with future");
 
-    yield AsyncActionResult.working();
+    emit(AsyncActionResult.working());
 
     final result = await future.asActionResult();
 
-    yield AsyncActionResult.from(result);
+    emit(AsyncActionResult.from(result));
   }
 }
 

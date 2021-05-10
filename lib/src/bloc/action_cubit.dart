@@ -14,6 +14,6 @@ class ActionCubit extends Cubit<AsyncActionResult> {
 
   /// Capture the result of a generic aync action
   Future<void> captureResult<T>(Future<T> future) async {
-    await this.state.updateWith(future).forEach(emit);
+    await this.state.updateWith(future, emit);
   }
 }

@@ -97,14 +97,21 @@ abstract class AsyncQueryResult<T> implements Stated {
     return failed(this.asError());
   }
 
-  Stream<AsyncQueryResult<U>> updateWith<U>(Future<U> future) async* {
+  /// emit [AsyncQueryResult.working] and then [AsyncQueryResult.completed] or [AsyncQueryResult.failed] based on the [future]'s result.
+  /// [emit] used to receive the the update
+  ///
+  /// `async generator` can't be used here, due to a issue in language: https://github.com/dart-lang/language/issues/1625
+  Future<void> updateWith<U>(
+    Future<U> future,
+    void emit(AsyncQueryResult<U> value),
+  ) async {
     if (isWorking) throw StateError("Parallel update with future");
 
-    yield AsyncQueryResult.working();
+    emit(AsyncQueryResult.working());
 
     final result = await future.asQueryResult();
 
-    yield AsyncQueryResult<U>.from(result);
+    emit(AsyncQueryResult<U>.from(result));
   }
 }
 

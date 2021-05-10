@@ -19,6 +19,6 @@ class QueryCubit<T> extends Cubit<AsyncQueryResult<T>> {
 
   /// Capture the result of a generic aync query
   Future<void> captureResult(Future<T> future) async {
-    await state.updateWith(future).forEach(print);
+    await state.updateWith(future, emit);
   }
 }
