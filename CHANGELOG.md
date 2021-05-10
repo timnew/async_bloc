@@ -1,21 +1,37 @@
 # Change Log
 
-## [1.0.0-preview.1]
+## [0.3.0-preview.1]
 
-* Moved results into `stated` library.
-* Renamed `ErrorWithStack` to `HasError`
-* Renamed `error` of `HasError` to `exception`, and changed type from `dynamic` to `Object`
-* Replaced `ValueResultMapper` `ErrorResultMapper` with `ValueMapper`
-* Renamed `ValueMapper` to `ValueTransformer`
-* Renamed `ResultMapper` to `StateTransformer`
-* Renamed `StatedResult.asFailed` to `StatedResult.asError`
-* Renamed `StatedResult.asValueResult` to `StatedResult.asValue`, and returns value directly
+* Added `stated` library
+  * Expose new `Stated` type as the base type
+  * Moved results into `stated` library.
+  * Added name suffix `State` to every states.
+  * Renamed `Waiting` to `WorkingState`, `FailedState` to `ErrorState`, `SucceededState` to `DoneValueState`
+  * Added `WorkingValueState` `ErrorValueState`
+  * Renamed `ErrorWithStack` to `ErrorInfo`
+  * Renamed `error` of `HasError` to `exception`, and changed type from `dynamic` to `Object`
+  * Replaced `ValueResultMapper` `ErrorResultMapper` with `ValueMapper`
+  * Renamed `ValueMapper` to `ValueTransformer`
+  * Renamed `ResultMapper` to `StateTransformer`
+  * Renamed `StatedResult.asFailed` to `StatedResult.asError`, and returns `ErrorInfo`
+  * Renamed `StatedResult.asValueResult` to `StatedResult.asValue`, and returns value directly
 
-* `QueryResult.succeeded` and `AsyncQueryResult.succeeded` are renamed to `completed`.
+* Change to `stated_result`
+  * `QueryResult.succeeded` and `AsyncQueryResult.succeeded` are renamed to `completed`.
+  * `AsyncQueryResult.mapValue` get dropped
+  * `AsyncQueryResult.updateWith` and `AsyncActionResult.updateWith` method signature changed
 
-* Added `ErrorValueResult`
-* Added `stated_value` library with `StatedValue` and `StatedValueBloc`
-* `StatedResult.asValue()` returns value itself instead of `ValueResult`.
+* Change to `stated_result_builder`
+  * Removed all the default builder
+  * `ActionResultBuilder` and `QueryResultBuilder` becomes a wrapper of `StatedBuilder`
+
+* Added `stated_builder` library
+  * Added `StatedBuilder`
+  * Added `WorkingIndicatorBuilder`
+
+* Added `stated_value` library
+  * Added `StatedValue`
+  * Added `StatedValueCubit`
 
 ## [0.2.0] - 2021-05-04
 
