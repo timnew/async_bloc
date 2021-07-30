@@ -3,12 +3,12 @@ import 'package:stated_result/stated.dart';
 typedef bool StatedPredict(Stated stated);
 
 class OnState<TS extends Stated> {
-  final StatedPredict? criteria;
+  final StatedPredict? condition;
 
-  const OnState([this.criteria]);
+  const OnState([this.condition]);
 
   bool matches(Stated stated) =>
-      stated is TS && (criteria?.call(stated) ?? true);
+      stated is TS && (condition?.call(stated) ?? true);
 
   factory OnState.isIdle() => OnState((s) => s.isIdle);
   factory OnState.isWorking() => OnState((s) => s.isWorking);
@@ -19,6 +19,18 @@ class OnState<TS extends Stated> {
   factory OnState.hasValue() => OnState((s) => s is HasValue);
   factory OnState.hasError() => OnState((s) => s is HasError);
   factory OnState.hasValueAndError() => OnState((s) => s is HasValueAndError);
+
+  factory OnState.always() => const _Always();
+}
+
+class _Always<TS extends Stated> implements OnState<TS> {
+  @override
+  StatedPredict? get condition => null;
+
+  @override
+  bool matches(Stated stated) => true;
+
+  const _Always();
 }
 
 extension StatedMatchExtension on Stated {
