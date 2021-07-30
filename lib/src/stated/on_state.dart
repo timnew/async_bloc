@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:stated_result/stated.dart';
 
 typedef bool StatedPredict(Stated stated);
@@ -23,7 +22,7 @@ class OnState<TS extends Stated> {
 }
 
 extension StatedMatchExtension on Stated {
-  TR match<TR>(Map<OnState, TR> patterns) {
+  TR matchPattern<TR>(Map<OnState, TR> patterns) {
     try {
       return patterns.entries.firstWhere((p) => p.key.matches(this)).value;
     } on StateError {

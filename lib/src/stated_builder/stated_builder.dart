@@ -17,7 +17,7 @@ class StatedBuilder<TS extends Stated> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => stated
-      .match<ValueWidgetBuilder<TS>>(patterns)
+      .matchPattern<ValueWidgetBuilder<TS>>(patterns)
       .call(context, stated, child);
 
   static ValueWidgetBuilder<Stated> buildAsUnit(TransitionBuilder builder) =>
