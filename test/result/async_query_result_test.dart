@@ -85,7 +85,7 @@ void main() {
       });
 
       group(".completed", () {
-        final result = AsyncQueryResult.completed(value);
+        final result = AsyncQueryResult.succeeded(value);
 
         test("should be a CompletedResult", () {
           expect(result, isInstanceOf<SucceededValueState<String>>());
@@ -142,7 +142,7 @@ void main() {
       group(".fromValue", () {
         test("value is SucceededResult", () {
           final result = AsyncQueryResult.fromValue(value);
-          expect(result, AsyncQueryResult.completed(value));
+          expect(result, AsyncQueryResult.succeeded(value));
         });
 
         test("null is PendingResult", () {
@@ -202,7 +202,7 @@ void main() {
           final result = AsyncQueryResult<String>.from(doneValue);
           expect(result, isInstanceOf<AsyncQueryResult<String>>());
           expect(result, isInstanceOf<SucceededValueState<String>>());
-          expect(result, AsyncQueryResult<String>.completed(value));
+          expect(result, AsyncQueryResult<String>.succeeded(value));
         });
       });
     });
@@ -224,7 +224,7 @@ void main() {
           captured,
           containsAllInOrder([
             AsyncQueryResult<String>.working(),
-            AsyncQueryResult<String>.completed(value),
+            AsyncQueryResult<String>.succeeded(value),
           ]),
         );
       });

@@ -11,7 +11,7 @@ class ActionBlocBuilder<B extends BlocBase<AsyncActionResult>>
     required TransitionBuilder? idleBuilder,
     required TransitionBuilder workingBuilder,
     required ValueWidgetBuilder<Object> failedBuilder,
-    required TransitionBuilder completedBuilder,
+    required TransitionBuilder succeededBuilder,
     BlocBuilderCondition<AsyncActionResult>? buildWhen,
   }) : super(
           key: key,
@@ -22,7 +22,7 @@ class ActionBlocBuilder<B extends BlocBase<AsyncActionResult>>
             idleBuilder: idleBuilder ?? workingBuilder,
             workingBuilder: workingBuilder,
             failedBuilder: failedBuilder,
-            completedBuilder: completedBuilder,
+            succeededBuilder: succeededBuilder,
           ),
           buildWhen: buildWhen,
         );

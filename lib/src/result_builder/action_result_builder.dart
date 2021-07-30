@@ -9,7 +9,7 @@ class ActionResultBuilder extends StatedBuilder<Stated> {
   /// * [idleBuilder] - Builder to be used when [AsyncActionResult.idle] is given.
   /// * [workingBuilder] - Builder to be used when [AsyncActionResult.working] is given.
   /// * [failedBuilder] - Builder to be used when [AsyncActionResult.failed] is given.
-  /// * [completedBuilder] - Builder to be used when [AsyncActionResult.completed] is given.
+  /// * [succeededBuilder] - Builder to be used when [AsyncActionResult.succeeded] is given.
   ///
   /// To consume [ActionResult], use [ActionResultBuilder.sync].
   ActionResultBuilder({
@@ -19,8 +19,8 @@ class ActionResultBuilder extends StatedBuilder<Stated> {
     required TransitionBuilder? idleBuilder,
     required TransitionBuilder workingBuilder,
     required ValueWidgetBuilder<Object> failedBuilder,
-    required TransitionBuilder completedBuilder,
   }) : super(
+    required TransitionBuilder succeededBuilder,
           key: key,
           stated: result,
           child: child,
@@ -37,7 +37,7 @@ class ActionResultBuilder extends StatedBuilder<Stated> {
   /// Consume [ActionResult]
   ///
   /// * [failedBuilder] - Builder to be used when [ActionResult.failed] is given.
-  /// * [completedBuilder] - Builder to be used when [ActionResult.completed] is given.
+  /// * [succeededBuilder] - Builder to be used when [ActionResult.succeeded] is given.
   ActionResultBuilder.sync({
     Key? key,
     required ActionResult result,

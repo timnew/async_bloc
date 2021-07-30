@@ -7,13 +7,13 @@ import '../states.dart';
 void main() {
   group("ActionResult", () {
     group(".completed", () {
-      final result = ActionResult.completed();
+      final result = ActionResult.succeeded();
 
       test('should be a CompletedResult', () {
         expect(result, isInstanceOf<SucceededState>());
       });
       test('gives the same instance', () {
-        expect(ActionResult.completed(), same(result));
+        expect(ActionResult.succeeded(), same(result));
       });
 
       test("should have correct states", () {

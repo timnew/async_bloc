@@ -52,14 +52,14 @@ void main() {
       });
 
       group(".completed", () {
-        final result = AsyncActionResult.completed();
+        final result = AsyncActionResult.succeeded();
 
         test('should be a CompletedResult', () {
           expect(result, isInstanceOf<SucceededState>());
         });
 
         test('should be constant', () {
-          expect(AsyncActionResult.completed(), same(result));
+          expect(AsyncActionResult.succeeded(), same(result));
         });
 
         test("should have correct states", () {
@@ -165,7 +165,7 @@ void main() {
           captured,
           containsAllInOrder([
             AsyncActionResult.working(),
-            AsyncActionResult.completed(),
+            AsyncActionResult.succeeded(),
           ]),
         );
       });
@@ -198,7 +198,7 @@ void main() {
           captured,
           containsAllInOrder([
             AsyncActionResult.working(),
-            AsyncActionResult.completed(),
+            AsyncActionResult.succeeded(),
           ]),
         );
       });
@@ -213,7 +213,7 @@ void main() {
           captured,
           containsAllInOrder([
             AsyncActionResult.working(),
-            AsyncActionResult.completed(),
+            AsyncActionResult.succeeded(),
           ]),
         );
       });
@@ -250,7 +250,7 @@ void main() {
 
       test("should complains when call on waiting", () async {
         final initial = AsyncActionResult.working();
-        final future = Future.value(ActionResult.completed());
+        final future = Future.value(ActionResult.succeeded());
 
         await expectLater(
           initial.updateWith(future, captured.add),

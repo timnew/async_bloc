@@ -9,7 +9,7 @@ import 'async_action_result.dart';
 /// [AsyncQueryResult.idle] creates the [IdleState], indicates the query hasn't started
 /// [AsyncQueryResult.preset] creates the [IdleValueState], indicates the query hasn't started, but has a preset value
 /// [AsyncQueryResult.working] creates the [WorkingState], indicates the query is in progress
-/// [AsyncQueryResult.completed] creates the [SucceededState], indicates the query is completed
+/// [AsyncQueryResult.succeeded] creates the [SucceededState], indicates the query is completed
 /// [AsyncQueryResult.failed] creates the [FailedState], indicates the query is failed
 ///
 /// See also
@@ -38,7 +38,7 @@ abstract class AsyncQueryResult<T> implements Stated {
   factory AsyncQueryResult.working() => const _Working();
 
   /// Creates a [AsyncQueryResult] in [SucceededValueState]
-  const factory AsyncQueryResult.completed(T value) = _Completed;
+  const factory AsyncQueryResult.succeeded(T value) = _Succeeded;
 
   /// creates a [AsyncQueryResult] in [FailedState] with [error]
   const factory AsyncQueryResult.failed(Object error) = _Failed;
@@ -48,13 +48,13 @@ abstract class AsyncQueryResult<T> implements Stated {
   /// Otherwise [SucceededValueState] with `value` is created
   factory AsyncQueryResult.fromValue(T? value) => value == null
       ? AsyncQueryResult.idle()
-      : AsyncQueryResult.completed(value);
+      : AsyncQueryResult.succeeded(value);
 
   /// Create [AsyncQueryResult] from other [Stated] types
   /// * [IdleState] converts to [AsyncQueryResult.idle]
   /// * [IdleValueState] converts to [AsyncQueryResult.preset]
   /// * [WorkingState] or [WorkingValueState] converts to [AsyncQueryResult.working]
-  /// * [SucceededValueState] converts to [AsyncQueryResult.completed]
+  /// * [SucceededValueState] converts to [AsyncQueryResult.succeeded]
   /// * [FailedState] or [FailedValueState] converts to [AsyncActionResult.failed]
   ///  Otherwise [UnsupportedError] is thrown
   factory AsyncQueryResult.from(Stated other) {
@@ -64,7 +64,7 @@ abstract class AsyncQueryResult<T> implements Stated {
     }
     if (other.isWorking) return AsyncQueryResult.working();
     if (other is SucceededValueState<T>) {
-      return AsyncQueryResult.completed(other.value);
+      return AsyncQueryResult.succeeded(other.value);
     }
     if (other.isFailed) return AsyncQueryResult.failed(other.extractError());
 
@@ -87,11 +87,11 @@ abstract class AsyncQueryResult<T> implements Stated {
       return idle();
     }
     if (this is _Working) return working();
-    if (this is _Completed) return completed(this.extractValue());
+    if (this is _Succeeded) return completed(this.extractValue());
     return failed(this.extractError());
   }
 
-  /// emit [AsyncQueryResult.working] and then [AsyncQueryResult.completed] or [AsyncQueryResult.failed] based on the [future]'s result.
+  /// emit [AsyncQueryResult.working] and then [AsyncQueryResult.succeeded] or [AsyncQueryResult.failed] based on the [future]'s result.
   /// [emit] used to receive the the update
   ///
   /// `async generator` can't be used here, due to a issue in language: https://github.com/dart-lang/language/issues/1625
@@ -121,8 +121,8 @@ class _Working<T> extends WorkingState with AsyncQueryResult<T> {
   const _Working();
 }
 
-class _Completed<T> extends SucceededValueState<T> with AsyncQueryResult<T> {
-  const _Completed(T value) : super(value);
+class _Succeeded<T> extends SucceededValueState<T> with AsyncQueryResult<T> {
+  const _Succeeded(T value) : super(value);
 }
 
 class _Failed<T> extends FailedState with AsyncQueryResult<T> {

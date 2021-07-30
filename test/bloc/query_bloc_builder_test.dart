@@ -23,7 +23,7 @@ void main() {
           workingBuilder: (_, child) => Beacon<WorkingState>(child: child),
           failedBuilder: (_, error, child) =>
               ErrorBeacon(error: error, child: child),
-          completedBuilder: (BuildContext context, value, child) =>
+          succeededBuilder: (BuildContext context, value, child) =>
               ContentBeacon(content: value, child: child),
         );
 
@@ -84,7 +84,7 @@ void main() {
 
       testWidgets(".completed", (WidgetTester tester) async {
         final cubit =
-            QueryCubit<String>(AsyncQueryResult<String>.completed(value));
+            QueryCubit<String>(AsyncQueryResult<String>.succeeded(value));
 
         await tester.pumpWidgetOnScaffold(buildWidget(cubit));
 
@@ -110,7 +110,7 @@ void main() {
             workingBuilder: (_, child) => Beacon<WorkingState>(child: child),
             failedBuilder: (_, error, child) =>
                 ErrorBeacon(error: error, child: child),
-            completedBuilder: (BuildContext context, value, child) =>
+            succeededBuilder: (BuildContext context, value, child) =>
                 ContentBeacon(content: value, child: child),
           ),
         );
@@ -135,7 +135,7 @@ void main() {
             workingBuilder: (_, child) => Beacon<WorkingState>(child: child),
             failedBuilder: (_, error, child) =>
                 ErrorBeacon(error: error, child: child),
-            completedBuilder: (BuildContext context, value, child) =>
+            succeededBuilder: (BuildContext context, value, child) =>
                 ContentBeacon(content: value, child: child),
           ),
         );

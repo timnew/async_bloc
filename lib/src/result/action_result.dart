@@ -8,7 +8,7 @@ import 'async_query_result.dart';
 
 /// A type represents the result of an action.
 ///
-/// [ActionResult.completed] creates the [SucceededState], indicates the action is completed
+/// [ActionResult.succeeded] creates the [SucceededState], indicates the action is completed
 /// [ActionResult.failed] creates the [FailedState], indicates the action is failed
 ///
 /// See also
@@ -16,22 +16,22 @@ import 'async_query_result.dart';
 /// * [QueryResult]
 /// * [AsyncQueryResult]
 abstract class ActionResult implements Stated {
-  /// Alias to [ActionResult.completed]
-  factory ActionResult() = ActionResult.completed;
+  /// Alias to [ActionResult.succeeded]
+  factory ActionResult() = ActionResult.succeeded;
 
   /// creates an [ActionResult] in [SucceededState]
   /// This factory always returns a const result
-  factory ActionResult.completed() => const _Completed();
+  factory ActionResult.succeeded() => const _Succeeded();
 
   /// creates an [ActionResult] in [FailedState] with [error]
   const factory ActionResult.failed(Object error) = _Failed;
 
   /// Create [ActionResult] from other [Stated] types
-  /// * [SucceededValueState] or [SucceededState] converts to [ActionResult.completed]
+  /// * [SucceededValueState] or [SucceededState] converts to [ActionResult.succeeded]
   /// * [FailedState] or [FailedValueState] converts to [ActionResult.failed]
   ///  Otherwise [UnsupportedError] is thrown
   factory ActionResult.from(Stated other) {
-    if (other.isSucceeded) return ActionResult.completed();
+    if (other.isSucceeded) return ActionResult.succeeded();
     if (other.isFailed) return ActionResult.failed(other.extractError());
     throw UnsupportedError("$other in the state not supported by ActionResult");
   }
@@ -44,13 +44,13 @@ abstract class ActionResult implements Stated {
     required StateTransformer<TR> completed,
     required ValueTransformer<Object, TR> failed,
   }) {
-    if (this is _Completed) return completed();
+    if (this is _Succeeded) return completed();
     return failed(this.extractError());
   }
 }
 
-class _Completed extends SucceededState with ActionResult {
-  const _Completed();
+class _Succeeded extends SucceededState with ActionResult {
+  const _Succeeded();
 }
 
 class _Failed extends FailedState with ActionResult {
@@ -62,7 +62,7 @@ extension ActionResultFutureExtension on Future {
   /// Materialize `Future` into `Future<ActionResult>`]
   ///
   /// Materialised future always succeed unless future throws error
-  /// Returns [ActionResult.completed] if future resovled succesfully
+  /// Returns [ActionResult.succeeded] if future resovled succesfully
   /// Returns [ActionResult.failed] if future throws exception
   ///
   /// If future yields [Stated] type, the result is converted via [ActionResult.from]. If result in state that not supported, [StateError] is thrown
@@ -82,6 +82,6 @@ extension ActionResultFutureExtension on Future {
       return ActionResult.from(result);
     }
 
-    return ActionResult.completed();
+    return ActionResult.succeeded();
   }
 }
