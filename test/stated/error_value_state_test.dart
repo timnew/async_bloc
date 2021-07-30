@@ -7,7 +7,7 @@ void main() {
   group("ErrorValueState", () {
     const value = "value";
     const error = "error";
-    const state = ErrorValueState(value, error);
+    const state = FailedValueState(value, error);
 
     test("it has correct state", () {
       expect(state.isIdle, isFalse);
@@ -38,7 +38,7 @@ void main() {
     });
 
     test("it should equals to each other", () {
-      expect(state, ErrorValueState(value, error));
+      expect(state, FailedValueState(value, error));
     });
   });
 }

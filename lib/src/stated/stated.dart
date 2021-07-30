@@ -1,28 +1,19 @@
-import 'error_value_state.dart';
-import 'working_state.dart';
-import 'done_state.dart';
-import 'idle_value_state.dart';
-import 'error_state.dart';
-import 'idle_state.dart';
-import 'done_value_state.dart';
-import 'working_value_state.dart';
-
 /// Beaviour to find out the type's state
 mixin Stated {
   /// Return true if it is idle
-  bool get isIdle => this is IdleState || this is IdleValueState;
+  bool get isIdle => false;
 
   /// Return true if it is in progress
-  bool get isWorking => this is WorkingState || this is WorkingValueState;
+  bool get isWorking => false;
 
   /// Return true if it is finished, either succeeded or failed
   bool get isFinished => isSucceeded || isFailed;
 
   /// Return true if it is succeeded
-  bool get isSucceeded => this is DoneValueState || this is DoneState;
+  bool get isSucceeded => false;
 
   /// Return true if it is failed with error
-  bool get isFailed => this is ErrorState || this is ErrorValueState;
+  bool get isFailed => false;
 
   /// Return true if it has a value
   bool get hasValue => this is HasValue;

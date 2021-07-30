@@ -9,8 +9,8 @@ import 'async_action_result.dart';
 /// [AsyncQueryResult.idle] creates the [IdleState], indicates the query hasn't started
 /// [AsyncQueryResult.preset] creates the [IdleValueState], indicates the query hasn't started, but has a preset value
 /// [AsyncQueryResult.working] creates the [WorkingState], indicates the query is in progress
-/// [AsyncQueryResult.completed] creates the [DoneState], indicates the query is completed
-/// [AsyncQueryResult.failed] creates the [ErrorState], indicates the query is failed
+/// [AsyncQueryResult.completed] creates the [SucceededState], indicates the query is completed
+/// [AsyncQueryResult.failed] creates the [FailedState], indicates the query is failed
 ///
 /// See also
 /// * [ActionResult]
@@ -37,15 +37,15 @@ abstract class AsyncQueryResult<T> implements Stated {
   /// This factory always returns a const result
   factory AsyncQueryResult.working() => const _Working();
 
-  /// Creates a [AsyncQueryResult] in [DoneValueState]
+  /// Creates a [AsyncQueryResult] in [SucceededValueState]
   const factory AsyncQueryResult.completed(T value) = _Completed;
 
-  /// creates a [AsyncQueryResult] in [ErrorState] with [error]
+  /// creates a [AsyncQueryResult] in [FailedState] with [error]
   const factory AsyncQueryResult.failed(Object error) = _Failed;
 
   /// creates an [AsyncQueryResult] from [value].
   /// If `value` is `null`, [IdleState] is created
-  /// Otherwise [DoneValueState] with `value` is created
+  /// Otherwise [SucceededValueState] with `value` is created
   factory AsyncQueryResult.fromValue(T? value) => value == null
       ? AsyncQueryResult.idle()
       : AsyncQueryResult.completed(value);
@@ -54,8 +54,8 @@ abstract class AsyncQueryResult<T> implements Stated {
   /// * [IdleState] converts to [AsyncQueryResult.idle]
   /// * [IdleValueState] converts to [AsyncQueryResult.preset]
   /// * [WorkingState] or [WorkingValueState] converts to [AsyncQueryResult.working]
-  /// * [DoneValueState] converts to [AsyncQueryResult.completed]
-  /// * [ErrorState] or [ErrorValueState] converts to [AsyncActionResult.failed]
+  /// * [SucceededValueState] converts to [AsyncQueryResult.completed]
+  /// * [FailedState] or [FailedValueState] converts to [AsyncActionResult.failed]
   ///  Otherwise [UnsupportedError] is thrown
   factory AsyncQueryResult.from(Stated other) {
     if (other is IdleState) return AsyncQueryResult.idle();
@@ -63,7 +63,7 @@ abstract class AsyncQueryResult<T> implements Stated {
       return AsyncQueryResult.preset(other.extractValue());
     }
     if (other.isWorking) return AsyncQueryResult.working();
-    if (other is DoneValueState<T>) {
+    if (other is SucceededValueState<T>) {
       return AsyncQueryResult.completed(other.value);
     }
     if (other.isFailed) return AsyncQueryResult.failed(other.extractError());
@@ -121,10 +121,10 @@ class _Working<T> extends WorkingState with AsyncQueryResult<T> {
   const _Working();
 }
 
-class _Completed<T> extends DoneValueState<T> with AsyncQueryResult<T> {
+class _Completed<T> extends SucceededValueState<T> with AsyncQueryResult<T> {
   const _Completed(T value) : super(value);
 }
 
-class _Failed<T> extends ErrorState with AsyncQueryResult<T> {
+class _Failed<T> extends FailedState with AsyncQueryResult<T> {
   const _Failed(Object error) : super(error);
 }

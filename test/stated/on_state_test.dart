@@ -32,10 +32,10 @@ void main() {
     final idleValueState = IdleValueState(value);
     final workingState = WorkingState();
     final workingValueState = WorkingValueState(value);
-    final errorState = ErrorState(error);
-    final errorValueState = ErrorValueState(error, value);
-    final doneState = DoneState();
-    final doneValueState = DoneValueState(value);
+    final errorState = FailedState(error);
+    final errorValueState = FailedValueState(error, value);
+    final doneState = SucceededState();
+    final doneValueState = SucceededValueState(value);
 
     void runTest(Map<OnState, bool> patterns,
         {required List<Stated> matches, required List<Stated> doesNotMatch}) {

@@ -6,7 +6,7 @@ import '../custom_matchers.dart';
 void main() {
   group("ErrorState", () {
     const error = "error";
-    const state = ErrorState(error);
+    const state = FailedState(error);
 
     test("it has correct state", () {
       expect(state.isIdle, isFalse);
@@ -28,7 +28,7 @@ void main() {
     });
 
     test("it should equals to each other", () {
-      expect(state, ErrorState(error));
+      expect(state, FailedState(error));
     });
   });
 }

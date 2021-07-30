@@ -55,7 +55,7 @@ void main() {
         final result = AsyncActionResult.completed();
 
         test('should be a CompletedResult', () {
-          expect(result, isInstanceOf<DoneState>());
+          expect(result, isInstanceOf<SucceededState>());
         });
 
         test('should be constant', () {
@@ -77,7 +77,7 @@ void main() {
         final result = AsyncActionResult.failed(exception);
 
         test('should be a FailedResult', () {
-          expect(result, isInstanceOf<ErrorState>());
+          expect(result, isInstanceOf<FailedState>());
         });
 
         test('should contain error and stack trace', () {
@@ -124,26 +124,26 @@ void main() {
         test("error", () {
           final result = AsyncActionResult.from(error);
           expect(result, isInstanceOf<AsyncActionResult>());
-          expect(result, isInstanceOf<ErrorState>());
+          expect(result, isInstanceOf<FailedState>());
           expect(result, AsyncActionResult.failed(exception));
         });
 
         test("errorValue", () {
           final result = AsyncActionResult.from(errorValue);
           expect(result, isInstanceOf<AsyncActionResult>());
-          expect(result, isInstanceOf<ErrorState>());
+          expect(result, isInstanceOf<FailedState>());
           expect(result, AsyncActionResult.failed(exception));
         });
 
         test("done", () {
           final result = AsyncActionResult.from(done);
           expect(result, isInstanceOf<AsyncActionResult>());
-          expect(result, isInstanceOf<DoneState>());
+          expect(result, isInstanceOf<SucceededState>());
         });
         test("doneValue", () {
           final result = AsyncActionResult.from(doneValue);
           expect(result, isInstanceOf<AsyncActionResult>());
-          expect(result, isInstanceOf<DoneState>());
+          expect(result, isInstanceOf<SucceededState>());
         });
       });
     });
@@ -190,7 +190,7 @@ void main() {
 
       test("should update value with DoneState", () async {
         final initial = AsyncActionResult.idle();
-        final future = Future.value(DoneState());
+        final future = Future.value(SucceededState());
 
         await initial.updateWith(future, captured.add);
 
@@ -205,7 +205,7 @@ void main() {
 
       test("should update value with DoneValueState", () async {
         final initial = AsyncActionResult.idle();
-        final future = Future.value(DoneValueState("value"));
+        final future = Future.value(SucceededValueState("value"));
 
         await initial.updateWith(future, captured.add);
 
@@ -220,7 +220,7 @@ void main() {
 
       test("should update value with ErrorState", () async {
         final initial = AsyncActionResult.idle();
-        final future = Future.value(ErrorState(exception));
+        final future = Future.value(FailedState(exception));
 
         await initial.updateWith(future, captured.add);
 
@@ -235,7 +235,7 @@ void main() {
 
       test("should update value with ErrroValueState", () async {
         final initial = AsyncActionResult.idle();
-        final future = Future.value(ErrorValueState("value", exception));
+        final future = Future.value(FailedValueState("value", exception));
 
         await initial.updateWith(future, captured.add);
 

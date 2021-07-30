@@ -88,7 +88,7 @@ void main() {
         final result = AsyncQueryResult.completed(value);
 
         test("should be a CompletedResult", () {
-          expect(result, isInstanceOf<DoneValueState<String>>());
+          expect(result, isInstanceOf<SucceededValueState<String>>());
         });
 
         test("should be a AsyncQueryResult", () {
@@ -96,7 +96,7 @@ void main() {
         });
 
         test("should has value", () {
-          final succeeded = result as DoneValueState<String>;
+          final succeeded = result as SucceededValueState<String>;
           expect(value, succeeded.value);
         });
 
@@ -116,7 +116,7 @@ void main() {
         final result = AsyncQueryResult<String>.failed(exception);
 
         test("should be a FailedResult", () {
-          expect(result, isInstanceOf<ErrorState>());
+          expect(result, isInstanceOf<FailedState>());
         });
 
         test("should be a AsyncQueryResult", () {
@@ -180,14 +180,14 @@ void main() {
         test("eror", () {
           final result = AsyncQueryResult<String>.from(error);
           expect(result, isInstanceOf<AsyncQueryResult<String>>());
-          expect(result, isInstanceOf<ErrorState>());
+          expect(result, isInstanceOf<FailedState>());
           expect(result, AsyncQueryResult.failed(exception));
         });
 
         test("errorValue", () {
           final result = AsyncQueryResult<String>.from(errorValue);
           expect(result, isInstanceOf<AsyncQueryResult<String>>());
-          expect(result, isInstanceOf<ErrorState>());
+          expect(result, isInstanceOf<FailedState>());
           expect(result, AsyncQueryResult.failed(exception));
         });
 
@@ -201,7 +201,7 @@ void main() {
         test("doneValue", () {
           final result = AsyncQueryResult<String>.from(doneValue);
           expect(result, isInstanceOf<AsyncQueryResult<String>>());
-          expect(result, isInstanceOf<DoneValueState<String>>());
+          expect(result, isInstanceOf<SucceededValueState<String>>());
           expect(result, AsyncQueryResult<String>.completed(value));
         });
       });

@@ -3,7 +3,7 @@ import 'package:stated_result/stated.dart';
 
 void main() {
   group("DoneState", () {
-    const state = DoneState();
+    const state = SucceededState();
 
     test("it has correct state", () {
       expect(state.isIdle, isFalse);
@@ -16,7 +16,7 @@ void main() {
     });
 
     test("it should equals to each other", () {
-      expect(state, DoneState());
+      expect(state, SucceededState());
     });
   });
 }

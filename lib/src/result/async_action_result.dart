@@ -8,8 +8,8 @@ import 'async_query_result.dart';
 ///
 /// [AsyncActionResult.idle] creates the [IdleState], indicates the action hasn't started
 /// [AsyncActionResult.working] creates the [WorkingState], indicates the action is in progress
-/// [AsyncActionResult.completed] creates the [DoneState], indicates the action is completed
-/// [AsyncActionResult.failed] creates the [ErrorState], indicates the action is failed
+/// [AsyncActionResult.completed] creates the [SucceededState], indicates the action is completed
+/// [AsyncActionResult.failed] creates the [FailedState], indicates the action is failed
 ///
 /// See also
 /// * [ActionResult]
@@ -27,18 +27,18 @@ abstract class AsyncActionResult implements Stated {
   /// This factory always returns a const result
   factory AsyncActionResult.working() => const _Working();
 
-  /// Creates a [AsyncActionResult] in [DoneState]
+  /// Creates a [AsyncActionResult] in [SucceededState]
   /// This factory always returns a const result
   factory AsyncActionResult.completed() => const _Completed();
 
-  /// creates a [AsyncActionResult] in [ErrorState] with [error]
+  /// creates a [AsyncActionResult] in [FailedState] with [error]
   const factory AsyncActionResult.failed(Object error) = _Failed;
 
   /// Create [AsyncActionResult] from other [Stated] types
   /// * [IdleState] or [IdleValueState] converts to [AsyncActionResult.idle]
   /// * [WorkingState] or [WorkingValueState] converts to [AsyncActionResult.working]
-  /// * [DoneValueState] or [DoneState] converts to [AsyncActionResult.completed]
-  /// * [ErrorState] or [ErrorValueState] converts to [AsyncActionResult.failed]
+  /// * [SucceededValueState] or [SucceededState] converts to [AsyncActionResult.completed]
+  /// * [FailedState] or [FailedValueState] converts to [AsyncActionResult.failed]
   ///  Otherwise [UnsupportedError] is thrown
   factory AsyncActionResult.from(Stated other) {
     if (other.isIdle) return AsyncActionResult.idle();
@@ -94,10 +94,10 @@ class _Working extends WorkingState with AsyncActionResult {
   const _Working();
 }
 
-class _Completed extends DoneState with AsyncActionResult {
+class _Completed extends SucceededState with AsyncActionResult {
   const _Completed();
 }
 
-class _Failed extends ErrorState with AsyncActionResult {
+class _Failed extends FailedState with AsyncActionResult {
   const _Failed(Object error) : super(error);
 }

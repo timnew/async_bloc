@@ -8,8 +8,8 @@ import 'async_query_result.dart';
 
 /// A type represents the result of an action.
 ///
-/// [ActionResult.completed] creates the [DoneState], indicates the action is completed
-/// [ActionResult.failed] creates the [ErrorState], indicates the action is failed
+/// [ActionResult.completed] creates the [SucceededState], indicates the action is completed
+/// [ActionResult.failed] creates the [FailedState], indicates the action is failed
 ///
 /// See also
 /// * [AsyncActionResult]
@@ -19,16 +19,16 @@ abstract class ActionResult implements Stated {
   /// Alias to [ActionResult.completed]
   factory ActionResult() = ActionResult.completed;
 
-  /// creates an [ActionResult] in [DoneState]
+  /// creates an [ActionResult] in [SucceededState]
   /// This factory always returns a const result
   factory ActionResult.completed() => const _Completed();
 
-  /// creates an [ActionResult] in [ErrorState] with [error]
+  /// creates an [ActionResult] in [FailedState] with [error]
   const factory ActionResult.failed(Object error) = _Failed;
 
   /// Create [ActionResult] from other [Stated] types
-  /// * [DoneValueState] or [DoneState] converts to [ActionResult.completed]
-  /// * [ErrorState] or [ErrorValueState] converts to [ActionResult.failed]
+  /// * [SucceededValueState] or [SucceededState] converts to [ActionResult.completed]
+  /// * [FailedState] or [FailedValueState] converts to [ActionResult.failed]
   ///  Otherwise [UnsupportedError] is thrown
   factory ActionResult.from(Stated other) {
     if (other.isSucceeded) return ActionResult.completed();
@@ -49,11 +49,11 @@ abstract class ActionResult implements Stated {
   }
 }
 
-class _Completed extends DoneState with ActionResult {
+class _Completed extends SucceededState with ActionResult {
   const _Completed();
 }
 
-class _Failed extends ErrorState with ActionResult {
+class _Failed extends FailedState with ActionResult {
   const _Failed(Object error) : super(error);
 }
 

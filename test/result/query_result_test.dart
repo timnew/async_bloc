@@ -10,7 +10,7 @@ void main() {
       final result = const QueryResult(value);
 
       test('should be a CompletedResult', () {
-        expect(result, isInstanceOf<DoneValueState<String>>());
+        expect(result, isInstanceOf<SucceededValueState<String>>());
       });
       test('gives the same instance', () {
         expect(const QueryResult(value), same(result));
@@ -30,7 +30,7 @@ void main() {
       final result = const QueryResult.completed(value);
 
       test('should be a CompletedResult', () {
-        expect(result, isInstanceOf<DoneValueState<String>>());
+        expect(result, isInstanceOf<SucceededValueState<String>>());
       });
       test('gives the same instance', () {
         expect(const QueryResult(value), same(result));
@@ -55,7 +55,7 @@ void main() {
       });
 
       test('should be an ErrorState', () {
-        expect(result, isInstanceOf<ErrorState>());
+        expect(result, isInstanceOf<FailedState>());
       });
 
       test("should have correct states", () {
@@ -96,14 +96,14 @@ void main() {
       test("error", () {
         final result = QueryResult<String>.from(error);
         expect(result, isInstanceOf<QueryResult<String>>());
-        expect(result, isInstanceOf<ErrorState>());
+        expect(result, isInstanceOf<FailedState>());
         expect(result, QueryResult.failed(exception));
       });
 
       test("errorValue", () {
         final result = QueryResult<String>.from(errorValue);
         expect(result, isInstanceOf<QueryResult<String>>());
-        expect(result, isInstanceOf<ErrorState>());
+        expect(result, isInstanceOf<FailedState>());
         expect(result, QueryResult.failed(exception));
       });
 
@@ -114,7 +114,7 @@ void main() {
       test("doneValue", () {
         final result = QueryResult<String>.from(doneValue);
         expect(result, isInstanceOf<QueryResult<String>>());
-        expect(result, isInstanceOf<DoneValueState>());
+        expect(result, isInstanceOf<SucceededValueState>());
         expect(result.extractValue(), value);
       });
     });
@@ -137,7 +137,7 @@ void main() {
           result,
           completion(isInstanceOf<QueryResult<String>>()),
         );
-        await expectLater(result, completion(isInstanceOf<ErrorState>()));
+        await expectLater(result, completion(isInstanceOf<FailedState>()));
         await expectLater(result, completion(WithError(error)));
       });
 

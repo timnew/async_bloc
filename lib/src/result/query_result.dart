@@ -8,8 +8,8 @@ import 'async_query_result.dart';
 
 /// A type represents the result of an query.
 ///
-/// [QueryResult.completed] creates the [DoneValueState], indicates the action is completed
-/// [QueryResult.failed] creates the [ErrorState], indicates the action is failed
+/// [QueryResult.completed] creates the [SucceededValueState], indicates the action is completed
+/// [QueryResult.failed] creates the [FailedState], indicates the action is failed
 ///
 /// See also
 /// * [ActionResult]
@@ -19,18 +19,19 @@ abstract class QueryResult<T> implements Stated {
   /// Alias to [QueryResult.completed]
   const factory QueryResult(T value) = QueryResult.completed;
 
-  /// creates an [QueryResult] in [DoneValueState] holds [value]
+  /// creates an [QueryResult] in [SucceededValueState] holds [value]
   const factory QueryResult.completed(T value) = _Completed;
 
-  /// creates an [QueryResult] in [ErrorState] with [error]
+  /// creates an [QueryResult] in [FailedState] with [error]
   const factory QueryResult.failed(Object error) = _Failed;
 
   /// Create [QueryResult] from other [Stated] types
-  /// * [DoneValueState] converts to [QueryResult.completed]
-  /// * [ErrorState] or [ErrorValueState] converts to [QueryResult.failed]
+  /// * [SucceededValueState] converts to [QueryResult.completed]
+  /// * [FailedState] or [FailedValueState] converts to [QueryResult.failed]
   ///  Otherwise [UnsupportedError] is thrown
   factory QueryResult.from(Stated other) {
-    if (other is DoneValueState<T>) return QueryResult.completed(other.value);
+    if (other is SucceededValueState<T>)
+      return QueryResult.completed(other.value);
     if (other is HasError) return QueryResult.failed(other.extractError());
     throw UnsupportedError("$other in the state not supported by QueryResult");
   }
@@ -48,11 +49,11 @@ abstract class QueryResult<T> implements Stated {
   }
 }
 
-class _Completed<T> extends DoneValueState<T> with QueryResult<T> {
+class _Completed<T> extends SucceededValueState<T> with QueryResult<T> {
   const _Completed(T value) : super(value);
 }
 
-class _Failed<T> extends ErrorState with QueryResult<T> {
+class _Failed<T> extends FailedState with QueryResult<T> {
   const _Failed(Object error) : super(error);
 }
 

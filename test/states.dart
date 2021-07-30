@@ -7,10 +7,10 @@ const idle = IdleState();
 const idleValue = IdleValueState(value);
 const working = WorkingState();
 const workingValue = WorkingValueState(value);
-const done = DoneState();
-const doneValue = DoneValueState(value);
-const error = ErrorState(exception);
-const errorValue = ErrorValueState(value, exception);
+const done = SucceededState();
+const doneValue = SucceededValueState(value);
+const error = FailedState(exception);
+const errorValue = FailedValueState(value, exception);
 
 const allStates = {
   "idle": idle,

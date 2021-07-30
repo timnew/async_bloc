@@ -6,7 +6,7 @@ import '../custom_matchers.dart';
 void main() {
   group("DoneValueState", () {
     const value = "value";
-    const state = DoneValueState(value);
+    const state = SucceededValueState(value);
 
     test("it has correct state", () {
       expect(state.isIdle, isFalse);
@@ -27,7 +27,7 @@ void main() {
       expect(state.extractValue(), value);
     });
     test("it should equals to each other", () {
-      expect(state, DoneValueState(value));
+      expect(state, SucceededValueState(value));
     });
   });
 }
