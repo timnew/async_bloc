@@ -39,11 +39,6 @@ mixin HasError {
   Object get error;
 }
 
-extension HasErrorExtension on HasError {
-  bool isErrorA<T>() => error is T;
-  T castErrorAs<T>() => error as T;
-}
-
 /// Contract for state implements both [HasValue] and [HasError] contracts.
 mixin HasValueAndError<T> implements HasValue<T>, HasError {}
 
