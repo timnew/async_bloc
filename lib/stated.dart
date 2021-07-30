@@ -1,6 +1,7 @@
 library stated;
 
 export 'src/stated/stated.dart';
+export 'src/stated/on_state.dart';
 
 export 'src/stated/idle_state.dart';
 export 'src/stated/idle_value_state.dart';

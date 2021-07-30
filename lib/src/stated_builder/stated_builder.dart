@@ -3,25 +3,32 @@ import 'package:flutter/widgets.dart';
 import 'package:stated_result/stated_builder.dart';
 import 'package:stated_result/stated_custom.dart';
 
-import 'on_state.dart';
-
 class StatedBuilder<TS extends Stated> extends StatelessWidget {
   final TS stated;
   final Widget? child;
-  final List<OnState> stateBuilders;
+  final Map<OnState<TS>, ValueWidgetBuilder<TS>> patterns;
 
   const StatedBuilder({
     Key? key,
     required this.stated,
     this.child,
-    required this.stateBuilders,
+    required this.patterns,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => stateBuilders
-      .firstWhere(
-        (b) => b.canBuild(stated),
-        orElse: () => const OnState.unexpected(),
-      )
-      .build(context, stated, child);
+  Widget build(BuildContext context) => stated
+      .match<ValueWidgetBuilder<TS>>(patterns)
+      .call(context, stated, child);
+
+  static ValueWidgetBuilder<Stated> buildAsUnit(TransitionBuilder builder) =>
+      (c, _, child) => builder(c, child);
+
+  static ValueWidgetBuilder<Stated> buildAsValue<T>(
+    ValueWidgetBuilder<T> valueBuilder,
+  ) =>
+      (c, stated, child) => valueBuilder(c, stated.extractValue(), child);
+
+  static ValueWidgetBuilder<Stated> buildAsError(
+          ValueWidgetBuilder<Object> errorBuilder) =>
+      (c, stated, child) => errorBuilder(c, stated.extractError(), child);
 }

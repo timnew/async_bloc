@@ -16,7 +16,7 @@ class ActionResultBuilder extends StatedBuilder<Stated> {
     Key? key,
     required AsyncActionResult result,
     Widget? child,
-    required TransitionBuilder idleBuilder,
+    required TransitionBuilder? idleBuilder,
     required TransitionBuilder workingBuilder,
     required ValueWidgetBuilder<Object> failedBuilder,
     required TransitionBuilder completedBuilder,
@@ -24,12 +24,14 @@ class ActionResultBuilder extends StatedBuilder<Stated> {
           key: key,
           stated: result,
           child: child,
-          stateBuilders: [
-            OnState.unit(idleBuilder, criteria: CanBuild.isIdle),
-            OnState.unit(workingBuilder, criteria: CanBuild.isWorking),
-            OnState.error(failedBuilder, criteria: CanBuild.isFailed),
-            OnState.unit(completedBuilder, criteria: CanBuild.isSuceeded),
-          ],
+          patterns: {
+            OnState.isIdle(): StatedBuilder.buildAsUnit(
+              idleBuilder ?? workingBuilder,
+            ),
+            OnState.isWorking(): StatedBuilder.buildAsUnit(workingBuilder),
+            OnState.isFailed(): StatedBuilder.buildAsError(failedBuilder),
+            OnState.isSuceeded(): StatedBuilder.buildAsUnit(completedBuilder),
+          },
         );
 
   /// Consume [ActionResult]
@@ -46,9 +48,9 @@ class ActionResultBuilder extends StatedBuilder<Stated> {
           key: key,
           stated: result,
           child: child,
-          stateBuilders: [
-            OnState.error(failedBuilder, criteria: CanBuild.isFailed),
-            OnState.unit(completedBuilder, criteria: CanBuild.isSuceeded),
-          ],
+          patterns: {
+            OnState.isFailed(): StatedBuilder.buildAsError(failedBuilder),
+            OnState.isSuceeded(): StatedBuilder.buildAsUnit(completedBuilder),
+          },
         );
 }

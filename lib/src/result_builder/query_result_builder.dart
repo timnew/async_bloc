@@ -26,19 +26,17 @@ class QueryResultBuilder<T> extends StatedBuilder<Stated> {
           key: key,
           stated: result,
           child: child,
-          stateBuilders: [
-            OnState.unit(
+          patterns: {
+            OnState<IdleState>(): StatedBuilder.buildAsUnit(
               idleBuilder ?? workingBuilder,
-              criteria: CanBuild.isIdle,
             ),
-            OnState<T>.value(
+            OnState<IdleValueState>(): StatedBuilder.buildAsValue(
               presetBuilder ?? completedBuilder,
-              criteria: CanBuild.isType<IdleValueState>(),
             ),
-            OnState.unit(workingBuilder, criteria: CanBuild.isWorking),
-            OnState.error(failedBuilder, criteria: CanBuild.isFailed),
-            OnState<T>.value(completedBuilder, criteria: CanBuild.isSuceeded),
-          ],
+            OnState.isWorking(): StatedBuilder.buildAsUnit(workingBuilder),
+            OnState.isFailed(): StatedBuilder.buildAsError(failedBuilder),
+            OnState.isSuceeded(): StatedBuilder.buildAsValue(completedBuilder),
+          },
         );
 
   /// Consume [ActionResult]
@@ -55,9 +53,9 @@ class QueryResultBuilder<T> extends StatedBuilder<Stated> {
           key: key,
           stated: result,
           child: child,
-          stateBuilders: [
-            OnState.error(failedBuilder, criteria: CanBuild.isFailed),
-            OnState<T>.value(completedBuilder, criteria: CanBuild.isSuceeded),
-          ],
+          patterns: {
+            OnState.isFailed(): StatedBuilder.buildAsError(failedBuilder),
+            OnState.isSuceeded(): StatedBuilder.buildAsValue(completedBuilder),
+          },
         );
 }
