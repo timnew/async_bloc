@@ -43,7 +43,7 @@ void main() {
           expect(result, isInstanceOf<AsyncQueryResult<String>>());
         });
         test("should has value", () {
-          expect(result.asValue(), value);
+          expect(result.extractValue(), value);
         });
 
         test("should have correct states", () {
@@ -53,7 +53,7 @@ void main() {
           expect(result.isSucceeded, isFalse);
           expect(result.isFailed, isFalse);
           expect(result.hasValue, isTrue);
-          expect(result.asValue(), value);
+          expect(result.extractValue(), value);
           expect(result.hasError, isFalse);
         });
       });
@@ -107,13 +107,13 @@ void main() {
           expect(result.isSucceeded, isTrue);
           expect(result.isFailed, isFalse);
           expect(result.hasValue, isTrue);
-          expect(result.asValue(), value);
+          expect(result.extractValue(), value);
           expect(result.hasError, isFalse);
         });
       });
 
       group(".failed", () {
-        final result = AsyncQueryResult<String>.failed(exception, stackTrace);
+        final result = AsyncQueryResult<String>.failed(exception);
 
         test("should be a FailedResult", () {
           expect(result, isInstanceOf<ErrorState>());
@@ -125,14 +125,6 @@ void main() {
 
         test("should contain error and stack trace", () {
           expect(result, WithError(exception));
-          expect(result, WithStackTrace(stackTrace));
-        });
-
-        test("can create result without stacktrace", () {
-          final result = AsyncQueryResult.failed(exception);
-
-          expect(result, WithError(exception));
-          expect(result, WithStackTrace(isNull));
         });
 
         test("should have correct states", () {
@@ -143,8 +135,7 @@ void main() {
           expect(result.isFailed, isTrue);
           expect(result.hasValue, isFalse);
           expect(result.hasError, isTrue);
-          expect(result.asError(), WithError(exception));
-          expect(result.asError(), WithStackTrace(stackTrace));
+          expect(result.extractError(), exception);
         });
       });
 
@@ -190,14 +181,14 @@ void main() {
           final result = AsyncQueryResult<String>.from(error);
           expect(result, isInstanceOf<AsyncQueryResult<String>>());
           expect(result, isInstanceOf<ErrorState>());
-          expect(result, AsyncQueryResult.failed(exception, stackTrace));
+          expect(result, AsyncQueryResult.failed(exception));
         });
 
         test("errorValue", () {
           final result = AsyncQueryResult<String>.from(errorValue);
           expect(result, isInstanceOf<AsyncQueryResult<String>>());
           expect(result, isInstanceOf<ErrorState>());
-          expect(result, AsyncQueryResult.failed(exception, stackTrace));
+          expect(result, AsyncQueryResult.failed(exception));
         });
 
         test("done", () {
@@ -249,7 +240,7 @@ void main() {
           containsAllInOrder([
             AsyncQueryResult<String>.working(),
             predicate<AsyncQueryResult<String>>(
-              (s) => s.isFailed && s.asError().error == exception,
+              (s) => s.isFailed && s.extractError() == exception,
               "is error",
             ),
           ]),

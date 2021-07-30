@@ -27,7 +27,7 @@ void main() {
     });
 
     group(".failed", () {
-      final result = ActionResult.failed(error, stackTrace);
+      final result = ActionResult.failed(error);
 
       test('should be a FailedResult', () {
         expect(result, isInstanceOf<ErrorState>());
@@ -35,14 +35,6 @@ void main() {
 
       test('should contain error and stack trace', () {
         expect(result, WithError(error));
-        expect(result, WithStackTrace(stackTrace));
-      });
-
-      test('can create result without stacktrace', () {
-        final result = ActionResult.failed(error);
-
-        expect(result, WithError(error));
-        expect(result, WithStackTrace(isNull));
       });
 
       test("should have correct states", () {
@@ -52,8 +44,7 @@ void main() {
         expect(result.isSucceeded, isFalse);
         expect(result.isFailed, isTrue);
         expect(result.hasValue, isFalse);
-        expect(result.asError(), WithError(error));
-        expect(result.asError(), WithStackTrace(stackTrace));
+        expect(result.extractError(), error);
       });
     });
 
@@ -78,7 +69,7 @@ void main() {
         final result = ActionResult.from(error);
         expect(result, isInstanceOf<ActionResult>());
         expect(result, isInstanceOf<ErrorState>());
-        expect(result, ActionResult.failed(exception, stackTrace));
+        expect(result, ActionResult.failed(exception));
       });
 
       test("errorValue", () {
@@ -86,7 +77,7 @@ void main() {
 
         expect(result, isInstanceOf<ActionResult>());
         expect(result, isInstanceOf<ErrorState>());
-        expect(result, ActionResult.failed(exception, stackTrace));
+        expect(result, ActionResult.failed(exception));
       });
 
       test("done", () {

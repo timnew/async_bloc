@@ -16,8 +16,8 @@ void main() {
             child: childBeacon,
             idleBuilder: (_, child) => Beacon<IdleState>(child: child),
             workingBuilder: (_, child) => Beacon<WorkingState>(child: child),
-            failedBuilder: (_, errorInfo, child) =>
-                ErrorBeacon(error: errorInfo.error, child: child),
+            failedBuilder: (_, error, child) =>
+                ErrorBeacon(error: error, child: child),
             completedBuilder: (BuildContext context, child) =>
                 ContentBeacon(child: child),
           );
@@ -82,8 +82,8 @@ void main() {
               child: childBeacon,
               idleBuilder: null,
               workingBuilder: (_, child) => Beacon<WorkingState>(child: child),
-              failedBuilder: (_, errorInfo, child) =>
-                  ErrorBeacon(error: errorInfo.error, child: child),
+              failedBuilder: (_, error, child) =>
+                  ErrorBeacon(error: error, child: child),
               completedBuilder: (BuildContext context, child) =>
                   ContentBeacon(child: child),
             ),

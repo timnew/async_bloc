@@ -43,12 +43,12 @@ void main() {
         expect(result.isSucceeded, isTrue);
         expect(result.isFailed, isFalse);
         expect(result.hasValue, isTrue);
-        expect(result.asValue(), value);
+        expect(result.extractValue(), value);
       });
     });
 
     group(".failed", () {
-      final result = QueryResult<String>.failed(exception, stackTrace);
+      final result = QueryResult<String>.failed(exception);
 
       test('should be a QueryResult<String>', () {
         expect(result, isInstanceOf<QueryResult<String>>());
@@ -66,15 +66,7 @@ void main() {
         expect(result.isFailed, isTrue);
         expect(result.hasValue, isFalse);
         expect(result.hasError, isTrue);
-        expect(result.asError(), WithError(exception));
-        expect(result.asError(), WithStackTrace(stackTrace));
-      });
-
-      test('can create result without stacktrace', () {
-        final result = QueryResult.failed(exception);
-
-        expect(result, WithError(exception));
-        expect(result, WithStackTrace(isNull));
+        expect(result.extractError(), exception);
       });
     });
 
@@ -105,14 +97,14 @@ void main() {
         final result = QueryResult<String>.from(error);
         expect(result, isInstanceOf<QueryResult<String>>());
         expect(result, isInstanceOf<ErrorState>());
-        expect(result, QueryResult.failed(exception, stackTrace));
+        expect(result, QueryResult.failed(exception));
       });
 
       test("errorValue", () {
         final result = QueryResult<String>.from(errorValue);
         expect(result, isInstanceOf<QueryResult<String>>());
         expect(result, isInstanceOf<ErrorState>());
-        expect(result, QueryResult.failed(exception, stackTrace));
+        expect(result, QueryResult.failed(exception));
       });
 
       test("done", () {
@@ -123,7 +115,7 @@ void main() {
         final result = QueryResult<String>.from(doneValue);
         expect(result, isInstanceOf<QueryResult<String>>());
         expect(result, isInstanceOf<DoneValueState>());
-        expect(result.asValue(), value);
+        expect(result.extractValue(), value);
       });
     });
   });

@@ -23,12 +23,8 @@ abstract class ActionResult implements Stated {
   /// This factory always returns a const result
   factory ActionResult.completed() => const _Completed();
 
-  /// creates an [ActionResult] in [ErrorState] with [error] and optional [stackTrace]
-  const factory ActionResult.failed(Object error, [StackTrace? stackTrace]) =
-      _Failed;
-
-  /// creates an [ActionResult] in [ErrorState] from [errorInfo]
-  factory ActionResult.fromError(ErrorInfo errorInfo) = _Failed.fromError;
+  /// creates an [ActionResult] in [ErrorState] with [error]
+  const factory ActionResult.failed(Object error) = _Failed;
 
   /// Create [ActionResult] from other [Stated] types
   /// * [DoneValueState] or [DoneState] converts to [ActionResult.completed]
@@ -36,7 +32,7 @@ abstract class ActionResult implements Stated {
   ///  Otherwise [UnsupportedError] is thrown
   factory ActionResult.from(Stated other) {
     if (other.isSucceeded) return ActionResult.completed();
-    if (other.isFailed) return ActionResult.fromError(other.asError());
+    if (other.isFailed) return ActionResult.failed(other.extractError());
     throw UnsupportedError("$other in the state not supported by ActionResult");
   }
 
@@ -46,10 +42,10 @@ abstract class ActionResult implements Stated {
   /// [failed] is called with error and stackTrace if result is failed
   TR map<TR>({
     required StateTransformer<TR> completed,
-    required ValueTransformer<ErrorInfo, TR> failed,
+    required ValueTransformer<Object, TR> failed,
   }) {
     if (this is _Completed) return completed();
-    return failed(this.asError());
+    return failed(this.extractError());
   }
 }
 
@@ -58,10 +54,7 @@ class _Completed extends DoneState with ActionResult {
 }
 
 class _Failed extends ErrorState with ActionResult {
-  const _Failed(Object error, [StackTrace? stackTrace])
-      : super(error, stackTrace);
-
-  _Failed.fromError(ErrorInfo errorInfo) : super.fromError(errorInfo);
+  const _Failed(Object error) : super(error);
 }
 
 /// Provides extension methods on `Future` for [ActionResult]
@@ -81,8 +74,8 @@ extension ActionResultFutureExtension on Future {
       result = await this;
     } on Error {
       rethrow;
-    } catch (exception, stackTrace) {
-      return ActionResult.failed(exception, stackTrace);
+    } catch (exception) {
+      return ActionResult.failed(exception);
     }
 
     if (result is Stated) {

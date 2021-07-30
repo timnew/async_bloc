@@ -10,7 +10,7 @@ class ActionBlocBuilder<B extends BlocBase<AsyncActionResult>>
     Widget? child,
     required TransitionBuilder? idleBuilder,
     required TransitionBuilder workingBuilder,
-    required ValueWidgetBuilder<ErrorInfo> failedBuilder,
+    required ValueWidgetBuilder<Object> failedBuilder,
     required TransitionBuilder completedBuilder,
     BlocBuilderCondition<AsyncActionResult>? buildWhen,
   }) : super(

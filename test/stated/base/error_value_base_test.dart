@@ -6,32 +6,27 @@ import 'package:stated_result/stated_result.dart';
 import '../../custom_matchers.dart';
 
 class StateA<T> extends ValueErrorStateBase<T, StateA<T>> {
-  const StateA(T value, Object error, [StackTrace? stackTrace])
-      : super(value, error, stackTrace);
+  const StateA(T value, Object error) : super(value, error);
 }
 
 class StateB<T> extends ValueErrorStateBase<T, StateB<T>> {
-  const StateB(T value, Object error, [StackTrace? stackTrace])
-      : super(value, error, stackTrace);
+  const StateB(T value, Object error) : super(value, error);
 }
 
 mixin UnionX {}
 
 class UnionXStateA<T> extends StateA<T> with UnionX {
-  const UnionXStateA(T value, Object error, [StackTrace? stackTrace])
-      : super(value, error, stackTrace);
+  const UnionXStateA(T value, Object error) : super(value, error);
 }
 
 class UnionXStateB<T> extends StateB<T> with UnionX {
-  const UnionXStateB(T value, Object error, [StackTrace? stackTrace])
-      : super(value, error, stackTrace);
+  const UnionXStateB(T value, Object error) : super(value, error);
 }
 
 mixin UnionY {}
 
 class UnionYStateA<T> extends StateA<T> with UnionY {
-  const UnionYStateA(T value, Object error, [StackTrace? stackTrace])
-      : super(value, error, stackTrace);
+  const UnionYStateA(T value, Object error) : super(value, error);
 }
 
 void main() {
@@ -41,21 +36,18 @@ void main() {
     const valueInt = 1;
     const error1 = "error1";
     const error2 = "error2";
-    const stackTrace = StackTrace.empty;
-    final stackTrace2 = StackTrace.fromString("another");
 
-    final stateXA11 = UnionXStateA(value1, error1, stackTrace);
-    final stateXA12 = UnionXStateA(value1, error2, stackTrace);
-    final stateXA11s = UnionXStateA(value1, error1, stackTrace2);
-    final stateXA21 = UnionXStateA(value2, error1, stackTrace);
-    final stateXB11 = UnionXStateB(value1, error1, stackTrace);
-    final stateYA11 = UnionYStateA(value1, error1, stackTrace);
-    final stateXAInt1 = UnionXStateA(valueInt, error1, stackTrace);
+    final stateXA11 = UnionXStateA(value1, error1);
+    final stateXA12 = UnionXStateA(value1, error2);
+    final stateXA21 = UnionXStateA(value2, error1);
+    final stateXB11 = UnionXStateB(value1, error1);
+    final stateYA11 = UnionYStateA(value1, error1);
+    final stateXAInt1 = UnionXStateA(valueInt, error1);
 
     test(
         "instances of same UnionState with same value, error and stackTrace should equal to each other",
         () {
-      final stateXA11_ = UnionXStateA(value1, error1, stackTrace);
+      final stateXA11_ = UnionXStateA(value1, error1);
 
       expect(stateXA11, isNot(same(stateXA11_)));
 
@@ -75,13 +67,6 @@ void main() {
         () {
       expect(stateXA11, isNot(stateXA12));
       expect(stateXA11.hashCode, isNot(stateXA12.hashCode));
-    });
-
-    test(
-        "instances of same UnionState with different stackTrace should not equal to each other",
-        () {
-      expect(stateXA11, isNot(stateXA11s));
-      expect(stateXA11.hashCode, isNot(stateXA11s.hashCode));
     });
 
     test(
@@ -107,8 +92,8 @@ void main() {
 
     test("union state type can have const constructor", () {
       expect(
-        const UnionXStateA(value1, error1, stackTrace),
-        same(const UnionXStateA(value1, error1, stackTrace)),
+        const UnionXStateA(value1, error1),
+        same(const UnionXStateA(value1, error1)),
       );
     });
 
@@ -117,7 +102,6 @@ void main() {
         [
           stateXA11,
           stateXA12,
-          stateXA11s,
           stateXA21,
           stateXB11,
           stateYA11,
@@ -130,7 +114,6 @@ void main() {
         [
           stateXA11,
           stateXA12,
-          stateXA11s,
           stateXA21,
           stateXB11,
           stateYA11,
@@ -143,7 +126,6 @@ void main() {
         [
           stateXA11,
           stateXA12,
-          stateXA11s,
           stateXB11,
           stateYA11,
         ],
@@ -156,7 +138,6 @@ void main() {
         [
           stateXA11,
           stateXA12,
-          stateXA11s,
           stateXA21,
           stateXB11,
           stateYA11,
@@ -168,7 +149,6 @@ void main() {
       expect(
         [
           stateXA11,
-          stateXA11s,
           stateXA21,
           stateXB11,
           stateYA11,
@@ -177,18 +157,6 @@ void main() {
         everyElement(WithError(error1)),
       );
       expect(stateXA12, WithError(error2));
-
-      expect(
-        [
-          stateXA11,
-          stateXA12,
-          stateXA21,
-          stateXB11,
-          stateYA11,
-          stateXAInt1,
-        ],
-        everyElement(WithStackTrace(stackTrace)),
-      );
     });
 
     test("instances should has proper value", () {
@@ -199,10 +167,8 @@ void main() {
 
     test("instances should has proper error", () {
       expect(stateXA11.error, error1);
-      expect(stateXA11.stackTrace, stackTrace);
 
       expect(stateXA12.error, error2);
-      expect(stateXA11.stackTrace, stackTrace);
     });
 
     test("toString() should contains State name and value", () {

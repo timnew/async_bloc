@@ -6,8 +6,7 @@ import '../custom_matchers.dart';
 void main() {
   group("ErrorState", () {
     const error = "error";
-    const stackTrace = StackTrace.empty;
-    const state = ErrorState(error, stackTrace);
+    const state = ErrorState(error);
 
     test("it has correct state", () {
       expect(state.isIdle, isFalse);
@@ -20,18 +19,16 @@ void main() {
     });
 
     test("it has error info", () {
-      expect(state, isInstanceOf<ErrorInfo>());
+      expect(state, isInstanceOf<HasError>());
       expect(state, WithError(error));
-      expect(state, WithStackTrace(stackTrace));
     });
 
     test("its asError returns error info", () {
-      expect(state.asError(), WithError(error));
-      expect(state.asError(), WithStackTrace(stackTrace));
+      expect(state.extractError(), error);
     });
 
     test("it should equals to each other", () {
-      expect(state, ErrorState(error, stackTrace));
+      expect(state, ErrorState(error));
     });
   });
 }

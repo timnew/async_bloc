@@ -26,19 +26,18 @@ void main() {
     });
 
     test("its asValue returns value", () {
-      expect(state.asValue(), value);
+      expect(state.extractValue(), value);
     });
 
     test("it has error info", () {
-      expect(state, isInstanceOf<ErrorInfo>());
+      expect(state, isInstanceOf<HasError>());
       expect(state, WithError(error));
-      expect(state, WithStackTrace(stackTrace));
     });
 
     test("its asError returns error info", () {
-      expect(state.asError(), WithError(error));
-      expect(state.asError(), WithStackTrace(stackTrace));
+      expect(state.extractError(), error);
     });
+
     test("it should equals to each other", () {
       expect(state, ErrorValueState(value, error, stackTrace));
     });

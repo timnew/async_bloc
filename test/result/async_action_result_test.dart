@@ -74,7 +74,7 @@ void main() {
       });
 
       group(".failed", () {
-        final result = AsyncActionResult.failed(exception, stackTrace);
+        final result = AsyncActionResult.failed(exception);
 
         test('should be a FailedResult', () {
           expect(result, isInstanceOf<ErrorState>());
@@ -82,14 +82,6 @@ void main() {
 
         test('should contain error and stack trace', () {
           expect(result, WithError(exception));
-          expect(result, WithStackTrace(stackTrace));
-        });
-
-        test('can create result without stacktrace', () {
-          final result = AsyncActionResult.failed(exception);
-
-          expect(result, WithError(exception));
-          expect(result, WithStackTrace(isNull));
         });
 
         test("should have correct states", () {
@@ -100,8 +92,7 @@ void main() {
           expect(result.isFailed, isTrue);
           expect(result.hasValue, isFalse);
           expect(result.hasError, isTrue);
-          expect(result.asError(), WithError(exception));
-          expect(result.asError(), WithStackTrace(stackTrace));
+          expect(result.extractError(), exception);
         });
       });
 
@@ -134,14 +125,14 @@ void main() {
           final result = AsyncActionResult.from(error);
           expect(result, isInstanceOf<AsyncActionResult>());
           expect(result, isInstanceOf<ErrorState>());
-          expect(result, AsyncActionResult.failed(exception, stackTrace));
+          expect(result, AsyncActionResult.failed(exception));
         });
 
         test("errorValue", () {
           final result = AsyncActionResult.from(errorValue);
           expect(result, isInstanceOf<AsyncActionResult>());
           expect(result, isInstanceOf<ErrorState>());
-          expect(result, AsyncActionResult.failed(exception, stackTrace));
+          expect(result, AsyncActionResult.failed(exception));
         });
 
         test("done", () {
@@ -190,7 +181,7 @@ void main() {
           containsAllInOrder([
             AsyncActionResult.working(),
             predicate<AsyncActionResult>(
-              (s) => s.isFailed && s.asError().error == exception,
+              (s) => s.isFailed && s.extractError() == exception,
               "is error",
             ),
           ]),

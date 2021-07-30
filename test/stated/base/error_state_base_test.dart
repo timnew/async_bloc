@@ -5,54 +5,43 @@ import 'package:stated_result/src/stated/base/error_state_base.dart';
 import '../../custom_matchers.dart';
 
 class StateA extends ErrorStateBase<StateA> {
-  const StateA(Object error, [StackTrace? stackTrace])
-      : super(error, stackTrace);
-
-  StateA.fromError(ErrorInfo errorInfo) : super.fromError(errorInfo);
+  const StateA(Object error) : super(error);
 }
 
 class StateB extends ErrorStateBase<StateB> {
-  const StateB(Object error, [StackTrace? stackTrace])
-      : super(error, stackTrace);
+  const StateB(Object error) : super(error);
 }
 
 mixin UnionX {}
 
 class UnionXStateA extends StateA with UnionX {
-  const UnionXStateA(Object error, [StackTrace? stackTrace])
-      : super(error, stackTrace);
-
-  UnionXStateA.fromError(ErrorInfo errorInfo) : super.fromError(errorInfo);
+  const UnionXStateA(Object error) : super(error);
 }
 
 class UnionXStateB extends StateB with UnionX {
-  const UnionXStateB(Object error, [StackTrace? stackTrace])
-      : super(error, stackTrace);
+  const UnionXStateB(Object error) : super(error);
 }
 
 mixin UnionY {}
 
 class UnionYStateA extends StateA with UnionY {
-  const UnionYStateA(Object error, [StackTrace? stackTrace])
-      : super(error, stackTrace);
+  const UnionYStateA(Object error) : super(error);
 }
 
 void main() {
   group("ErrorStateBase", () {
     const error1 = "error1";
     final error2 = "error2";
-    const stackTrace = StackTrace.empty;
-    final stackTrace2 = StackTrace.fromString("stackTraceString");
 
-    final stateXA1 = UnionXStateA(error1, stackTrace);
-    final stateXA2 = UnionXStateA(error2, stackTrace);
-    final stateXB1 = UnionXStateB(error1, stackTrace);
-    final stateYA1 = UnionYStateA(error1, stackTrace);
+    final stateXA1 = UnionXStateA(error1);
+    final stateXA2 = UnionXStateA(error2);
+    final stateXB1 = UnionXStateB(error1);
+    final stateYA1 = UnionYStateA(error1);
 
     test(
         "instances of same UnionState with same error and stackTrace should equal to each other",
         () {
-      final stateXA1_ = UnionXStateA(error1, stackTrace);
+      final stateXA1_ = UnionXStateA(error1);
 
       expect(stateXA1, isNot(same(stateXA1_)));
 
@@ -65,15 +54,6 @@ void main() {
         () {
       expect(stateXA1, isNot(stateXA2));
       expect(stateXA1.hashCode, isNot(stateXA2.hashCode));
-    });
-
-    test(
-        "instances of same UnionState with different stackTrace should not equal to each other",
-        () {
-      final stateXA1s2 = UnionXStateA(error1, stackTrace2);
-
-      expect(stateXA1, isNot(stateXA1s2));
-      expect(stateXA1.hashCode, isNot(stateXA1s2.hashCode));
     });
 
     test(
@@ -92,8 +72,8 @@ void main() {
 
     test("union state type can have const constructor", () {
       expect(
-        const UnionXStateA(error1, stackTrace),
-        same(const UnionXStateA(error1, stackTrace)),
+        const UnionXStateA(error1),
+        same(const UnionXStateA(error1)),
       );
     });
 
@@ -113,19 +93,12 @@ void main() {
         everyElement(WithError(error1)),
       );
       expect(stateXA2, WithError(error2));
-
-      expect(
-        [stateXA1, stateXA2, stateXB1, stateYA1],
-        everyElement(WithStackTrace(stackTrace)),
-      );
     });
 
     test("instances should be instance of ValueResult", () {
       expect(stateXA1.error, error1);
-      expect(stateXA1.stackTrace, stackTrace);
 
       expect(stateXA2.error, error2);
-      expect(stateXA2.stackTrace, stackTrace);
     });
 
     test("toString() should contains State name and value", () {

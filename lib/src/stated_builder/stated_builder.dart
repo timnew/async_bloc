@@ -12,7 +12,7 @@ class StatedBuilder<T> extends StatelessWidget {
   final ValueWidgetBuilder<T>? doneValueBuilder;
   final TransitionBuilder? doneBuilder;
   final ValueWidgetBuilder<HasValueAndError<T>>? errorValueBuilder;
-  final ValueWidgetBuilder<ErrorInfo>? errorBuilder;
+  final ValueWidgetBuilder<Object>? errorBuilder;
 
   const StatedBuilder({
     Key? key,
@@ -34,19 +34,20 @@ class StatedBuilder<T> extends StatelessWidget {
     final prebuiltChild = _prebuild(context);
 
     if (stated is IdleValueState && idleValueBuilder != null) {
-      return idleValueBuilder!(context, stated.asValue(), prebuiltChild);
+      return idleValueBuilder!(context, stated.extractValue(), prebuiltChild);
     }
     if (stated.isIdle) {
       return ensureBuilder(idleBuilder)(context, prebuiltChild);
     }
     if (stated is WorkingValueState && workingValueBuilder != null) {
-      return workingValueBuilder!(context, stated.asValue(), prebuiltChild);
+      return workingValueBuilder!(
+          context, stated.extractValue(), prebuiltChild);
     }
     if (stated.isWorking) {
       return ensureBuilder(workingBuilder)(context, prebuiltChild);
     }
     if (stated is DoneValueState && doneValueBuilder != null) {
-      return doneValueBuilder!(context, stated.asValue(), prebuiltChild);
+      return doneValueBuilder!(context, stated.extractValue(), prebuiltChild);
     }
     if (stated.isSucceeded) {
       return ensureBuilder(doneBuilder)(context, prebuiltChild);
@@ -61,7 +62,7 @@ class StatedBuilder<T> extends StatelessWidget {
     if (stated.isFailed) {
       return ensureBuilder(errorBuilder)(
         context,
-        stated.asError(),
+        stated.extractError(),
         prebuiltChild,
       );
     }
@@ -70,7 +71,7 @@ class StatedBuilder<T> extends StatelessWidget {
   }
 
   Widget? _prebuild(BuildContext context) => stated.hasValue
-      ? valueBuilder?.call(context, stated.asValue(), child) ?? child
+      ? valueBuilder?.call(context, stated.extractValue(), child) ?? child
       : child;
 
   @protected

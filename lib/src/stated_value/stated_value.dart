@@ -36,9 +36,9 @@ abstract class StatedValue<T> implements Stated, HasValue<T> {
 
   TR consume<TR>({
     required ValueTransformer<T, TR> onValue,
-    required ValueTransformer<ErrorInfo, TR> onError,
+    required ValueTransformer<Object, TR> onError,
   }) =>
-      this.hasError ? onError(this.asError()) : onValue(this.value);
+      this.hasError ? onError(this..extractError()) : onValue(this.value);
 }
 
 class BestGuessValue<T> extends IdleValueState<T> with StatedValue<T> {

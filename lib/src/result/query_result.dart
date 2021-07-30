@@ -22,12 +22,8 @@ abstract class QueryResult<T> implements Stated {
   /// creates an [QueryResult] in [DoneValueState] holds [value]
   const factory QueryResult.completed(T value) = _Completed;
 
-  /// creates an [QueryResult] in [ErrorState] with [error] and optional [stackTrace]
-  const factory QueryResult.failed(Object error, [StackTrace? stackTrace]) =
-      _Failed;
-
-  /// creates an [QueryResult] in [ErrorState] from [errorInfo]
-  factory QueryResult.fromError(ErrorInfo errorInfo) = _Failed.fromError;
+  /// creates an [QueryResult] in [ErrorState] with [error]
+  const factory QueryResult.failed(Object error) = _Failed;
 
   /// Create [QueryResult] from other [Stated] types
   /// * [DoneValueState] converts to [QueryResult.completed]
@@ -35,7 +31,7 @@ abstract class QueryResult<T> implements Stated {
   ///  Otherwise [UnsupportedError] is thrown
   factory QueryResult.from(Stated other) {
     if (other is DoneValueState<T>) return QueryResult.completed(other.value);
-    if (other is ErrorInfo) return QueryResult.fromError(other.asError());
+    if (other is HasError) return QueryResult.failed(other.extractError());
     throw UnsupportedError("$other in the state not supported by QueryResult");
   }
 
@@ -45,10 +41,10 @@ abstract class QueryResult<T> implements Stated {
   /// [failed] is called with error and stackTrace if result is failed
   TR map<TR>({
     required ValueTransformer<T, TR> completed,
-    required ValueTransformer<ErrorInfo, TR> failed,
+    required ValueTransformer<Object, TR> failed,
   }) {
-    if (this is _Completed) return completed(this.asValue());
-    return failed(this.asError());
+    if (this is _Completed) return completed(this.extractValue());
+    return failed(this.extractError());
   }
 }
 
@@ -57,10 +53,7 @@ class _Completed<T> extends DoneValueState<T> with QueryResult<T> {
 }
 
 class _Failed<T> extends ErrorState with QueryResult<T> {
-  const _Failed(Object error, [StackTrace? stackTrace])
-      : super(error, stackTrace);
-
-  _Failed.fromError(ErrorInfo errorInfo) : super.fromError(errorInfo);
+  const _Failed(Object error) : super(error);
 }
 
 /// Provides extension methods on `Future<T>` for [QueryResult]
@@ -75,8 +68,8 @@ extension QueryResultFutureExtension<T> on Future<T> {
       return QueryResult.completed(await this);
     } on Error {
       rethrow;
-    } catch (exception, stackTrace) {
-      return QueryResult.failed(exception, stackTrace);
+    } catch (exception) {
+      return QueryResult.failed(exception);
     }
   }
 }

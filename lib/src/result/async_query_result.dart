@@ -40,14 +40,8 @@ abstract class AsyncQueryResult<T> implements Stated {
   /// Creates a [AsyncQueryResult] in [DoneValueState]
   const factory AsyncQueryResult.completed(T value) = _Completed;
 
-  /// creates a [AsyncQueryResult] in [ErrorState] with [error] and optional [stackTrace]
-  const factory AsyncQueryResult.failed(
-    Object error, [
-    StackTrace? stackTrace,
-  ]) = _Failed;
-
-  /// creates an [AsyncQueryResult] in [ErrorState] from [errorInfo]
-  factory AsyncQueryResult.fromError(ErrorInfo errorInfo) = _Failed.fromError;
+  /// creates a [AsyncQueryResult] in [ErrorState] with [error]
+  const factory AsyncQueryResult.failed(Object error) = _Failed;
 
   /// creates an [AsyncQueryResult] from [value].
   /// If `value` is `null`, [IdleState] is created
@@ -66,13 +60,13 @@ abstract class AsyncQueryResult<T> implements Stated {
   factory AsyncQueryResult.from(Stated other) {
     if (other is IdleState) return AsyncQueryResult.idle();
     if (other is IdleValueState<T>) {
-      return AsyncQueryResult.preset(other.asValue());
+      return AsyncQueryResult.preset(other.extractValue());
     }
     if (other.isWorking) return AsyncQueryResult.working();
     if (other is DoneValueState<T>) {
       return AsyncQueryResult.completed(other.value);
     }
-    if (other.isFailed) return AsyncQueryResult.fromError(other.asError());
+    if (other.isFailed) return AsyncQueryResult.failed(other.extractError());
 
     throw UnsupportedError(
       "$other in the state not supported by AsyncQueryResult",
@@ -82,19 +76,19 @@ abstract class AsyncQueryResult<T> implements Stated {
   /// Pattern match the result on all branches
   TR map<TR>({
     required StateTransformer<TR> idle,
-    ValueTransformer<HasValue<T>, TR>? preset,
+    ValueTransformer<T, TR>? preset,
     required StateTransformer<TR> working,
-    required ValueTransformer<HasValue<T>, TR> completed,
-    required ValueTransformer<ErrorInfo, TR> failed,
+    required ValueTransformer<T, TR> completed,
+    required ValueTransformer<Object, TR> failed,
   }) {
     if (this is _Idle) return idle();
     if (this is _Preset) {
-      if (preset != null) return preset(this.asValue());
+      if (preset != null) return preset(this.extractValue());
       return idle();
     }
     if (this is _Working) return working();
-    if (this is _Completed) return completed(this.asValue());
-    return failed(this.asError());
+    if (this is _Completed) return completed(this.extractValue());
+    return failed(this.extractError());
   }
 
   /// emit [AsyncQueryResult.working] and then [AsyncQueryResult.completed] or [AsyncQueryResult.failed] based on the [future]'s result.
@@ -132,8 +126,5 @@ class _Completed<T> extends DoneValueState<T> with AsyncQueryResult<T> {
 }
 
 class _Failed<T> extends ErrorState with AsyncQueryResult<T> {
-  const _Failed(Object error, [StackTrace? stackTrace])
-      : super(error, stackTrace);
-
-  _Failed.fromError(ErrorInfo errorInfo) : super.fromError(errorInfo);
+  const _Failed(Object error) : super(error);
 }

@@ -31,14 +31,8 @@ abstract class AsyncActionResult implements Stated {
   /// This factory always returns a const result
   factory AsyncActionResult.completed() => const _Completed();
 
-  /// creates a [AsyncActionResult] in [ErrorState] with [error] and optional [stackTrace]
-  const factory AsyncActionResult.failed(
-    Object error, [
-    StackTrace? stackTrace,
-  ]) = _Failed;
-
-  /// creates an [AsyncActionResult] in [ErrorState] from [errorInfo]
-  factory AsyncActionResult.fromError(ErrorInfo errorInfo) = _Failed.fromError;
+  /// creates a [AsyncActionResult] in [ErrorState] with [error]
+  const factory AsyncActionResult.failed(Object error) = _Failed;
 
   /// Create [AsyncActionResult] from other [Stated] types
   /// * [IdleState] or [IdleValueState] converts to [AsyncActionResult.idle]
@@ -50,7 +44,7 @@ abstract class AsyncActionResult implements Stated {
     if (other.isIdle) return AsyncActionResult.idle();
     if (other.isWorking) return AsyncActionResult.working();
     if (other.isSucceeded) return AsyncActionResult.completed();
-    if (other.isFailed) return AsyncActionResult.fromError(other.asError());
+    if (other.isFailed) return AsyncActionResult.failed(other.extractError());
     throw UnsupportedError(
       "$other in the state not supported by AsyncActionResult",
     );
@@ -61,12 +55,12 @@ abstract class AsyncActionResult implements Stated {
     required StateTransformer<TR> idle,
     required StateTransformer<TR> working,
     required StateTransformer<TR> completed,
-    required ValueTransformer<ErrorInfo, TR> failed,
+    required ValueTransformer<Object, TR> failed,
   }) {
     if (this is _Idle) return idle();
     if (this is _Working) return working();
     if (this is _Completed) return completed();
-    return failed(this.asError());
+    return failed(this.extractError());
   }
 
   /// emit [AsyncActionResult.working] and then the other [AsyncActionResult] based on the [future]'s result.
@@ -105,8 +99,5 @@ class _Completed extends DoneState with AsyncActionResult {
 }
 
 class _Failed extends ErrorState with AsyncActionResult {
-  const _Failed(Object error, [StackTrace? stackTrace])
-      : super(error, stackTrace);
-
-  _Failed.fromError(ErrorInfo errorInfo) : super.fromError(errorInfo);
+  const _Failed(Object error) : super(error);
 }

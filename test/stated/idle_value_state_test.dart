@@ -24,7 +24,7 @@ void main() {
     });
 
     test("its asValue returns value", () {
-      expect(state.asValue(), value);
+      expect(state.extractValue(), value);
     });
     test("it should equals to each other", () {
       expect(state, IdleValueState(value));

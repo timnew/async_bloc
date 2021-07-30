@@ -10,7 +10,7 @@ class ActionBlocConsumer<B extends BlocBase<AsyncActionResult>>
     Widget? child,
     required TransitionBuilder? idelBuilder,
     required TransitionBuilder workingBuilder,
-    required ValueWidgetBuilder<ErrorInfo> failedBuilder,
+    required ValueWidgetBuilder<Object> failedBuilder,
     required TransitionBuilder completedBuilder,
     BlocBuilderCondition<AsyncActionResult>? buildWhen,
     required BlocWidgetListener<AsyncActionResult> listener,

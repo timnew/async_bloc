@@ -21,8 +21,8 @@ void main() {
           presetBuilder: (_, value, child) =>
               Beacon<IdleValueState>(value: value, child: child),
           workingBuilder: (_, child) => Beacon<WorkingState>(child: child),
-          failedBuilder: (_, errorInfo, child) =>
-              ErrorBeacon(error: errorInfo.error, child: child),
+          failedBuilder: (_, error, child) =>
+              ErrorBeacon(error: error, child: child),
           completedBuilder: (BuildContext context, value, child) =>
               ContentBeacon(content: value, child: child),
         );
@@ -108,8 +108,8 @@ void main() {
             idleBuilder: (_, child) => Beacon<IdleState>(child: child),
             presetBuilder: null,
             workingBuilder: (_, child) => Beacon<WorkingState>(child: child),
-            failedBuilder: (_, errorInfo, child) =>
-                ErrorBeacon(error: errorInfo.error, child: child),
+            failedBuilder: (_, error, child) =>
+                ErrorBeacon(error: error, child: child),
             completedBuilder: (BuildContext context, value, child) =>
                 ContentBeacon(content: value, child: child),
           ),
@@ -133,8 +133,8 @@ void main() {
             presetBuilder: (_, value, child) =>
                 Beacon<IdleValueState>(value: value, child: child),
             workingBuilder: (_, child) => Beacon<WorkingState>(child: child),
-            failedBuilder: (_, errorInfo, child) =>
-                ErrorBeacon(error: errorInfo.error, child: child),
+            failedBuilder: (_, error, child) =>
+                ErrorBeacon(error: error, child: child),
             completedBuilder: (BuildContext context, value, child) =>
                 ContentBeacon(content: value, child: child),
           ),
