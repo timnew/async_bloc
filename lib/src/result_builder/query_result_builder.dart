@@ -21,22 +21,23 @@ class QueryResultBuilder<T> extends StatedBuilder<Stated> {
     ValueWidgetBuilder<T>? presetBuilder,
     required TransitionBuilder workingBuilder,
     required ValueWidgetBuilder<Object> failedBuilder,
-  }) : super(
     required ValueWidgetBuilder<T> succeededBuilder,
+  }) : super.patternBuilder(
           key: key,
           stated: result,
           child: child,
-          patterns: {
-            OnState<IdleState>(): StatedBuilder.buildAsUnit(
+          patterns: (b) => b
+            ..unit(
+              OnState<IdleState>(),
               idleBuilder ?? workingBuilder,
-            ),
-            OnState<IdleValueState>(): StatedBuilder.buildAsValue(
-              presetBuilder ?? completedBuilder,
-            ),
-            OnState.isWorking(): StatedBuilder.buildAsUnit(workingBuilder),
-            OnState.isFailed(): StatedBuilder.buildAsError(failedBuilder),
-            OnState.isSuceeded(): StatedBuilder.buildAsValue(completedBuilder),
-          },
+            )
+            ..value(
+              OnState<IdleValueState>(),
+              presetBuilder ?? succeededBuilder,
+            )
+            ..unit(OnState.isWorking(), workingBuilder)
+            ..error(OnState.isFailed(), failedBuilder)
+            ..value(OnState.isSuceeded(), succeededBuilder),
         );
 
   /// Consume [ActionResult]
@@ -53,9 +54,8 @@ class QueryResultBuilder<T> extends StatedBuilder<Stated> {
           key: key,
           stated: result,
           child: child,
-          patterns: {
-            OnState.isFailed(): StatedBuilder.buildAsError(failedBuilder),
-            OnState.isSuceeded(): StatedBuilder.buildAsValue(completedBuilder),
-          },
+          patterns: (b) => b
+            ..error(OnState.isFailed(), failedBuilder)
+            ..value(OnState.isSuceeded(), succeededBuilder),
         );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stated_result/stated_builder.dart';
 import 'package:stated_result/stated_result_builder.dart';
 
 class QueryBlocConsumer<B extends BlocBase<AsyncQueryResult<T>>, T>
@@ -14,7 +15,11 @@ class QueryBlocConsumer<B extends BlocBase<AsyncQueryResult<T>>, T>
     required ValueWidgetBuilder<Object> failedBuilder,
     required ValueWidgetBuilder<T> succeededBuilder,
     BlocBuilderCondition<AsyncQueryResult<T>>? buildWhen,
-    required BlocWidgetListener<AsyncQueryResult<T>> listener,
+    ContextConsumer? idleConsumer,
+    ValueConsumer<T>? presetConsumer,
+    ContextConsumer? workingConsumer,
+    ValueConsumer<Object>? failedConsumer,
+    ValueConsumer<T>? succeededConsumer,
     BlocBuilderCondition<AsyncQueryResult<T>>? listenWhen,
   }) : super(
           key: key,
@@ -29,7 +34,12 @@ class QueryBlocConsumer<B extends BlocBase<AsyncQueryResult<T>>, T>
             succeededBuilder: succeededBuilder,
           ),
           buildWhen: buildWhen,
-          listener: listener,
+          listener: StatedConsumer((b) => b
+            ..unit(OnState<IdleState>(), idleConsumer)
+            ..value(OnState<IdleValueState>(), presetConsumer)
+            ..unit(OnState.isWorking(), workingConsumer)
+            ..error(OnState.isFailed(), failedConsumer)
+            ..value(OnState.isSuceeded(), succeededConsumer)),
           listenWhen: listenWhen,
         );
 }

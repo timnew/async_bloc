@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stated_result/stated_builder.dart';
 import 'package:stated_result/stated_result_builder.dart';
 
 class ActionBlocConsumer<B extends BlocBase<AsyncActionResult>>
@@ -13,7 +14,10 @@ class ActionBlocConsumer<B extends BlocBase<AsyncActionResult>>
     required ValueWidgetBuilder<Object> failedBuilder,
     required TransitionBuilder suceededBuilder,
     BlocBuilderCondition<AsyncActionResult>? buildWhen,
-    required BlocWidgetListener<AsyncActionResult> listener,
+    ContextConsumer? idleConsumer,
+    ContextConsumer? workingConsumer,
+    ValueConsumer<Object>? failedConsumer,
+    ContextConsumer? succeededConsumer,
     BlocBuilderCondition<AsyncActionResult>? listenWhen,
   }) : super(
           key: key,
@@ -27,7 +31,11 @@ class ActionBlocConsumer<B extends BlocBase<AsyncActionResult>>
             succeededBuilder: suceededBuilder,
           ),
           buildWhen: buildWhen,
-          listener: listener,
+          listener: StatedConsumer((b) => b
+            ..unit(OnState.isIdle(), idleConsumer)
+            ..unit(OnState.isWorking(), workingConsumer)
+            ..error(OnState.isFailed(), failedConsumer)
+            ..unit(OnState.isSuceeded(), succeededConsumer)),
           listenWhen: listenWhen,
         );
 }
