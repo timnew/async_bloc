@@ -1,3 +1,5 @@
+import 'package:stated_result/stated_value.dart';
+
 import 'error_value_state.dart';
 import 'working_state.dart';
 import 'done_state.dart';
@@ -28,13 +30,13 @@ mixin Stated {
   bool get hasValue => this is HasValue;
 
   /// Extract the value
-  T asValue<T>() => (this as HasValue<T>).value;
+  T extractValue<T>() => (this as HasValue<T>).value;
 
-  /// Return true if it has error info
-  bool get hasError => this is ErrorInfo;
+  /// Return true if it has error
+  bool get hasError => this is HasError;
 
-  /// Extract error info
-  ErrorInfo asError() => this as ErrorInfo;
+  /// Extract error or exception
+  Object extractError() => (this as HasError).error;
 }
 
 /// Contract for state holds value
@@ -43,17 +45,18 @@ mixin HasValue<T> {
   T get value;
 }
 
-/// Contract for state holds error information
-mixin ErrorInfo {
+mixin HasError {
   /// the exception or error
   Object get error;
-
-  /// The stack trace of the error/exception
-  StackTrace? get stackTrace;
 }
 
-/// Contract for state implements both [HasValue] and [ErrorInfo] contracts.
-mixin HasValueAndError<T> implements HasValue<T>, ErrorInfo {}
+extension HasErrorExtension on HasError {
+  bool isErrorA<T>() => error is T;
+  T castErrorAs<T>() => error as T;
+}
+
+/// Contract for state implements both [HasValue] and [HasError] contracts.
+mixin HasValueAndError<T> implements HasValue<T>, HasError {}
 
 // Transformer for state without value
 typedef TR StateTransformer<TR>();
