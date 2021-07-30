@@ -235,7 +235,7 @@ void main() {
 
       test("should update value with ErrroValueState", () async {
         final initial = AsyncActionResult.idle();
-        final future = Future.value(ErrorValueState("value", exception, null));
+        final future = Future.value(ErrorValueState("value", exception));
 
         await initial.updateWith(future, captured.add);
 

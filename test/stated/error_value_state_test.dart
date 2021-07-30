@@ -7,8 +7,7 @@ void main() {
   group("ErrorValueState", () {
     const value = "value";
     const error = "error";
-    const stackTrace = StackTrace.empty;
-    const state = ErrorValueState(value, error, stackTrace);
+    const state = ErrorValueState(value, error);
 
     test("it has correct state", () {
       expect(state.isIdle, isFalse);
@@ -39,7 +38,7 @@ void main() {
     });
 
     test("it should equals to each other", () {
-      expect(state, ErrorValueState(value, error, stackTrace));
+      expect(state, ErrorValueState(value, error));
     });
   });
 }

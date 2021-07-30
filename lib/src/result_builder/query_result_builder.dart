@@ -3,7 +3,7 @@ import 'package:stated_result/stated_builder.dart';
 import 'package:stated_result/stated_result.dart';
 
 /// Widget that builds itself based on the value of [QueryResult] or [AsyncQueryResult]
-class QueryResultBuilder<T> extends StatedBuilder<T> {
+class QueryResultBuilder<T> extends StatedBuilder<Stated> {
   /// Consume [AsyncQueryResult]
   ///
   /// * [idleBuilder] - Builder to be used when [AsyncQueryResult.idle] is given.
@@ -17,7 +17,7 @@ class QueryResultBuilder<T> extends StatedBuilder<T> {
     Key? key,
     required AsyncQueryResult<T> result,
     Widget? child,
-    required TransitionBuilder idleBuilder,
+    required TransitionBuilder? idleBuilder,
     ValueWidgetBuilder<T>? presetBuilder,
     required TransitionBuilder workingBuilder,
     required ValueWidgetBuilder<Object> failedBuilder,
@@ -26,11 +26,19 @@ class QueryResultBuilder<T> extends StatedBuilder<T> {
           key: key,
           stated: result,
           child: child,
-          idleBuilder: idleBuilder,
-          idleValueBuilder: presetBuilder,
-          workingBuilder: workingBuilder,
-          errorBuilder: failedBuilder,
-          doneValueBuilder: completedBuilder,
+          stateBuilders: [
+            OnState.unit(
+              idleBuilder ?? workingBuilder,
+              criteria: CanBuild.isIdle,
+            ),
+            OnState<T>.value(
+              presetBuilder ?? completedBuilder,
+              criteria: CanBuild.isType<IdleValueState>(),
+            ),
+            OnState.unit(workingBuilder, criteria: CanBuild.isWorking),
+            OnState.error(failedBuilder, criteria: CanBuild.isFailed),
+            OnState<T>.value(completedBuilder, criteria: CanBuild.isSuceeded),
+          ],
         );
 
   /// Consume [ActionResult]
@@ -47,7 +55,9 @@ class QueryResultBuilder<T> extends StatedBuilder<T> {
           key: key,
           stated: result,
           child: child,
-          errorBuilder: failedBuilder,
-          doneValueBuilder: completedBuilder,
+          stateBuilders: [
+            OnState.error(failedBuilder, criteria: CanBuild.isFailed),
+            OnState<T>.value(completedBuilder, criteria: CanBuild.isSuceeded),
+          ],
         );
 }

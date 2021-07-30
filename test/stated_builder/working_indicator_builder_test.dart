@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stated_result/stated_builder.dart';
-import 'package:stated_result/stated_value.dart';
 import 'package:test_beacon/test_beacon.dart';
 
 import '../custom_finders.dart';

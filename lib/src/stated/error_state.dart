@@ -4,6 +4,6 @@ import 'base/error_state_base.dart';
 ///
 /// * [error] : exception or error object
 class ErrorState extends ErrorStateBase<ErrorState> {
-  /// Create [ErrorState] from [error] and [stackTrace]
+  /// Create [ErrorState] from [error]
   const ErrorState(Object error) : super(error);
 }

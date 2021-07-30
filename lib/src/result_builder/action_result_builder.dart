@@ -3,7 +3,7 @@ import 'package:stated_result/stated_builder.dart';
 import 'package:stated_result/stated_result.dart';
 
 /// Widget that builds itself based on the value of [ActionResult] or [AsyncActionResult]
-class ActionResultBuilder extends StatedBuilder<Never> {
+class ActionResultBuilder extends StatedBuilder<Stated> {
   /// Consume [AsyncActionResult]
   ///
   /// * [idleBuilder] - Builder to be used when [AsyncActionResult.idle] is given.
@@ -24,10 +24,12 @@ class ActionResultBuilder extends StatedBuilder<Never> {
           key: key,
           stated: result,
           child: child,
-          idleBuilder: idleBuilder,
-          workingBuilder: workingBuilder,
-          errorBuilder: failedBuilder,
-          doneBuilder: completedBuilder,
+          stateBuilders: [
+            OnState.unit(idleBuilder, criteria: CanBuild.isIdle),
+            OnState.unit(workingBuilder, criteria: CanBuild.isWorking),
+            OnState.error(failedBuilder, criteria: CanBuild.isFailed),
+            OnState.unit(completedBuilder, criteria: CanBuild.isSuceeded),
+          ],
         );
 
   /// Consume [ActionResult]
@@ -44,7 +46,9 @@ class ActionResultBuilder extends StatedBuilder<Never> {
           key: key,
           stated: result,
           child: child,
-          errorBuilder: failedBuilder,
-          doneBuilder: completedBuilder,
+          stateBuilders: [
+            OnState.error(failedBuilder, criteria: CanBuild.isFailed),
+            OnState.unit(completedBuilder, criteria: CanBuild.isSuceeded),
+          ],
         );
 }

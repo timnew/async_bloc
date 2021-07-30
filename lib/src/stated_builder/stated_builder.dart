@@ -1,90 +1,27 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:stated_result/stated.dart';
+import 'package:stated_result/stated_builder.dart';
+import 'package:stated_result/stated_custom.dart';
 
-class StatedBuilder<T> extends StatelessWidget {
-  final Stated stated;
+import 'on_state.dart';
+
+class StatedBuilder<TS extends Stated> extends StatelessWidget {
+  final TS stated;
   final Widget? child;
-  final ValueWidgetBuilder<T>? valueBuilder;
-  final ValueWidgetBuilder<T>? idleValueBuilder;
-  final TransitionBuilder? idleBuilder;
-  final ValueWidgetBuilder<T>? workingValueBuilder;
-  final TransitionBuilder? workingBuilder;
-  final ValueWidgetBuilder<T>? doneValueBuilder;
-  final TransitionBuilder? doneBuilder;
-  final ValueWidgetBuilder<HasValueAndError<T>>? errorValueBuilder;
-  final ValueWidgetBuilder<Object>? errorBuilder;
+  final List<OnState> stateBuilders;
 
   const StatedBuilder({
     Key? key,
     required this.stated,
     this.child,
-    this.valueBuilder,
-    this.idleValueBuilder,
-    this.idleBuilder,
-    this.workingValueBuilder,
-    this.workingBuilder,
-    this.doneValueBuilder,
-    this.doneBuilder,
-    this.errorValueBuilder,
-    this.errorBuilder,
+    required this.stateBuilders,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final prebuiltChild = _prebuild(context);
-
-    if (stated is IdleValueState && idleValueBuilder != null) {
-      return idleValueBuilder!(context, stated.extractValue(), prebuiltChild);
-    }
-    if (stated.isIdle) {
-      return ensureBuilder(idleBuilder)(context, prebuiltChild);
-    }
-    if (stated is WorkingValueState && workingValueBuilder != null) {
-      return workingValueBuilder!(
-          context, stated.extractValue(), prebuiltChild);
-    }
-    if (stated.isWorking) {
-      return ensureBuilder(workingBuilder)(context, prebuiltChild);
-    }
-    if (stated is DoneValueState && doneValueBuilder != null) {
-      return doneValueBuilder!(context, stated.extractValue(), prebuiltChild);
-    }
-    if (stated.isSucceeded) {
-      return ensureBuilder(doneBuilder)(context, prebuiltChild);
-    }
-    if (stated is ErrorValueState && errorValueBuilder != null) {
-      return errorValueBuilder!(
-        context,
-        stated as ErrorValueState<T>,
-        prebuiltChild,
-      );
-    }
-    if (stated.isFailed) {
-      return ensureBuilder(errorBuilder)(
-        context,
-        stated.extractError(),
-        prebuiltChild,
-      );
-    }
-
-    return onBuilderNotFound(context, stated, prebuiltChild);
-  }
-
-  Widget? _prebuild(BuildContext context) => stated.hasValue
-      ? valueBuilder?.call(context, stated.extractValue(), child) ?? child
-      : child;
-
-  @protected
-  TB ensureBuilder<TB>(TB? builder) => builder ?? cannotBuild();
-
-  @protected
-  Never cannotBuild() => throw StateError("No builder for $stated");
-
-  @protected
-  Widget onBuilderNotFound(
-    BuildContext context,
-    Stated stated,
-    Widget? prebuiltChild,
-  ) =>
-      cannotBuild();
+  Widget build(BuildContext context) => stateBuilders
+      .firstWhere(
+        (b) => b.canBuild(stated),
+        orElse: () => const OnState.unexpected(),
+      )
+      .build(context, stated, child);
 }

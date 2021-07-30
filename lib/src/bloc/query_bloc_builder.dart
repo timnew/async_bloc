@@ -20,8 +20,8 @@ class QueryBlocBuilder<B extends BlocBase<AsyncQueryResult<T>>, T>
           builder: (context, result) => QueryResultBuilder<T>(
             result: result,
             child: child,
-            idleBuilder: idleBuilder ?? workingBuilder,
-            presetBuilder: presetBuilder ?? completedBuilder,
+            idleBuilder: idleBuilder,
+            presetBuilder: presetBuilder,
             workingBuilder: workingBuilder,
             failedBuilder: failedBuilder,
             completedBuilder: completedBuilder,
