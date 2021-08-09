@@ -22,11 +22,11 @@ class QueryResultBuilder<T> extends StatedBuilder<Stated> {
     required TransitionBuilder workingBuilder,
     required ValueWidgetBuilder<Object> failedBuilder,
     required ValueWidgetBuilder<T> succeededBuilder,
-  }) : super.patternBuilder(
+  }) : super(
           key: key,
           stated: result,
           child: child,
-          patterns: (b) => b
+          patternDefs: (b) => b
             ..unit(
               OnState<IdleState>(),
               idleBuilder ?? workingBuilder,
@@ -50,11 +50,11 @@ class QueryResultBuilder<T> extends StatedBuilder<Stated> {
     Widget? child,
     required ValueWidgetBuilder<Object> failedBuilder,
     required ValueWidgetBuilder<T> succeededBuilder,
-  }) : super.patternBuilder(
+  }) : super(
           key: key,
           stated: result,
           child: child,
-          patterns: (b) => b
+          patternDefs: (b) => b
             ..error(OnState.isFailed(), failedBuilder)
             ..value(OnState.isSuceeded(), succeededBuilder),
         );

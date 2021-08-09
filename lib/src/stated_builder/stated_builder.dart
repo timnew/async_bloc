@@ -3,28 +3,30 @@ import 'package:flutter/widgets.dart';
 import 'package:stated_result/stated_builder.dart';
 import 'package:stated_result/stated_custom.dart';
 
+import 'call_builder.dart';
+
 class StatedBuilder<TS extends Stated> extends StatelessWidget {
   final TS stated;
   final Widget? child;
-  final Map<OnState<TS>, ValueWidgetBuilder<TS>> patterns;
+  final Map<OnState, ValueWidgetBuilder<Stated>> patterns;
 
-  const StatedBuilder({
+  const StatedBuilder.patterns({
     Key? key,
     required this.stated,
     this.child,
     required this.patterns,
   }) : super(key: key);
 
-  StatedBuilder.patternBuilder({
+  StatedBuilder({
     Key? key,
     required TS stated,
     Widget? child,
-    required void patterns(StatedeBuilderPatternsBuilder<TS> b),
-  }) : this(
+    required CallBuilder<StatedBuilderPatternBuilder<TS>> patternDefs,
+  }) : this.patterns(
           key: key,
           stated: stated,
           child: child,
-          patterns: StatedeBuilderPatternsBuilder(patterns).build(),
+          patterns: StatedBuilderPatternBuilder<TS>(patternDefs).build(),
         );
 
   @override
@@ -33,28 +35,44 @@ class StatedBuilder<TS extends Stated> extends StatelessWidget {
       .call(context, stated, child);
 }
 
-class StatedeBuilderPatternsBuilder<TS extends Stated> {
-  final Map<OnState<TS>, ValueWidgetBuilder<TS>> patterns = {};
+class StatedBuilderPatternBuilder<TS extends Stated> {
+  final CallBuilder<StatedBuilderPatternBuilder<TS>> buildAction;
 
-  StatedeBuilderPatternsBuilder(
-    void action(StatedeBuilderPatternsBuilder<TS> b),
-  ) {
-    action(this);
+  bool _hasRan = false;
+  late Map<OnState<TS>, ValueWidgetBuilder<Stated>> _patterns;
+
+  StatedBuilderPatternBuilder(this.buildAction);
+
+  Map<OnState<TS>, ValueWidgetBuilder<Stated>> build() {
+    if (!_hasRan) {
+      _patterns = {};
+      buildAction(this);
+      _hasRan = true;
+    }
+
+    return _patterns;
+  }
+
+  void _add(OnState<TS> onState, ValueWidgetBuilder<Stated> pattern) {
+    _patterns[onState] = pattern;
   }
 
   void unit(OnState<TS> onState, TransitionBuilder builder) {
-    patterns[onState] = (c, _, child) => builder(c, child);
+    _add(
+      onState,
+      (c, _, child) => builder(c, child),
+    );
   }
 
   void value<T>(OnState<TS> onState, ValueWidgetBuilder<T> builder) {
-    patterns[onState] =
-        (c, stated, child) => builder(c, stated.extractValue(), child);
+    _add(
+      onState,
+      (c, stated, child) => builder(c, stated.extractValue(), child),
+    );
   }
 
   void error(OnState<TS> onState, ValueWidgetBuilder<Object> builder) {
-    patterns[onState] =
-        (c, stated, child) => builder(c, stated.extractError(), child);
+    _add(onState,
+        (c, stated, child) => builder(c, stated.extractError(), child));
   }
-
-  Map<OnState<TS>, ValueWidgetBuilder<TS>> build() => patterns;
 }

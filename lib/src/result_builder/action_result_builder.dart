@@ -20,11 +20,11 @@ class ActionResultBuilder extends StatedBuilder<Stated> {
     required TransitionBuilder workingBuilder,
     required ValueWidgetBuilder<Object> failedBuilder,
     required TransitionBuilder succeededBuilder,
-  }) : super.patternBuilder(
+  }) : super(
           key: key,
           stated: result,
           child: child,
-          patterns: (b) => b
+          patternDefs: (b) => b
             ..unit(OnState.isIdle(), idleBuilder ?? workingBuilder)
             ..unit(OnState.isWorking(), workingBuilder)
             ..error(OnState.isFailed(), failedBuilder)
@@ -41,11 +41,11 @@ class ActionResultBuilder extends StatedBuilder<Stated> {
     Widget? child,
     required ValueWidgetBuilder<Object> failedBuilder,
     required TransitionBuilder succeededBuilder,
-  }) : super.patternBuilder(
+  }) : super(
           key: key,
           stated: result,
           child: child,
-          patterns: (b) => b
+          patternDefs: (b) => b
             ..error(OnState.isFailed(), failedBuilder)
             ..unit(OnState.isSuceeded(), succeededBuilder),
         );
