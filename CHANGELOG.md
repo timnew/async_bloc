@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.3.0-preview.2]
+
+* Removed the concept of `ErrorInfo`, use error directly
+* Replace `stated_value` library with `stated_custom`
+* Brand new `stated_builder` with support to `stated_custom` and `OnState` DSL
+* Rename `DoneState`, `CompletedState` to `SucceededState` and`ErrorState` to `FailedState` to align the terms
+
 ## [0.3.0-preview.1]
 
 * Added `stated` library
